@@ -1,9 +1,9 @@
 ﻿using System;
 
-public class Class1
-{
-	public Class1()
-	{
-		//testcomment
-	}
-}
+//public class Class1
+//{
+//	public Class1()
+//	{
+//		//testcomment
+//	}
+//}
