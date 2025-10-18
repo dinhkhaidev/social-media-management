@@ -12,6 +12,13 @@
     <Compile Remove="Function\**" />
     <EmbeddedResource Remove="Function\**" />
     <None Remove="Function\**" />
+<<<<<<< HEAD
+=======
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="datas\RoundedTextBox.cs" />
+>>>>>>> 6e51f6dff36ae25a95fe262169b8135bba77e09a
   </ItemGroup>
 
   <ItemGroup>
