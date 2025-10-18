@@ -8,7 +8,7 @@ namespace SocialManager
     public class User
     {
         // --- Properties ---
-        public Guid UserID { get; private set; }
+        public Guid UserID { get; set; }  // Changed from private set to public set
         public string UserName { get; set; }
         public string Password { get; set; } // Attention: không nên lưu password dạng plain text trong thực tế
         public string FullName { get; set; }
@@ -65,6 +65,23 @@ namespace SocialManager
                 this.StatusId = statusId;
             }
         }
+        public User(Guid userID, string userName, string password, string fullName, string bio, string avatarUrl, string email, string phone, int gender, DateTime dOB, string address, DateTime createdAt, int statusId)
+        {
+            UserID = userID;
+            UserName = userName;
+            Password = password;
+            FullName = fullName;
+            Bio = bio;
+            AvatarUrl = avatarUrl;
+            Email = email;
+            Phone = phone;
+            Gender = gender;
+            DOB = dOB;
+            Address = address;
+            CreatedAt = createdAt;
+            StatusId = statusId;
+        }
+
 
         // --- Methods ---
 

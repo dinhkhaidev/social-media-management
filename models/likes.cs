@@ -1,8 +1,8 @@
 ﻿using System;
 
-public class Class1
+public class Likes
 {
-	public Class1()
+	public Likes()
 	{
 		//testcomment
 	}

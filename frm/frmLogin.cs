@@ -1,0 +1,322 @@
+﻿using SocialManager.services;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SocialManager.frm
+{
+    public partial class frmLogin : Form
+    {
+        private readonly UserService _userService;
+        public frmLogin()
+        {
+            InitializeComponent();
+            InitializeForm();
+            _userService = new UserService();
+        }
+
+        private void InitializeForm()
+        {
+            // Setup form properties
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | 
+                         ControlStyles.UserPaint | 
+                         ControlStyles.DoubleBuffer | 
+                         ControlStyles.ResizeRedraw, true);
+
+            // Remove labels since we have placeholders
+            if (pnlLoginForm.Controls.Contains(lblUsername))
+                pnlLoginForm.Controls.Remove(lblUsername);
+            if (pnlLoginForm.Controls.Contains(lblPassword))
+                pnlLoginForm.Controls.Remove(lblPassword);
+
+            // Setup input field events
+            //txtUsername.Enter += TxtUsername_Enter;
+            //txtUsername.Leave += TxtUsername_Leave;
+            //txtPassword.Enter += TxtPassword_Enter;
+            //txtPassword.Leave += TxtPassword_Leave;
+
+            // Setup Enter key handling
+            txtUsername.KeyPress += Input_KeyPress;
+            txtPassword.KeyPress += Input_KeyPress;
+            this.AcceptButton = btnLogin;
+        }
+
+        private void Input_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnLogin_Click(sender, e);
+            }
+        }
+
+        private void TxtUsername_Enter(object sender, EventArgs e)
+        {
+            pnlUsername.BackColor = Color.FromArgb(240, 248, 255);
+            pnlUsername.Invalidate();
+        }
+
+        private void TxtUsername_Leave(object sender, EventArgs e)
+        {
+            pnlUsername.BackColor = Color.FromArgb(248, 249, 250);
+            pnlUsername.Invalidate();
+        }
+
+        private void TxtPassword_Enter(object sender, EventArgs e)
+        {
+            pnlPassword.BackColor = Color.FromArgb(240, 248, 255);
+            pnlPassword.Invalidate();
+        }
+
+        private void TxtPassword_Leave(object sender, EventArgs e)
+        {
+            pnlPassword.BackColor = Color.FromArgb(248, 249, 250);
+            pnlPassword.Invalidate();
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            if (!ValidateInput())
+                return;
+
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Text;
+
+            // Show loading state
+            btnLogin.Text = "LOGGING IN...";
+            btnLogin.Enabled = false;
+            this.Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                if (_userService.AuthenticateUser(username, password))
+                {
+                    AuthSessionService.Login(_userService.GetUserByUsername(username));
+                    
+                    // Successful login
+                    MessageBox.Show("Login successful!", "Success", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
+                    try
+                    {
+                        // Create admin form
+                        frmAdmin adminForm = new frmAdmin();
+                        
+                        // Hide login form FIRST
+                        this.Hide();
+                        
+                        // Show admin form as dialog
+                        var adminResult = adminForm.ShowDialog();
+                        
+                        // After admin form closes, check if user is still logged in
+                        if (!AuthSessionService.IsLoggedIn)
+                        {
+                            // User logged out, show login form again
+                            this.Show();
+                            txtPassword.Clear();
+                            txtUsername.Focus();
+                        }
+                        else
+                        {
+                            // User closed admin form but still logged in, close application
+                            this.Close();
+                        }
+                    }
+                    catch (Exception adminEx)
+                    {
+                        MessageBox.Show($"Error opening admin panel: {adminEx.Message}", 
+                            "Admin Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        
+                        // Show login form again
+                        this.Show();
+                    }
+                }
+                else
+                {
+                    // Failed login
+                    MessageBox.Show("Invalid username or password. Please try again.", "Login Failed", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    
+                    txtPassword.Clear();
+                    txtUsername.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred during login: {ex.Message}", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Reset button state
+                btnLogin.Text = "LOGIN";
+                btnLogin.Enabled = true;
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                MessageBox.Show("Please enter your username or email.", "Validation Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtUsername.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show("Please enter your password.", "Validation Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPassword.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        private void llblForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("Please contact your administrator to reset your password.", "Forgot Password", 
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void llblRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Pass reference của login form hiện tại để không tạo form mới
+            frmRegister registerForm = new frmRegister(this); // Pass login form reference
+            
+            // Hide login form
+            this.Hide();
+            
+            // Show register form as dialog
+            var result = registerForm.ShowDialog();
+            
+            // Show login form again after register is closed
+            this.Show();
+            
+            // Optional: Focus on username field for new login attempt
+            txtUsername.Focus();
+        }
+
+        public void SetUsername(string username)
+        {
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                txtUsername.Text = username;
+                txtPassword.Focus(); // Focus on password field
+            }
+        }
+
+        // Custom paint events for modern UI - using GraphicsExtensions from Admin form
+        private void pnlLoginCard_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = sender as Panel;
+            if (panel != null)
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                
+                // Draw subtle shadow
+                using (var shadowBrush = new SolidBrush(Color.FromArgb(15, 0, 0, 0)))
+                {
+                    GraphicsExtensions.FillRoundedRectangle(e.Graphics, shadowBrush, new Rectangle(5, 5, panel.Width - 5, panel.Height - 5), 15);
+                }
+                
+                // Draw main card
+                using (var cardBrush = new SolidBrush(Color.White))
+                {
+                    GraphicsExtensions.FillRoundedRectangle(e.Graphics, cardBrush, new Rectangle(0, 0, panel.Width - 5, panel.Height - 5), 15);
+                }
+            }
+        }
+
+        private void pnlInput_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = sender as Panel;
+            if (panel != null)
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                
+                using (var brush = new SolidBrush(panel.BackColor))
+                {
+                    GraphicsExtensions.FillRoundedRectangle(e.Graphics, brush, new Rectangle(0, 0, panel.Width, panel.Height), 8);
+                }
+                
+                // Draw border
+                Color borderColor = panel.BackColor == Color.FromArgb(240, 248, 255) ? 
+                    Color.FromArgb(52, 152, 219) : Color.FromArgb(220, 221, 222);
+                using (var pen = new Pen(borderColor, 1))
+                {
+                    GraphicsExtensions.DrawRoundedRectangle(e.Graphics, pen, new Rectangle(0, 0, panel.Width - 1, panel.Height - 1), 8);
+                }
+            }
+        }
+
+        private void picLogo_Paint(object sender, PaintEventArgs e)
+        {
+            DrawLogo(e.Graphics, new Rectangle(5, 5, 40, 40), Color.FromArgb(52, 152, 219));
+        }
+
+        private void picAppLogo_Paint(object sender, PaintEventArgs e)
+        {
+            DrawLogo(e.Graphics, new Rectangle(10, 10, 60, 60), Color.White);
+        }
+
+        private void picUsernameIcon_Paint(object sender, PaintEventArgs e)
+        {
+            DrawUserIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
+        }
+
+        private void picPasswordIcon_Paint(object sender, PaintEventArgs e)
+        {
+            DrawLockIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
+        }
+
+        private void DrawLogo(Graphics g, Rectangle rect, Color color)
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            using (var brush = new SolidBrush(color))
+            using (var pen = new Pen(Color.White, 2))
+            {
+                // Social media logo - connected circles
+                g.FillEllipse(brush, rect);
+                g.DrawEllipse(pen, rect.X + 8, rect.Y + 8, 12, 12);
+                g.DrawEllipse(pen, rect.X + 25, rect.Y + 8, 12, 12);
+                g.DrawEllipse(pen, rect.X + 16, rect.Y + 25, 12, 12);
+                g.DrawLine(pen, rect.X + 20, rect.Y + 14, rect.X + 25, rect.Y + 14);
+                g.DrawLine(pen, rect.X + 22, rect.Y + 20, rect.X + 22, rect.Y + 25);
+            }
+        }
+
+        private void DrawUserIcon(Graphics g, Rectangle rect, Color color)
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            using (var pen = new Pen(color, 1.5f))
+            {
+                // User icon
+                g.DrawEllipse(pen, rect.X + 4, rect.Y + 2, 8, 8);
+                g.DrawArc(pen, rect.X + 2, rect.Y + 8, 12, 8, 0, 180);
+            }
+        }
+
+        private void DrawLockIcon(Graphics g, Rectangle rect, Color color)
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            using (var pen = new Pen(color, 1.5f))
+            {
+                // Lock icon
+                g.DrawRectangle(pen, rect.X + 3, rect.Y + 8, 10, 6);
+                g.DrawArc(pen, rect.X + 5, rect.Y + 3, 6, 8, 180, 180);
+                g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 10, 2, 2);
+            }
+        }
+    }
+}
