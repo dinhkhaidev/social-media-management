@@ -47,7 +47,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="middlewares\protectedAuth.middleware.cs">
-      <SubType>Form</SubType>
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 </Project>
