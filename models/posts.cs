@@ -1,8 +1,7 @@
 ﻿using System;
-
-public class Class1
+public class Post
 {
-	public Class1()
+	public Post()
 	{
 	}
 }

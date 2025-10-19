@@ -1,7 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="frm\frmComment.cs">
+    <Compile Update="controls\RoundedTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="datas\RoundedTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\frmAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmDashboard.cs">
@@ -10,7 +16,37 @@
     <Compile Update="frm\frmForgotPass.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frm\frmUser.cs">
+    <Compile Update="frm\frmInfor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmPost.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmRegister.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucAnalytics.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucPosts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucSimpleDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucSocialAccounts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="middlewares\protectedAuth.middleware.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
