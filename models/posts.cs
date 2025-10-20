@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 namespace SocialManager
+public class Post
 {
     public class Post
     {
