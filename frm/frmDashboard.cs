@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SocialManager.services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,18 @@ namespace SocialManager.frm
         public frmDashboard()
         {
             InitializeComponent();
+            lblUsername.Text = AuthSessionService.CurrentUser.UserName;
+        }
+
+        private void lblUsername_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnNewPost_Click(object sender, EventArgs e)
+        {
+            frmPost frmPost = new frmPost();
+            frmPost.ShowDialog();
         }
     }
 }

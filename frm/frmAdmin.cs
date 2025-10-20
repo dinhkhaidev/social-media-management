@@ -14,7 +14,8 @@ using System.Windows.Forms;
 
 namespace SocialManager.frm
 {
-    public partial class frmAdmin : ProtectFormMiddleware
+    //public partial class frmAdmin : ProtectFormMiddleware
+    public partial class frmAdmin : Form
     {
         private string currentView = "Dashboard";
         private bool sidebarCollapsed = false;
@@ -694,8 +695,8 @@ namespace SocialManager.frm
                 
                 // Create and show login form BEFORE closing admin form
                 frmLogin loginForm = new frmLogin();
-                loginForm.Show();
-                
+                //loginForm.Show();
+
                 // Close admin form
                 this.Close();
             }

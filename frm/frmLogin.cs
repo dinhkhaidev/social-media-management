@@ -98,6 +98,8 @@ namespace SocialManager.frm
             {
                 if (_userService.AuthenticateUser(username, password))
                 {
+                    //User foundUser = _userService.GetUserByUsername(username);
+
                     AuthSessionService.Login(_userService.GetUserByUsername(username));
                     
                     // Successful login
@@ -107,14 +109,33 @@ namespace SocialManager.frm
                     try
                     {
                         // Create admin form
-                        frmAdmin adminForm = new frmAdmin();
-                        
-                        // Hide login form FIRST
-                        this.Hide();
-                        
-                        // Show admin form as dialog
-                        var adminResult = adminForm.ShowDialog();
-                        
+                        if (AuthSessionService.CurrentUser!= null && AuthSessionService.CurrentUser.Role == 1)
+                        {
+                            frmAdmin adminForm = new frmAdmin();
+
+                            // Hide login form FIRST
+                            this.Hide();
+
+                            // Show admin form as dialog
+                            var adminResult = adminForm.ShowDialog();
+
+                        }
+                        else if (AuthSessionService.CurrentUser != null)
+                        {
+                            frmDashboard userForm = new frmDashboard();
+                            this.Hide();
+
+                            // Show admin form as dialog
+                            var adminResult = userForm.ShowDialog();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Your account does not have permission to access the admin panel.", 
+                                "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            
+                            // Show login form again
+                            this.Show();
+                        }
                         // After admin form closes, check if user is still logged in
                         if (!AuthSessionService.IsLoggedIn)
                         {

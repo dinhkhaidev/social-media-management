@@ -374,4 +374,5 @@
         private Button btnToggleSidebar;
         private Panel pnlBreadcrumb;
         private Label lblBreadcrumb;
-    }}
+    }
+}
