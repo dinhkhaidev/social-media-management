@@ -4,6 +4,9 @@
     <Compile Update="controls\RoundedTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="frm\frmDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="datas\RoundedTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -16,7 +19,7 @@
     <Compile Update="frm\frmForgotPass.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frm\frmInfor.cs">
+    <Compile Update="frm\frmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmLogin.cs">
@@ -26,6 +29,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmRegister.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmInfor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucAnalytics.cs">
@@ -47,7 +53,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="middlewares\protectedAuth.middleware.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
 </Project>

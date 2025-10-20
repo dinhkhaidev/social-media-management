@@ -19,6 +19,7 @@ namespace SocialManager
         public int Gender { get; set; } // 0: Nam, 1: Nữ
         public DateTime DOB { get; set; }
         public string Address { get; set; }
+        public int Role { get; set; } // 0: User, 1: Admin, 2: Moderator
         public DateTime CreatedAt { get; set; }
         public int StatusId { get; set; }
 
@@ -28,13 +29,13 @@ namespace SocialManager
         public User()
         {
             UserName = Password = FullName = Bio = AvatarUrl = Email = Phone = Address = "";
+            Role= 0;
         }
 
         // Constructor để tạo đối tượng từ một dòng CSV
         public User(string csvLine)
         {
             string[] values = csvLine.Split(',');
-
             // Kiểm tra để tránh lỗi nếu dòng CSV không đủ cột
             if (values.Length >= 13)
             {
@@ -44,28 +45,30 @@ namespace SocialManager
 
                 this.UserName = values[1];
                 this.Password = values[2];
-                this.FullName = values[3];
-                this.Bio = values[4];
-                this.AvatarUrl = values[5];
-                this.Email = values[6];
-                this.Phone = values[7];
+                int.TryParse(values[3], out int role);
+                this.Role = role;
+                this.FullName = values[4];
+                this.Bio = values[5];
+                this.AvatarUrl = values[6];
+                this.Email = values[7];
+                this.Phone = values[8];
 
-                int.TryParse(values[8], out int gender);
+                int.TryParse(values[9], out int gender);
                 this.Gender = gender;
 
-                DateTime.TryParse(values[9], out DateTime dob);
+                DateTime.TryParse(values[10], out DateTime dob);
                 this.DOB = dob;
 
-                this.Address = values[10];
+                this.Address = values[11];
 
-                DateTime.TryParse(values[11], out DateTime createdAt);
+                DateTime.TryParse(values[12], out DateTime createdAt);
                 this.CreatedAt = createdAt;
 
-                int.TryParse(values[12], out int statusId);
+                int.TryParse(values[13], out int statusId);
                 this.StatusId = statusId;
             }
         }
-        public User(Guid userID, string userName, string password, string fullName, string bio, string avatarUrl, string email, string phone, int gender, DateTime dOB, string address, DateTime createdAt, int statusId)
+        public User(Guid userID, string userName, string password, string fullName, string bio, string avatarUrl, string email, string phone, int gender, DateTime dob, string address, DateTime createdAt, int statusId)
         {
             UserID = userID;
             UserName = userName;
@@ -76,7 +79,8 @@ namespace SocialManager
             Email = email;
             Phone = phone;
             Gender = gender;
-            DOB = dOB;
+            DOB = dob;
+            Role = 0;
             Address = address;
             CreatedAt = createdAt;
             StatusId = statusId;
