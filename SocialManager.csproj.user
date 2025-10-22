@@ -1,17 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
   <ItemGroup>
-    <Compile Update="controls\RoundedTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="datas\RoundedTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="frm\frmAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmDashboard.cs">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Update="frm\frmForgotPass.cs">
       <SubType>Form</SubType>
@@ -27,6 +22,15 @@
     </Compile>
     <Compile Update="frm\frmRegister.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\PostControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\RoundedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\RoundedTextBox.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucAnalytics.cs">
       <SubType>UserControl</SubType>
@@ -47,7 +51,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="middlewares\protectedAuth.middleware.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
 </Project>

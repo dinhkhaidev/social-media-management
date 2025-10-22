@@ -2,8 +2,15 @@
 {
     partial class frmPost
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -15,151 +22,336 @@
 
         #region Windows Form Designer generated code
 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
-            this.lblPostInfo = new System.Windows.Forms.Label();
-            this.txtContent = new SocialManager.controls.RoundedTextBox();
-            this.btnLike = new System.Windows.Forms.Button();
-            this.btnComment = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.lblStatus = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            pnlMain = new Panel();
+            dtpScheduleDate = new DateTimePicker();
+            chkSchedulePost = new CheckBox();
+            cmbVisibility = new ComboBox();
+            lblVisibility = new Label();
+            lblSettings = new Label();
+            pnlImagePreview = new Panel();
+            lblImageInfo = new Label();
+            btnRemoveImage = new Button();
+            picPreview = new PictureBox();
+            btnSelectImage = new Button();
+            lblMedia = new Label();
+            lblCharacterCount = new Label();
+            txtContent = new RichTextBox();
+            lblContent = new Label();
+            lblSubtitle = new Label();
+            lblTitle = new Label();
+            btnPost = new Button();
+            btnCancel = new Button();
+            pnlMain.SuspendLayout();
+            pnlImagePreview.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picPreview).BeginInit();
+            SuspendLayout();
             // 
-            // lblPostInfo
+            // pnlMain
             // 
-            this.lblPostInfo.AutoSize = true;
-            this.lblPostInfo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblPostInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblPostInfo.Location = new System.Drawing.Point(25, 25);
-            this.lblPostInfo.Name = "lblPostInfo";
-            this.lblPostInfo.Size = new System.Drawing.Size(273, 20);
-            this.lblPostInfo.TabIndex = 0;
-            this.lblPostInfo.Text = "ID: 12345 | Password: N/A | 20/10/2025";
+            pnlMain.BackColor = Color.White;
+            pnlMain.BorderStyle = BorderStyle.FixedSingle;
+            pnlMain.Controls.Add(dtpScheduleDate);
+            pnlMain.Controls.Add(chkSchedulePost);
+            pnlMain.Controls.Add(cmbVisibility);
+            pnlMain.Controls.Add(lblVisibility);
+            pnlMain.Controls.Add(lblSettings);
+            pnlMain.Controls.Add(pnlImagePreview);
+            pnlMain.Controls.Add(btnSelectImage);
+            pnlMain.Controls.Add(lblMedia);
+            pnlMain.Controls.Add(lblCharacterCount);
+            pnlMain.Controls.Add(txtContent);
+            pnlMain.Controls.Add(lblContent);
+            pnlMain.Controls.Add(lblSubtitle);
+            pnlMain.Controls.Add(lblTitle);
+            pnlMain.Location = new Point(29, 33);
+            pnlMain.Margin = new Padding(3, 4, 3, 4);
+            pnlMain.Name = "pnlMain";
+            pnlMain.Size = new Size(685, 733);
+            pnlMain.TabIndex = 0;
+            // 
+            // dtpScheduleDate
+            // 
+            dtpScheduleDate.CustomFormat = "dd/MM/yyyy HH:mm";
+            dtpScheduleDate.Font = new Font("Segoe UI", 9F);
+            dtpScheduleDate.Format = DateTimePickerFormat.Custom;
+            dtpScheduleDate.Location = new Point(458, 610);
+            dtpScheduleDate.Margin = new Padding(3, 4, 3, 4);
+            dtpScheduleDate.Name = "dtpScheduleDate";
+            dtpScheduleDate.ShowUpDown = true;
+            dtpScheduleDate.Size = new Size(205, 27);
+            dtpScheduleDate.TabIndex = 12;
+            dtpScheduleDate.Visible = false;
+            // 
+            // chkSchedulePost
+            // 
+            chkSchedulePost.AutoSize = true;
+            chkSchedulePost.Font = new Font("Segoe UI", 10F);
+            chkSchedulePost.ForeColor = Color.FromArgb(52, 73, 94);
+            chkSchedulePost.Location = new Point(318, 613);
+            chkSchedulePost.Margin = new Padding(3, 4, 3, 4);
+            chkSchedulePost.Name = "chkSchedulePost";
+            chkSchedulePost.Size = new Size(134, 27);
+            chkSchedulePost.TabIndex = 11;
+            chkSchedulePost.Text = "Lên lịch đăng";
+            chkSchedulePost.UseVisualStyleBackColor = true;
+            chkSchedulePost.CheckedChanged += chkSchedulePost_CheckedChanged;
+            // 
+            // cmbVisibility
+            // 
+            cmbVisibility.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbVisibility.Font = new Font("Segoe UI", 10F);
+            cmbVisibility.FormattingEnabled = true;
+            cmbVisibility.Items.AddRange(new object[] { "Công khai", "Bạn bè", "Riêng tư" });
+            cmbVisibility.Location = new Point(162, 606);
+            cmbVisibility.Margin = new Padding(3, 4, 3, 4);
+            cmbVisibility.Name = "cmbVisibility";
+            cmbVisibility.Size = new Size(137, 31);
+            cmbVisibility.TabIndex = 10;
+            // 
+            // lblVisibility
+            // 
+            lblVisibility.AutoSize = true;
+            lblVisibility.Font = new Font("Segoe UI", 10F);
+            lblVisibility.ForeColor = Color.FromArgb(52, 73, 94);
+            lblVisibility.Location = new Point(34, 614);
+            lblVisibility.Name = "lblVisibility";
+            lblVisibility.Size = new Size(129, 23);
+            lblVisibility.TabIndex = 9;
+            lblVisibility.Text = "Quyền riêng tư:";
+            // 
+            // lblSettings
+            // 
+            lblSettings.AutoSize = true;
+            lblSettings.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblSettings.ForeColor = Color.FromArgb(52, 73, 94);
+            lblSettings.Location = new Point(34, 576);
+            lblSettings.Name = "lblSettings";
+            lblSettings.Size = new Size(142, 25);
+            lblSettings.TabIndex = 8;
+            lblSettings.Text = "Cài đặt bài viết";
+            // 
+            // pnlImagePreview
+            // 
+            pnlImagePreview.BackColor = Color.FromArgb(248, 249, 250);
+            pnlImagePreview.BorderStyle = BorderStyle.FixedSingle;
+            pnlImagePreview.Controls.Add(btnRemoveImage);
+            pnlImagePreview.Controls.Add(lblImageInfo);
+            pnlImagePreview.Controls.Add(picPreview);
+            pnlImagePreview.Location = new Point(34, 454);
+            pnlImagePreview.Margin = new Padding(3, 4, 3, 4);
+            pnlImagePreview.Name = "pnlImagePreview";
+            pnlImagePreview.Size = new Size(617, 106);
+            pnlImagePreview.TabIndex = 7;
+            pnlImagePreview.Visible = false;
+            // 
+            // lblImageInfo
+            // 
+            lblImageInfo.AutoSize = true;
+            lblImageInfo.Font = new Font("Segoe UI", 10F);
+            lblImageInfo.ForeColor = Color.FromArgb(127, 140, 141);
+            lblImageInfo.Location = new Point(98, 28);
+            lblImageInfo.Name = "lblImageInfo";
+            lblImageInfo.Size = new Size(166, 23);
+            lblImageInfo.TabIndex = 2;
+            lblImageInfo.Text = "Chưa chọn hình ảnh";
+            // 
+            // btnRemoveImage
+            // 
+            btnRemoveImage.BackColor = Color.FromArgb(231, 76, 60);
+            btnRemoveImage.FlatAppearance.BorderSize = 0;
+            btnRemoveImage.FlatStyle = FlatStyle.Flat;
+            btnRemoveImage.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnRemoveImage.ForeColor = Color.White;
+            btnRemoveImage.Location = new Point(577, 8);
+            btnRemoveImage.Margin = new Padding(3, 4, 3, 4);
+            btnRemoveImage.Name = "btnRemoveImage";
+            btnRemoveImage.Size = new Size(29, 33);
+            btnRemoveImage.TabIndex = 1;
+            btnRemoveImage.Text = "×";
+            btnRemoveImage.UseVisualStyleBackColor = false;
+            btnRemoveImage.Click += btnRemoveImage_Click;
+            // 
+            // picPreview
+            // 
+            picPreview.BackColor = Color.White;
+            picPreview.BorderStyle = BorderStyle.FixedSingle;
+            picPreview.Location = new Point(11, 8);
+            picPreview.Margin = new Padding(3, 4, 3, 4);
+            picPreview.Name = "picPreview";
+            picPreview.Size = new Size(68, 79);
+            picPreview.SizeMode = PictureBoxSizeMode.Zoom;
+            picPreview.TabIndex = 0;
+            picPreview.TabStop = false;
+            // 
+            // btnSelectImage
+            // 
+            btnSelectImage.BackColor = Color.FromArgb(46, 204, 113);
+            btnSelectImage.FlatAppearance.BorderSize = 0;
+            btnSelectImage.FlatStyle = FlatStyle.Flat;
+            btnSelectImage.Font = new Font("Segoe UI", 10F);
+            btnSelectImage.ForeColor = Color.White;
+            btnSelectImage.Location = new Point(34, 401);
+            btnSelectImage.Margin = new Padding(3, 4, 3, 4);
+            btnSelectImage.Name = "btnSelectImage";
+            btnSelectImage.Size = new Size(137, 36);
+            btnSelectImage.TabIndex = 6;
+            btnSelectImage.Text = "📷 Chọn hình ảnh";
+            btnSelectImage.UseVisualStyleBackColor = false;
+            btnSelectImage.Click += btnSelectImage_Click;
+            // 
+            // lblMedia
+            // 
+            lblMedia.AutoSize = true;
+            lblMedia.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblMedia.ForeColor = Color.FromArgb(52, 73, 94);
+            lblMedia.Location = new Point(34, 363);
+            lblMedia.Name = "lblMedia";
+            lblMedia.Size = new Size(240, 25);
+            lblMedia.TabIndex = 5;
+            lblMedia.Text = "Thêm hình ảnh (tùy chọn)";
+            // 
+            // lblCharacterCount
+            // 
+            lblCharacterCount.AutoSize = true;
+            lblCharacterCount.Font = new Font("Segoe UI", 9F);
+            lblCharacterCount.ForeColor = Color.FromArgb(149, 165, 166);
+            lblCharacterCount.Location = new Point(558, 339);
+            lblCharacterCount.Name = "lblCharacterCount";
+            lblCharacterCount.Size = new Size(83, 20);
+            lblCharacterCount.TabIndex = 4;
+            lblCharacterCount.Text = "0/500 ký tự";
+            lblCharacterCount.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtContent
             // 
-            this.txtContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtContent.BackColor = System.Drawing.SystemColors.Window;
-            this.txtContent.BorderColor = System.Drawing.Color.LightGray;
-            this.txtContent.BorderFocusColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(123)))), ((int)(((byte)(255)))));
-            this.txtContent.BorderRadius = 15;
-            this.txtContent.BorderSize = 1;
-            this.txtContent.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtContent.Location = new System.Drawing.Point(29, 60);
-            this.txtContent.Multiline = true;
-            this.txtContent.Name = "txtContent";
-            this.txtContent.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
-            this.txtContent.PasswordChar = false;
-            this.txtContent.PlaceholderColor = System.Drawing.Color.DarkGray;
-            this.txtContent.PlaceholderText = "Nội dung bài viết...";
-            this.txtContent.Size = new System.Drawing.Size(742, 250);
-            this.txtContent.TabIndex = 1;
-            this.txtContent.UnderlinedStyle = false;
+            txtContent.BorderStyle = BorderStyle.FixedSingle;
+            txtContent.Font = new Font("Segoe UI", 11F);
+            txtContent.Location = new Point(34, 136);
+            txtContent.Margin = new Padding(3, 4, 3, 4);
+            txtContent.MaxLength = 500;
+            txtContent.Name = "txtContent";
+            txtContent.Size = new Size(617, 199);
+            txtContent.TabIndex = 3;
+            txtContent.Text = "";
+            txtContent.TextChanged += txtContent_TextChanged;
             // 
-            // btnLike
+            // lblContent
             // 
-            this.btnLike.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLike.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnLike.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-            this.btnLike.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLike.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnLike.Location = new System.Drawing.Point(29, 325);
-            this.btnLike.Name = "btnLike";
-            this.btnLike.Size = new System.Drawing.Size(120, 32);
-            this.btnLike.TabIndex = 3;
-            this.btnLike.Text = "Like";
-            this.btnLike.UseVisualStyleBackColor = false;
+            lblContent.AutoSize = true;
+            lblContent.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblContent.ForeColor = Color.FromArgb(52, 73, 94);
+            lblContent.Location = new Point(34, 107);
+            lblContent.Name = "lblContent";
+            lblContent.Size = new Size(205, 25);
+            lblContent.TabIndex = 2;
+            lblContent.Text = "Bạn đang nghĩ gì thế?";
             // 
-            // btnComment
+            // lblSubtitle
             // 
-            this.btnComment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnComment.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnComment.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-            this.btnComment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnComment.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnComment.Location = new System.Drawing.Point(165, 325);
-            this.btnComment.Name = "btnComment";
-            this.btnComment.Size = new System.Drawing.Size(120, 32);
-            this.btnComment.TabIndex = 4;
-            this.btnComment.Text = "Comment";
-            this.btnComment.UseVisualStyleBackColor = false;
+            lblSubtitle.AutoSize = true;
+            lblSubtitle.Font = new Font("Segoe UI", 10F);
+            lblSubtitle.ForeColor = Color.FromArgb(127, 140, 141);
+            lblSubtitle.Location = new Point(34, 74);
+            lblSubtitle.Name = "lblSubtitle";
+            lblSubtitle.Size = new Size(310, 23);
+            lblSubtitle.TabIndex = 1;
+            lblSubtitle.Text = "Chia sẻ suy nghĩ của bạn với mọi người";
             // 
-            // btnSave
+            // lblTitle
             // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(123)))), ((int)(((byte)(255)))));
-            this.btnSave.FlatAppearance.BorderSize = 0;
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(651, 370);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(120, 40);
-            this.btnSave.TabIndex = 5;
-            this.btnSave.Text = "Lưu";
-            this.btnSave.UseVisualStyleBackColor = false;
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            lblTitle.Location = new Point(34, 33);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(246, 41);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Tạo bài viết mới";
+            // 
+            // btnPost
+            // 
+            btnPost.BackColor = Color.FromArgb(52, 152, 219);
+            btnPost.FlatAppearance.BorderSize = 0;
+            btnPost.FlatStyle = FlatStyle.Flat;
+            btnPost.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            btnPost.ForeColor = Color.White;
+            btnPost.Location = new Point(600, 787);
+            btnPost.Margin = new Padding(3, 4, 3, 4);
+            btnPost.Name = "btnPost";
+            btnPost.Size = new Size(114, 60);
+            btnPost.TabIndex = 13;
+            btnPost.Text = "📤 Đăng";
+            btnPost.UseVisualStyleBackColor = false;
+            btnPost.Click += btnPost_Click;
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.BackColor = System.Drawing.Color.Gainsboro;
-            this.btnCancel.FlatAppearance.BorderSize = 0;
-            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnCancel.Location = new System.Drawing.Point(525, 370);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(120, 40);
-            this.btnCancel.TabIndex = 6;
-            this.btnCancel.Text = "Hủy";
-            this.btnCancel.UseVisualStyleBackColor = false;
-            // 
-            // lblStatus
-            // 
-            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
-            this.lblStatus.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblStatus.Location = new System.Drawing.Point(650, 332);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(121, 19);
-            this.lblStatus.TabIndex = 7;
-            this.lblStatus.Text = "Trạng thái cập nhật";
-            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            btnCancel.BackColor = Color.FromArgb(149, 165, 166);
+            btnCancel.FlatAppearance.BorderSize = 0;
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Segoe UI", 11F);
+            btnCancel.ForeColor = Color.White;
+            btnCancel.Location = new Point(474, 787);
+            btnCancel.Margin = new Padding(3, 4, 3, 4);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(114, 60);
+            btnCancel.TabIndex = 14;
+            btnCancel.Text = "Hủy";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // frmPost
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(800, 422);
-            this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.btnComment);
-            this.Controls.Add(this.btnLike);
-            this.Controls.Add(this.txtContent);
-            this.Controls.Add(this.lblPostInfo);
-            this.MinimumSize = new System.Drawing.Size(600, 400);
-            this.Name = "frmPost";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Chi Tiết Bài Viết";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(247, 249, 252);
+            ClientSize = new Size(743, 867);
+            Controls.Add(btnCancel);
+            Controls.Add(btnPost);
+            Controls.Add(pnlMain);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "frmPost";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Tạo bài viết mới";
+            pnlMain.ResumeLayout(false);
+            pnlMain.PerformLayout();
+            pnlImagePreview.ResumeLayout(false);
+            pnlImagePreview.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picPreview).EndInit();
+            ResumeLayout(false);
+
         }
 
         #endregion
 
-        private System.Windows.Forms.Label lblPostInfo;
-        private controls.RoundedTextBox txtContent;
-        private System.Windows.Forms.Button btnLike;
-        private System.Windows.Forms.Button btnComment;
-        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblSubtitle;
+        private System.Windows.Forms.Label lblContent;
+        private System.Windows.Forms.RichTextBox txtContent;
+        private System.Windows.Forms.Label lblCharacterCount;
+        private System.Windows.Forms.Label lblMedia;
+        private System.Windows.Forms.Button btnSelectImage;
+        private System.Windows.Forms.Panel pnlImagePreview;
+        private System.Windows.Forms.PictureBox picPreview;
+        private System.Windows.Forms.Button btnRemoveImage;
+        private System.Windows.Forms.Label lblImageInfo;
+        private System.Windows.Forms.Label lblSettings;
+        private System.Windows.Forms.Label lblVisibility;
+        private System.Windows.Forms.ComboBox cmbVisibility;
+        private System.Windows.Forms.CheckBox chkSchedulePost;
+        private System.Windows.Forms.DateTimePicker dtpScheduleDate;
+        private System.Windows.Forms.Button btnPost;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label lblStatus;
     }
 }
