@@ -1,0 +1,101 @@
+PostID,UserID,Content,MediaUrl,Visibility,LikesCount,CommentsCount,CreatedAt,UpdatedAt
+1,b1c13a86-f3f3-4296-9ba5-03cce3a8b118,"Hôm nay thời tiết đẹp quá! Ai rảnh đi cafe không? ☕",https://example.com/media/post1.jpg,Public,15,8,2025-10-20 08:30:15,
+PostID,UserID,Content,MediaUrl,Visibility,LikesCount,CommentsCount,CreatedAt,UpdatedAt
+1,b1c13a86-f3f3-4296-9ba5-03cce3a8b118,AI đang thay đổi thế giới nhanh hơn chúng ta tưởng.,https://picsum.photos/500/300?random=1,Public,8,4,2025-04-30 02:22:53,2025-08-14 06:24:02
+2,b633242c-be5a-4e15-ac8d-989253896723,Hệ điều hành mới cập nhật có lỗi gì không mọi người?,https://picsum.photos/500/300?random=2,Friends,12,7,2021-07-08 21:37:02,2021-10-18 10:27:30
+3,6b654c3a-4ade-4da9-a267-5c9ab8730007,Mẫu điện thoại mới ra mắt có đáng tiền không?,,Public,15,9,2025-03-03 23:00:13,
+4,5c732c78-6c05-4d6b-9a31-adc02ce52b1f,Mọi người nghĩ sao về thị trường chứng khoán tuần tới?,https://picsum.photos/500/300?random=4,Public,22,11,2022-01-26 15:00:40,2024-08-24 16:54:45
+5,e93f824e-29ba-4795-9bb2-3056bf1ef180,Pin của máy này đúng là một điểm trừ lớn ạ.,https://picsum.photos/500/300?random=5,Public,18,8,2025-09-19 12:43:46,2025-10-03 19:09:16
+6,33694092-0610-4088-8274-cedd56c1a2ec,AI đang thay đổi thế giới nhanh hơn chúng ta tưởng.,,Public,14,6,2023-05-31 15:44:48,2023-10-31 17:07:20
+7,6eed39c9-83b8-43e6-95ab-83c9625e1bf8,Hệ điều hành mới cập nhật có lỗi gì không mọi người?,https://picsum.photos/500/300?random=7,Friends,20,10,2024-06-28 00:12:15,2025-10-05 14:54:22
+8,6fa3fa03-a468-4ae0-8789-2f0d52493a6a,Cổ phiếu ngành công nghệ đang dẫn dắt thị trường.,https://picsum.photos/500/300?random=8,Public,25,12,2021-01-03 11:17:54,2024-04-11 21:33:45
+9,23b59c80-4a91-47ee-b051-7eacf6f2ca41,Bạn nghĩ ai sẽ vô địch giải năm nay?,https://picsum.photos/500/300?random=9,Public,32,16,2023-07-24 00:43:31,
+10,558cdd20-e089-414a-b7bd-18fca64d2608,Lãi suất tiết kiệm dạo này có vẻ không hấp dẫn lắm.,,Public,19,8,2021-02-25 10:07:45,2024-04-01 22:20:53
+11,5403dc51-6709-460c-90b3-8e9abebce43a,Mẫu điện thoại mới ra mắt có đáng tiền không?,https://picsum.photos/500/300?random=11,Public,28,13,2025-04-02 00:49:01,2025-06-17 00:18:20
+12,9f010aa5-3bc0-454a-943d-06055f729f48,Mọi người nghĩ sao về thị trường chứng khoán tuần tới?,https://picsum.photos/500/300?random=12,Public,30,15,2023-12-18 07:31:21,2024-10-18 00:41:14
+13,3659ba56-1673-4e28-a06e-494184f2b2f1,Mẫu điện thoại mới ra mắt có đáng tiền không?,https://picsum.photos/500/300?random=13,Public,24,11,2025-05-10 11:32:08,
+14,1d837871-8735-4141-83d9-592d9aef042a,Hè này nên đi biển nào đẹp mà vắng người nhỉ?,https://picsum.photos/500/300?random=14,Friends,16,7,2021-07-29 10:26:13,2023-11-09 13:46:48
+15,03023a08-98b0-4a9c-9562-584d7c7624c1,Ai có kinh nghiệm du lịch một mình không?,,Public,22,10,2022-10-04 02:41:36,2023-02-13 11:24:22
+16,2d377520-e359-48c2-b2d6-cf0de98f9cce,Trận đấu tối qua mãn nhãn thật sự!,https://picsum.photos/500/300?random=16,Friends,18,8,2024-08-23 10:37:39,
+17,84e33ae0-3e05-49c9-8493-a57f9083ea0f,AI đang thay đổi thế giới nhanh hơn chúng ta tưởng.,https://picsum.photos/500/300?random=17,Public,26,12,2025-04-30 02:22:53,2025-08-14 06:24:02
+18,2ce01aad-5a0e-481d-b48c-382fe9a44381,AI đang thay đổi thế giới nhanh hơn chúng ta tưởng.,https://picsum.photos/500/300?random=18,Public,35,14,2025-01-23 21:09:57,2025-08-25 18:54:31
+19,fc164408-145d-450e-84f6-df51ec926eca,Pin của máy này đúng là một điểm trừ lớn ạ.,,Public,20,9,2025-08-20 23:49:41,2025-09-06 11:07:56
+20,674d8dfb-d588-4512-8ca9-941665abd3ba,Cổ phiếu ngành công nghệ đang dẫn dắt thị trường.,https://picsum.photos/500/300?random=20,Public,28,13,2024-09-01 05:20:08,2025-03-21 18:30:34
+21,b636b593-f99a-4047-99c5-d84d0be7abef,Cầu thủ yêu thích của mọi người là ai?,https://picsum.photos/500/300?random=21,Friends,21,9,2025-01-19 20:44:24,2025-08-21 00:41:33
+22,0f8c2cba-0c9f-4de9-9cfb-e4c3a8aa3020,Mọi người nghĩ sao về thị trường chứng khoán tuần tới?,,Public,25,12,2024-03-02 13:54:59,
+23,6d0aaf6e-3dfe-4890-aefb-8bb73af2c068,Hệ điều hành mới cập nhật có lỗi gì không mọi người?,https://picsum.photos/500/300?random=23,Public,19,8,2023-04-24 08:01:37,2023-11-23 19:17:09
+24,9bc45ca6-ead5-452f-9835-b57f4afa4c6b,Trận đấu tối qua mãn nhãn thật sự!,https://picsum.photos/500/300?random=24,Public,42,18,2025-08-23 18:53:14,2025-09-23 19:47:08
+25,4433fa69-510c-417c-b819-49c35b6ebd09,Lãi suất tiết kiệm dạo này có vẻ không hấp dẫn lắm.,https://picsum.photos/500/300?random=25,Friends,23,10,2025-02-22 16:17:12,2025-09-05 12:19:56
+26,2cc4a664-5344-4d07-9400-8642f7a67053,Mọi người nghĩ sao về thị trường chứng khoán tuần tới?,https://picsum.photos/500/300?random=26,Public,20,9,2024-07-11 19:42:07,2024-12-10 16:00:45
+27,26221568-2dd9-4f97-87cc-30caf520e300,Hè này nên đi biển nào đẹp mà vắng người nhỉ?,,Public,30,14,2023-05-31 01:49:38,2024-08-17 05:02:41
+28,e83a5f3b-f2b2-4060-ba11-a0a2c6cb812a,Trận đấu tối qua mãn nhãn thật sự!,https://picsum.photos/500/300?random=28,Public,38,17,2022-11-17 11:11:57,2025-03-20 11:36:20
+29,5c732c78-6c05-4d6b-9a31-adc02ce52b1f,Siêu phẩm của cầu thủ đó đúng là không thể tin được!,https://picsum.photos/500/300?random=29,Friends,45,20,2025-10-06 10:23:23,2025-10-12 10:16:29
+30,e31c97ef-6df9-4973-830e-296b7767e786,Hè này nên đi biển nào đẹp mà vắng người nhỉ?,https://picsum.photos/500/300?random=30,Public,27,12,2025-09-12 18:21:59,2025-09-25 15:14:21
+31,82c35ed5-c8c5-48f3-97ed-b3ced4113a1b,Có ai có kinh nghiệm đầu tư vàng không chia sẻ cho mình với!,https://picsum.photos/500/300?random=31,Public,24,11,2022-06-13 10:26:52,2023-06-30 05:44:37
+32,82a6e2a7-2fb1-4f26-b869-f784aeac3448,Mẫu điện thoại mới ra mắt có đáng tiền không?,https://picsum.photos/500/300?random=32,Public,31,15,2021-03-11 17:57:21,2025-10-07 07:26:34
+33,29feb88b-ca36-446f-97e6-d6a3c959d61f,Đa dạng hóa danh mục là chiến lược an toàn nhất.,https://picsum.photos/500/300?random=33,Friends,26,12,2024-10-22 20:11:42,
+34,345fa40b-a3ba-4e25-9f11-e2887cfbfacb,Mọi người nghĩ sao về thị trường chứng khoán tuần tới?,,Public,22,10,2024-10-03 00:55:02,2024-12-08 06:03:23
+35,ce2f2663-09fe-4373-a44e-3286b4b599cc,Trận đấu tối qua mãn nhãn thật sự!,https://picsum.photos/500/300?random=35,Public,40,17,2024-01-10 13:24:01,2025-10-06 23:21:23
+36,b592d1cc-e74f-4760-bf41-ef1dea7a3534,AI đang thay đổi thế giới nhanh hơn chúng ta tưởng.,https://picsum.photos/500/300?random=36,Public,33,14,2022-02-23 09:12:25,
+37,ef26d43b-4f10-4163-8174-6210edb0dceb,Có ai có kinh nghiệm đầu tư vàng không chia sẻ cho mình với!,https://picsum.photos/500/300?random=37,Friends,28,12,2025-01-11 23:02:58,
+38,a2d5e807-e029-498a-b712-cff822988c18,Mình cũng từng đến đó cảnh đẹp thực sự nhưng dịch vụ chưa tốt lắm.,https://picsum.photos/500/300?random=38,Public,29,13,2024-12-21 03:17:03,2025-06-19 20:53:01
+39,45d67185-7732-46ce-b99c-93197a66fb41,Ai có kinh nghiệm du lịch một mình không?,https://picsum.photos/500/300?random=39,Public,25,11,2022-05-16 03:08:38,2025-03-31 21:12:15
+40,da97631f-a81c-4c05-b568-75b060d3146c,Mọi người nghĩ sao về thị trường chứng khoán tuần tới?,https://picsum.photos/500/300?random=40,Public,20,9,2023-02-27 03:28:41,2023-06-02 01:59:12
+41,84f7e735-21d6-4080-a3f7-91c4b1e57446,Hệ điều hành mới cập nhật có lỗi gì không mọi người?,,Friends,17,7,2025-06-22 00:23:40,2025-09-28 19:15:11
+42,5403dc51-6709-460c-90b3-8e9abebce43a,Bạn nghĩ ai sẽ vô địch giải năm nay?,https://picsum.photos/500/300?random=42,Public,43,19,2021-11-25 22:03:53,2024-10-04 12:26:54
+43,730bb91f-fe34-432c-b167-8db8a48c8e7d,Siêu phẩm của cầu thủ đó đúng là không thể tin được!,https://picsum.photos/500/300?random=43,Public,38,16,2025-05-17 13:56:15,
+44,9fce07f6-a324-4ca3-ba5b-34b8cdf5e772,Mình đang tìm review chi tiết về chuyến đi Hà Giang.,https://picsum.photos/500/300?random=44,Friends,32,14,2021-03-20 21:04:21,2023-06-25 14:24:24
+45,068b8c0a-8f78-423d-b293-1ad31d4ada34,Mẫu điện thoại mới ra mắt có đáng tiền không?,https://picsum.photos/500/300?random=45,Public,36,15,2021-04-04 02:20:21,2023-01-29 13:17:35
+46,f0f22b95-c10f-42e1-92b4-bcb0899b945e,Cầu thủ yêu thích của mọi người là ai?,https://picsum.photos/500/300?random=46,Public,29,12,2023-10-17 05:22:34,2024-10-09 10:44:21
+47,e8d237e0-6434-4187-b557-9ec1b593b219,AI đang thay đổi thế giới nhanh hơn chúng ta tưởng.,,Public,34,13,2023-11-21 09:19:29,2024-08-14 23:39:12
+48,c2b7fb43-1a1f-43be-bb58-459a6035034c,Mình đang tìm review chi tiết về chuyến đi Hà Giang.,https://picsum.photos/500/300?random=48,Friends,30,14,2023-07-12 03:51:22,2025-05-26 20:42:12
+49,9f010aa5-3bc0-454a-943d-06055f729f48,Cầu thủ yêu thích của mọi người là ai?,https://picsum.photos/500/300?random=49,Public,37,16,2021-06-26 16:13:22,2022-02-18 12:30:35
+50,e31c97ef-6df9-4973-830e-296b7767e786,Hệ điều hành mới cập nhật có lỗi gì không mọi người?,https://picsum.photos/500/300?random=50,Public,18,8,2024-05-15 00:53:03,2024-08-19 01:30:06,
+3,6b654c3a-4ade-4da9-a267-5c9ab8730007,"Đọc xong cuốn sách hay, ai muốn mượn không? 📚",https://example.com/media/post3.jpg,Friends,8,3,2025-10-18 19:45:00,
+4,5c732c78-6c05-4d6b-9a31-adc02ce52b1f,"Mới học xong khóa Python, cảm thấy rất thú vị! 🐍💻",,Public,23,7,2025-10-17 10:15:20,2025-10-17 15:30:00
+5,e93f824e-29ba-4795-9bb2-3056bf1ef180,"Du lịch Đà Lạt cuối tuần này, ai có kinh nghiệm chỉ giúp với! 🏔️",https://example.com/media/post5.jpg,Public,31,18,2025-10-16 07:20:45,
+6,33694092-0610-4088-8274-cedd56c1a2ec,"Hải Phòng hôm nay mưa to, mọi người cẩn thận khi ra đường! 🌧️",,Public,12,4,2025-10-15 16:50:30,
+7,6eed39c9-83b8-43e6-95ab-83c9625e1bf8,"Công nghệ AI đang phát triển quá nhanh, thật tuyệt vời! 🤖",https://example.com/media/post7.jpg,Public,55,22,2025-10-14 09:30:00,
+8,6fa3fa03-a468-4ae0-8789-2f0d52493a6a,"Ngày mưa cà phê và sách là đủ. Cuộc sống đơn giản mà đẹp. ☕📖",https://example.com/media/post8.jpg,Public,28,9,2025-10-13 11:45:15,
+9,2cc4a664-5344-4d07-9400-8642f7a67053,"Biên Hòa có quán cơm ngon nào gần chợ không nhỉ? Giới thiệu với! 🍜",,Public,7,15,2025-10-12 12:30:20,
+10,4433fa69-510c-417c-b819-49c35b6ebd09,"Vừa xem phim rất hay! Ai xem Oppenheimer chưa? 🎬",https://example.com/media/post10.jpg,Public,19,11,2025-10-11 20:15:00,
+11,23b59c80-4a91-47ee-b051-7eacf6f2ca41,"Tập guitar mỗi ngày giúp tôi thư giãn rất nhiều 🎸",,Friends,14,5,2025-10-10 18:00:30,
+12,068b8c0a-8f78-423d-b293-1ad31d4ada34,"Âm nhạc là liệu pháp tâm hồn! 🎵",https://example.com/media/post12.jpg,Public,33,8,2025-10-09 15:20:00,
+13,48bc63e9-543c-41fa-a4f3-452366917166,"TP.HCM buổi tối rất đẹp, đi dạo Bùi Viện chill quá! 🌃",https://example.com/media/post13.jpg,Public,45,16,2025-10-08 21:30:45,
+14,9bc45ca6-ead5-452f-9835-b57f4afa4c6b,"Nha Trang biển đẹp, nhưng cần bảo vệ môi trường hơn nữa! 🏖️",,Public,22,13,2025-10-07 08:45:00,
+15,9fce07f6-a324-4ca3-ba5b-34b8cdf5e772,"Vinh quê tôi, ai về thăm thì ghé chơi nhé! 🏡",https://example.com/media/post15.jpg,Public,18,6,2025-10-06 14:20:30,
+16,558cdd20-e089-414a-b7bd-18fca64d2608,"Guitar solo mới học, mong mọi người góp ý! 🎶",https://example.com/media/post16.mp4,Friends,11,7,2025-10-05 19:30:00,
+17,e8d237e0-6434-4187-b557-9ec1b593b219,"Huế mùa mưa rất thơ, ai đồng ý không? 🌧️",https://example.com/media/post17.jpg,Public,26,10,2025-10-04 10:15:20,
+18,730bb91f-fe34-432c-b167-8db8a48c8e7d,"Làm việc remote từ Biên Hòa rất thoải mái! 💻",https://example.com/media/post18.jpg,Public,17,5,2025-10-03 09:00:15,
+19,f0f22b95-c10f-42e1-92b4-bcb0899b945e,"Hà Nội mùa thu đẹp nhất năm rồi! 🍂",https://example.com/media/post19.jpg,Public,38,14,2025-10-02 16:45:00,
+20,c2b7fb43-1a1f-43be-bb58-459a6035034c,"Cà phê buổi sáng tại Huế thật tuyệt vời! ☕",https://example.com/media/post20.jpg,Public,21,8,2025-10-01 07:30:00,
+21,e83a5f3b-f2b2-4060-ba11-a0a2c6cb812a,"Vũng Tàu cuối tuần rất đông, nhưng vẫn vui! 🏖️",https://example.com/media/post21.jpg,Public,29,12,2025-09-30 13:20:30,
+22,1d837871-8735-4141-83d9-592d9aef042a,"Đọc sách giúp mình học được nhiều điều hay! 📚",https://example.com/media/post22.jpg,Friends,13,4,2025-09-29 17:00:00,
+23,26221568-2dd9-4f97-87cc-30caf520e300,"Hà Nội phở ngon nhất Việt Nam! 🍜",https://example.com/media/post23.jpg,Public,41,19,2025-09-28 11:45:15,
+24,f71236dc-e977-45d8-96b4-d2b25a04b364,"Biên Hòa phát triển nhanh quá! 🏙️",,Public,16,7,2025-09-27 14:30:20,
+25,da97631f-a81c-4c05-b568-75b060d3146c,"Đà Nẵng cầu rồng phun lửa rất đẹp! 🐉🔥",https://example.com/media/post25.jpg,Public,34,11,2025-09-26 20:00:00,
+26,84f7e735-21d6-4080-a3f7-91c4b1e57446,"Đà Nẵng có nhiều quán ăn ngon lắm! 🍲",,Public,19,9,2025-09-25 12:15:30,
+27,5403dc51-6709-460c-90b3-8e9abebce43a,"Vinh có ai thích đọc sách không, hẹn gặp! 📖",https://example.com/media/post27.jpg,Friends,10,3,2025-09-24 15:45:00,
+28,45d67185-7732-46ce-b99c-93197a66fb41,"Hà Nội hồ Gươm đẹp lắm, ai chưa đến thì nên thử! 🌊",https://example.com/media/post28.jpg,Public,27,8,2025-09-23 09:30:15,
+29,ef26d43b-4f10-4163-8174-6210edb0dceb,"Đà Nẵng làm việc từ xa view biển tuyệt vời! 🌊💻",https://example.com/media/post29.jpg,Public,32,10,2025-09-22 10:20:00,
+30,9f010aa5-3bc0-454a-943d-06055f729f48,"Vinh quê hương tôi yêu! ❤️",https://example.com/media/post30.jpg,Public,24,6,2025-09-21 16:00:30,
+31,3659ba56-1673-4e28-a06e-494184f2b2f1,"Hải Phòng có quán cafe acoustic rất chill! 🎸☕",https://example.com/media/post31.jpg,Public,20,7,2025-09-20 18:30:00,
+32,82c35ed5-c8c5-48f3-97ed-b3ced4113a1b,"Cần Thơ chợ nổi rất độc đáo! 🚤",https://example.com/media/post32.jpg,Public,36,14,2025-09-19 07:45:20,
+33,29feb88b-ca36-446f-97e6-d6a3c959d61f,"TP.HCM nhớ quá, sắp về thăm rồi! 🏙️❤️",https://example.com/media/post33.jpg,Public,15,5,2025-09-18 13:15:00,
+34,82a6e2a7-2fb1-4f26-b869-f784aeac3448,"Hải Phòng bánh đa cua ngon tuyệt! 🦀",https://example.com/media/post34.jpg,Public,28,12,2025-09-17 11:30:45,
+35,345fa40b-a3ba-4e25-9f11-e2887cfbfacb,"Hải Phòng phát triển công nghệ rất mạnh! 💻",https://example.com/media/post35.jpg,Public,22,8,2025-09-16 14:00:00,
+36,a2d5e807-e029-498a-b712-cff822988c18,"Biên Hòa cà phê sữa đá ngon nhất! ☕",https://example.com/media/post36.jpg,Public,17,6,2025-09-15 08:20:30,
+37,03023a08-98b0-4a9c-9562-584d7c7624c1,"Huế âm nhạc truyền thống rất hay! 🎵",https://example.com/media/post37.jpg,Friends,12,4,2025-09-14 19:45:00,
+38,2d377520-e359-48c2-b2d6-cf0de98f9cce,"Hà Nội phố cổ đi bộ cuối tuần vui lắm! 🚶",https://example.com/media/post38.jpg,Public,31,11,2025-09-13 17:30:20,
+39,ce2f2663-09fe-4373-a44e-3286b4b599cc,"TP.HCM giao thông giờ cao điểm khó khăn quá! 🚗",,Public,25,15,2025-09-12 08:00:00,
+40,84e33ae0-3e05-49c9-8493-a57f9083ea0f,"TP.HCM âm nhạc đường phố rất sôi động! 🎸",https://example.com/media/post40.jpg,Public,19,7,2025-09-11 20:15:30,
+41,2ce01aad-5a0e-481d-b48c-382fe9a44381,"Huế cung đình nhạc nghe rất hay! 🎭",https://example.com/media/post41.jpg,Public,14,5,2025-09-10 15:30:00,
+42,fc164408-145d-450e-84f6-df51ec926eca,"Đà Nẵng bãi biển sạch đẹp! 🏖️",https://example.com/media/post42.jpg,Public,33,13,2025-09-09 10:45:15,
+43,674d8dfb-d588-4512-8ca9-941665abd3ba,"Hải Phòng khám phá địa điểm mới! 🗺️",https://example.com/media/post43.jpg,Friends,11,4,2025-09-08 12:00:00,
+44,b636b593-f99a-4047-99c5-d84d0be7abef,"Biên Hòa công nghệ phát triển nhanh! 🚀",https://example.com/media/post44.jpg,Public,21,8,2025-09-07 09:20:30,
+45,0f8c2cba-0c9f-4de9-9cfb-e4c3a8aa3020,"TP.HCM startup sôi động! 💡",https://example.com/media/post45.jpg,Public,29,10,2025-09-06 16:30:45,
+46,6d0aaf6e-3dfe-4890-aefb-8bb73af2c068,"Hải Phòng khám phá ẩm thực địa phương! 🍜",https://example.com/media/post46.jpg,Public,18,7,2025-09-05 11:15:00,
+47,b1c13a86-f3f3-4296-9ba5-03cce3a8b118,"Cafe sáng thứ 7 thật tuyệt! ☕🌞",https://example.com/media/post47.jpg,Public,23,9,2025-09-04 08:30:20,
+48,b633242c-be5a-4e15-ac8d-989253896723,"Code review buổi chiều! 💻👨‍💻",https://example.com/media/post48.jpg,Public,26,11,2025-09-03 14:45:00,
+49,6b654c3a-4ade-4da9-a267-5c9ab8730007,"Đọc sách mỗi tối trước khi ngủ! 📚🌙",,Friends,9,3,2025-09-02 21:00:15,
+50,5c732c78-6c05-4d6b-9a31-adc02ce52b1f,"Python là tương lai! 🐍✨",https://example.com/media/post50.jpg,Public,37,16,2025-09-01 13:20:30,

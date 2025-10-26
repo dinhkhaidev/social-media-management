@@ -15,7 +15,7 @@ namespace SocialManager
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             // Start with Login form normally  
-            Application.Run(new frmPost());
+            Application.Run(new frmLogin());
         }
     }
 }
