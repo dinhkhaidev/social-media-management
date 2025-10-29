@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -40,7 +41,7 @@ namespace SocialManager.frm.UserControls
 
         var lblError = new Label
         {
-          Text = $"Dashboard Loading Error\n\nError: {ex.Message}\n\nThis is a fallback view. The dashboard is still functional.",
+          Text = $"Lỗi tải Bảng điều khiển\n\nChi tiết: {ex.Message}\n\nĐây là giao diện dự phòng. Một số chức năng có thể bị hạn chế.",
           Dock = DockStyle.Fill,
           TextAlign = ContentAlignment.MiddleCenter,
           Font = new Font("Segoe UI", 12F),
@@ -82,9 +83,10 @@ namespace SocialManager.frm.UserControls
       }
       catch (Exception ex)
       {
-        // Handle any errors during data loading
-        MessageBox.Show($"Error loading dashboard data: {ex.Message}", "Dashboard Error",
-            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        // Ghi log và hiển thị thông báo thân thiện
+        System.Diagnostics.Debug.WriteLine($"Error loading dashboard data: {ex}");
+        MessageBox.Show($"Lỗi khi tải dữ liệu bảng điều khiển: {ex.Message}", "Lỗi bảng điều khiển",
+          MessageBoxButtons.OK, MessageBoxIcon.Warning);
       }
     }
 
@@ -95,7 +97,8 @@ namespace SocialManager.frm.UserControls
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error posting: {ex.Message}", "Error",
+        System.Diagnostics.Debug.WriteLine(ex.ToString());
+        MessageBox.Show($"Lỗi khi đăng: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -108,15 +111,16 @@ namespace SocialManager.frm.UserControls
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error scheduling: {ex.Message}", "Error",
+        System.Diagnostics.Debug.WriteLine(ex.ToString());
+        MessageBox.Show($"Lỗi khi lên lịch: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
     private void btnViewAllActivity_Click(object sender, EventArgs e)
     {
-      MessageBox.Show("Activity history feature coming soon!", "Info",
-          MessageBoxButtons.OK, MessageBoxIcon.Information);
+      MessageBox.Show("Tính năng lịch sử hoạt động sẽ sớm có!", "Thông tin",
+              MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void btnAddPhoto_Click(object sender, EventArgs e)
@@ -125,19 +129,29 @@ namespace SocialManager.frm.UserControls
       {
         using (OpenFileDialog openFileDialog = new OpenFileDialog())
         {
-          openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png, *.gif, *.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
-          openFileDialog.Title = "Select an image";
+          openFileDialog.Filter = "Tệp hình ảnh (*.jpg, *.jpeg, *.png, *.gif, *.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
+          openFileDialog.Title = "Chọn hình ảnh";
 
           if (openFileDialog.ShowDialog() == DialogResult.OK)
           {
-            MessageBox.Show($"Image selected: {Path.GetFileName(openFileDialog.FileName)}", "Success",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var selected = openFileDialog.FileName;
+            if (!string.IsNullOrEmpty(selected))
+            {
+              MessageBox.Show($"Đã chọn hình: {Path.GetFileName(selected)}", "Thành công",
+                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+              MessageBox.Show("Không có tệp nào được chọn.", "Thông tin",
+                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
           }
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error selecting image: {ex.Message}", "Error",
+        System.Diagnostics.Debug.WriteLine(ex.ToString());
+        MessageBox.Show($"Lỗi khi chọn hình ảnh: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -145,8 +159,7 @@ namespace SocialManager.frm.UserControls
     // Custom paint events for modern UI
     private void pnlCard_Paint(object sender, PaintEventArgs e)
     {
-      Panel panel = sender as Panel;
-      if (panel != null)
+      if (sender is Panel panel)
       {
         try
         {
@@ -173,6 +186,7 @@ namespace SocialManager.frm.UserControls
         catch (Exception ex)
         {
           // Fallback to simple rectangle if drawing fails
+          System.Diagnostics.Debug.WriteLine(ex.ToString());
           e.Graphics.FillRectangle(Brushes.White, panel.ClientRectangle);
           e.Graphics.DrawRectangle(Pens.LightGray, 0, 0, panel.Width - 1, panel.Height - 1);
         }
@@ -262,6 +276,7 @@ namespace SocialManager.frm.UserControls
       catch (Exception ex)
       {
         // Fallback to simple rectangle if icon drawing fails
+        System.Diagnostics.Debug.WriteLine(ex.ToString());
         g.FillRectangle(new SolidBrush(color), rect);
       }
     }
