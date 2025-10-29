@@ -8,7 +8,7 @@ namespace SocialManager.services
 {
   public class UserService
   {
-    private readonly List<User> _users;
+    private List<User> _users;
     public UserService()
     {
       _users = User.GetList(GlobalSetting.UsersFilePath);
@@ -56,6 +56,7 @@ namespace SocialManager.services
     {
       try
       {
+        _users = User.GetList(GlobalSetting.UsersFilePath);
         return _users.Any(u => u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) || u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
       }
       catch (Exception ex)
@@ -65,6 +66,10 @@ namespace SocialManager.services
       }
     }
 
+        public void RefreshUser()
+        {
+            _users = User.GetList(GlobalSetting.UsersFilePath);
+        }
     public bool CreateUser(string username, string password, string fullname, string email, string phone, int gender, DateTime dob, string address, string bio, string avatarUrl)
     {
       try
@@ -99,6 +104,9 @@ namespace SocialManager.services
     {
       try
       {
+        // Always refresh user data before authentication to get latest data
+        _users = User.GetList(GlobalSetting.UsersFilePath);
+        
         if (!File.Exists(GlobalSetting.UsersFilePath))
         {
           string directoryPath = Path.GetDirectoryName(GlobalSetting.UsersFilePath);
@@ -106,6 +114,7 @@ namespace SocialManager.services
           {
             Directory.CreateDirectory(directoryPath);
           }
+
           var adminUser = new User
           {
             UserID = Guid.NewGuid(),
@@ -124,7 +133,11 @@ namespace SocialManager.services
             StatusId = 1
           };
           adminUser.Save(GlobalSetting.UsersFilePath);
+          
+          // Refresh users list after creating admin
+          _users = User.GetList(GlobalSetting.UsersFilePath);
         }
+        
         var user = _users.FirstOrDefault(u => (u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) || u.Email.Equals(username, StringComparison.OrdinalIgnoreCase)) && u.Password == password && u.StatusId == 1);
         return user != null;
       }
@@ -138,6 +151,8 @@ namespace SocialManager.services
     {
       try
       {
+        // Refresh users list to get latest data
+        _users = User.GetList(GlobalSetting.UsersFilePath);
         return _users.FirstOrDefault(u => u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) || u.Email.Equals(username, StringComparison.OrdinalIgnoreCase));
       }
       catch
@@ -150,6 +165,8 @@ namespace SocialManager.services
     {
       try
       {
+        // Refresh the users list to get latest data
+        _users = User.GetList(GlobalSetting.UsersFilePath);
         return _users.FirstOrDefault(u => u.UserID == userId);
       }
       catch

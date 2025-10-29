@@ -229,7 +229,7 @@ namespace SocialManager.frm
         if (success)
         {
           // Cập nhật lại AuthSessionService
-          AuthSessionService.CurrentUser = currentUser;
+          AuthSessionService.UpdateCurrentUser(currentUser);
         }
 
         return success;
