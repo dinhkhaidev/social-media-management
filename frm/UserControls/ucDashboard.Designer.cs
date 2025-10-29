@@ -35,16 +35,15 @@ namespace SocialManager.frm.UserControls
             lstRecentActivity = new ListBox();
             lblActivityTitle = new Label();
             pnlComposer = new Panel();
+            lblComposerTitle = new Label();
             pnlStats = new Panel();
             label4 = new Label();
             label3 = new Label();
             label1 = new Label();
-            lblActiveAccountsValue = new Label();
             lblInteractionsValue = new Label();
             lblGrowthValue = new Label();
             lblTotalPostsValue = new Label();
             lblTitle = new Label();
-            lblComposerTitle = new Label();
             pnlMain.SuspendLayout();
             pnlActivity.SuspendLayout();
             pnlComposer.SuspendLayout();
@@ -134,13 +133,24 @@ namespace SocialManager.frm.UserControls
             pnlComposer.TabIndex = 2;
             pnlComposer.Paint += pnlCard_Paint;
             // 
+            // lblComposerTitle
+            // 
+            lblComposerTitle.AutoSize = true;
+            lblComposerTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblComposerTitle.ForeColor = Color.FromArgb(44, 62, 80);
+            lblComposerTitle.Location = new Point(20, 20);
+            lblComposerTitle.Name = "lblComposerTitle";
+            lblComposerTitle.Size = new Size(177, 32);
+            lblComposerTitle.TabIndex = 0;
+            lblComposerTitle.Text = "Analysis Chart";
+            lblComposerTitle.Click += lblComposerTitle_Click;
+            // 
             // pnlStats
             // 
             pnlStats.BackColor = Color.White;
             pnlStats.Controls.Add(label4);
             pnlStats.Controls.Add(label3);
             pnlStats.Controls.Add(label1);
-            pnlStats.Controls.Add(lblActiveAccountsValue);
             pnlStats.Controls.Add(lblInteractionsValue);
             pnlStats.Controls.Add(lblGrowthValue);
             pnlStats.Controls.Add(lblTotalPostsValue);
@@ -155,7 +165,7 @@ namespace SocialManager.frm.UserControls
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(833, 80);
+            label4.Location = new Point(879, 82);
             label4.Name = "label4";
             label4.Size = new Size(114, 28);
             label4.TabIndex = 10;
@@ -165,7 +175,7 @@ namespace SocialManager.frm.UserControls
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(473, 80);
+            label3.Location = new Point(515, 80);
             label3.Name = "label3";
             label3.Size = new Size(114, 28);
             label3.TabIndex = 9;
@@ -181,22 +191,12 @@ namespace SocialManager.frm.UserControls
             label1.TabIndex = 8;
             label1.Text = "Total Users";
             // 
-            // lblActiveAccountsValue
-            // 
-            lblActiveAccountsValue.AutoSize = true;
-            lblActiveAccountsValue.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblActiveAccountsValue.ForeColor = Color.FromArgb(46, 204, 113);
-            lblActiveAccountsValue.Location = new Point(891, 38);
-            lblActiveAccountsValue.Name = "lblActiveAccountsValue";
-            lblActiveAccountsValue.Size = new Size(0, 41);
-            lblActiveAccountsValue.TabIndex = 3;
-            // 
             // lblInteractionsValue
             // 
             lblInteractionsValue.AutoSize = true;
             lblInteractionsValue.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblInteractionsValue.ForeColor = Color.FromArgb(231, 76, 60);
-            lblInteractionsValue.Location = new Point(859, 38);
+            lblInteractionsValue.Location = new Point(896, 41);
             lblInteractionsValue.Name = "lblInteractionsValue";
             lblInteractionsValue.Size = new Size(71, 41);
             lblInteractionsValue.TabIndex = 2;
@@ -207,7 +207,7 @@ namespace SocialManager.frm.UserControls
             lblGrowthValue.AutoSize = true;
             lblGrowthValue.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblGrowthValue.ForeColor = Color.FromArgb(39, 174, 96);
-            lblGrowthValue.Location = new Point(473, 40);
+            lblGrowthValue.Location = new Point(515, 40);
             lblGrowthValue.Name = "lblGrowthValue";
             lblGrowthValue.Size = new Size(99, 41);
             lblGrowthValue.TabIndex = 1;
@@ -234,18 +234,6 @@ namespace SocialManager.frm.UserControls
             lblTitle.Size = new Size(229, 54);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Dashboard";
-            // 
-            // lblComposerTitle
-            // 
-            lblComposerTitle.AutoSize = true;
-            lblComposerTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblComposerTitle.ForeColor = Color.FromArgb(44, 62, 80);
-            lblComposerTitle.Location = new Point(20, 20);
-            lblComposerTitle.Name = "lblComposerTitle";
-            lblComposerTitle.Size = new Size(177, 32);
-            lblComposerTitle.TabIndex = 0;
-            lblComposerTitle.Text = "Analysis Chart";
-            lblComposerTitle.Click += lblComposerTitle_Click;
             // 
             // ucDashboard
             // 
@@ -274,7 +262,6 @@ namespace SocialManager.frm.UserControls
         private Label lblTotalPostsValue;
         private Label lblGrowthValue;
         private Label lblInteractionsValue;
-        private Label lblActiveAccountsValue;
         private Panel pnlComposer;
         private Panel pnlActivity;
         private Label lblActivityTitle;

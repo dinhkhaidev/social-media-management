@@ -76,8 +76,8 @@ namespace SocialManager.frm.UserControls
                 if (lblInteractionsValue != null)
                     lblInteractionsValue.Text = "85K";
 
-                if (lblActiveAccountsValue != null)
-                    lblActiveAccountsValue.Text = "5";
+                //if (lblActiveAccountsValue != null)
+                //    lblActiveAccountsValue.Text = "5";
             }
             catch (Exception ex)
             {
@@ -103,7 +103,7 @@ namespace SocialManager.frm.UserControls
         {
             try
             {
-                
+
             }
             catch (Exception ex)
             {

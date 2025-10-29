@@ -96,67 +96,83 @@ namespace SocialManager.frm
 
       try
       {
+        // Force refresh user data before authentication to get latest data
+        _userService.RefreshUser();
+        
         if (_userService.AuthenticateUser(username, password))
         {
-          //User foundUser = _userService.GetUserByUsername(username);
+          // Get the most current user data after authentication
+          User foundUser = _userService.GetUserByUsername(username);
 
-          AuthSessionService.Login(_userService.GetUserByUsername(username));
-
-          // Successful login
-          MessageBox.Show("Login successful!", "Success",
-              MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-          try
+          if (foundUser != null)
           {
-            // Create admin form
-            if (AuthSessionService.CurrentUser != null && AuthSessionService.CurrentUser.Role == 1)
+            AuthSessionService.Login(foundUser);
+
+            // Successful login
+            MessageBox.Show("Login successful!", "Success",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            try
             {
-              frmAdmin adminForm = new frmAdmin();
+              // Create admin form
+              if (AuthSessionService.CurrentUser != null && AuthSessionService.CurrentUser.Role == 1)
+              {
+                frmAdmin adminForm = new frmAdmin();
 
-              // Hide login form FIRST
-              this.Hide();
+                // Hide login form FIRST
+                this.Hide();
 
-              // Show admin form as dialog
-              var adminResult = adminForm.ShowDialog();
+                // Show admin form as dialog
+                var adminResult = adminForm.ShowDialog();
 
+              }
+              else if (AuthSessionService.CurrentUser != null)
+              {
+                frmDashboard userForm = new frmDashboard();
+                this.Hide();
+
+                // Show dashboard form as dialog
+                var dashboardResult = userForm.ShowDialog();
+              }
+              else
+              {
+                MessageBox.Show("Your account does not have permission to access the dashboard.",
+                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                // Show login form again
+                this.Show();
+              }
+              // After dashboard form closes, check if user is still logged in
+              if (!AuthSessionService.IsLoggedIn)
+              {
+                // User logged out, show login form again and clear inputs
+                this.Show();
+                txtPassword.Clear();
+                txtUsername.Focus();
+              }
+              else
+              {
+                // User closed dashboard form but still logged in, close application
+                this.Close();
+              }
             }
-            else if (AuthSessionService.CurrentUser != null)
+            catch (Exception adminEx)
             {
-              frmDashboard userForm = new frmDashboard();
-              this.Hide();
-
-              // Show admin form as dialog
-              var adminResult = userForm.ShowDialog();
-            }
-            else
-            {
-              MessageBox.Show("Your account does not have permission to access the admin panel.",
-                  "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+              MessageBox.Show($"Error opening dashboard: {adminEx.Message}",
+                  "Dashboard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
               // Show login form again
               this.Show();
             }
-            // After admin form closes, check if user is still logged in
-            if (!AuthSessionService.IsLoggedIn)
-            {
-              // User logged out, show login form again
-              this.Show();
-              txtPassword.Clear();
-              txtUsername.Focus();
-            }
-            else
-            {
-              // User closed admin form but still logged in, close application
-              this.Close();
-            }
           }
-          catch (Exception adminEx)
+          else
           {
-            MessageBox.Show($"Error opening admin panel: {adminEx.Message}",
-                "Admin Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Failed to get user data after authentication
+            MessageBox.Show("Authentication successful but failed to load user data. Please try again.", "Login Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            // Show login form again
-            this.Show();
+            txtPassword.Clear();
+            txtUsername.Focus();
           }
         }
         else
@@ -221,6 +237,9 @@ namespace SocialManager.frm
       // Show register form as dialog
       var result = registerForm.ShowDialog();
 
+      // Refresh user service data when returning from registration
+      _userService.RefreshUser();
+
       // Show login form again after register is closed
       this.Show();
 
@@ -234,6 +253,18 @@ namespace SocialManager.frm
       {
         txtUsername.Text = username;
         txtPassword.Focus(); // Focus on password field
+      }
+    }
+
+    public void RefreshUserData()
+    {
+      try
+      {
+        _userService.RefreshUser();
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error refreshing user data in login form: {ex.Message}");
       }
     }
 

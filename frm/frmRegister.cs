@@ -91,12 +91,19 @@ public partial class frmRegister : Form
             ))
             {
                 string username = txtUsername.Text.Trim();
+                
+                // Force refresh user service to ensure latest data is available for login
+                _userService.RefreshUser();
+                
                 MessageBox.Show("Account created successfully! You can now login with your credentials.",
                     "Registration Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                
                 // FIX: Sử dụng parent login form nếu có, không tạo mới
                 if (_parentLoginForm != null)
                 {
+                    // Refresh parent login form's user data
+                    _parentLoginForm.RefreshUserData();
+                    
                     // Set username trong parent login form
                     _parentLoginForm.SetUsername(username);
                     
