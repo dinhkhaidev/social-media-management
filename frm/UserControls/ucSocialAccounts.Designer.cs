@@ -1,4 +1,4 @@
-ï»¿namespace SocialManager.frm.UserControls
+namespace SocialManager.frm.UserControls
 {
     partial class ucSocialAccounts
     {
@@ -160,7 +160,7 @@
             lblTotalUsersLabel.Name = "lblTotalUsersLabel";
             lblTotalUsersLabel.Size = new Size(96, 23);
             lblTotalUsersLabel.TabIndex = 1;
-            lblTotalUsersLabel.Text = "Total Users";
+            lblTotalUsersLabel.Text = "T?ng ngý?i dùng";
             // 
             // pnlActiveUsers
             // 
@@ -206,7 +206,7 @@
             lblActiveUsersLabel.Name = "lblActiveUsersLabel";
             lblActiveUsersLabel.Size = new Size(107, 23);
             lblActiveUsersLabel.TabIndex = 1;
-            lblActiveUsersLabel.Text = "Active Users";
+            lblActiveUsersLabel.Text = "Ngý?i dùng ho?t ð?ng";
             // 
             // pnlNewToday
             // 
@@ -240,7 +240,7 @@
             lblNewTodayLabel.Name = "lblNewTodayLabel";
             lblNewTodayLabel.Size = new Size(98, 23);
             lblNewTodayLabel.TabIndex = 1;
-            lblNewTodayLabel.Text = "New Today";
+            lblNewTodayLabel.Text = "M?i hôm nay";
             // 
             // pnlNewThisWeek
             // 
@@ -274,7 +274,7 @@
             lblNewWeekLabel.Name = "lblNewWeekLabel";
             lblNewWeekLabel.Size = new Size(92, 23);
             lblNewWeekLabel.TabIndex = 1;
-            lblNewWeekLabel.Text = "This Week";
+            lblNewWeekLabel.Text = "Tu?n này";
             // 
             // pnlAdminUsers
             // 
@@ -308,7 +308,7 @@
             lblAdminUsersLabel.Name = "lblAdminUsersLabel";
             lblAdminUsersLabel.Size = new Size(67, 23);
             lblAdminUsersLabel.TabIndex = 1;
-            lblAdminUsersLabel.Text = "Admins";
+            lblAdminUsersLabel.Text = "Qu?n tr? viên";
             // 
             // lblStatisticsTitle
             // 
@@ -320,7 +320,7 @@
             lblStatisticsTitle.Name = "lblStatisticsTitle";
             lblStatisticsTitle.Size = new Size(213, 32);
             lblStatisticsTitle.TabIndex = 0;
-            lblStatisticsTitle.Text = "ðŸ“Š User Statistics";
+            lblStatisticsTitle.Text = "?? User Statistics";
             // 
             // pnlUsersList
             // 
@@ -359,7 +359,7 @@
             btnUserDetails.Name = "btnUserDetails";
             btnUserDetails.Size = new Size(120, 35);
             btnUserDetails.TabIndex = 0;
-            btnUserDetails.Text = "ðŸ‘¤ View Details";
+            btnUserDetails.Text = "?? View Details";
             btnUserDetails.UseVisualStyleBackColor = false;
             btnUserDetails.Click += btnUserDetails_Click;
             // 
@@ -374,7 +374,7 @@
             btnExportUsers.Name = "btnExportUsers";
             btnExportUsers.Size = new Size(120, 35);
             btnExportUsers.TabIndex = 1;
-            btnExportUsers.Text = "ðŸ“¤ Export CSV";
+            btnExportUsers.Text = "?? Export CSV";
             btnExportUsers.UseVisualStyleBackColor = false;
             btnExportUsers.Click += btnExportUsers_Click;
             // 
@@ -389,7 +389,7 @@
             btnRefreshData.Name = "btnRefreshData";
             btnRefreshData.Size = new Size(120, 35);
             btnRefreshData.TabIndex = 2;
-            btnRefreshData.Text = "ðŸ”„ Refresh Data";
+            btnRefreshData.Text = "?? Refresh Data";
             btnRefreshData.UseVisualStyleBackColor = false;
             btnRefreshData.Click += btnRefreshData_Click;
             // 
@@ -433,7 +433,7 @@
             lblLastRefresh.Name = "lblLastRefresh";
             lblLastRefresh.Size = new Size(144, 20);
             lblLastRefresh.TabIndex = 1;
-            lblLastRefresh.Text = "Last updated: --:--:--";
+            lblLastRefresh.Text = "C?p nh?t l?n cu?i: --:--:--";
             // 
             // lblUsersTitle
             // 
@@ -444,7 +444,7 @@
             lblUsersTitle.Name = "lblUsersTitle";
             lblUsersTitle.Size = new Size(226, 32);
             lblUsersTitle.TabIndex = 0;
-            lblUsersTitle.Text = "ðŸ‘¥ Users Manager";
+            lblUsersTitle.Text = "?? Users Manager";
             // 
             // pnlActivities
             // 
@@ -482,7 +482,7 @@
             lblActivitiesTitle.Padding = new Padding(0, 0, 0, 8);
             lblActivitiesTitle.Size = new Size(160, 40);
             lblActivitiesTitle.TabIndex = 0;
-            lblActivitiesTitle.Text = "ðŸ“‹ Activities";
+            lblActivitiesTitle.Text = "?? Activities";
             // 
             // ucSocialAccounts
             // 
