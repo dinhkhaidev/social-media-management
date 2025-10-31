@@ -1,4 +1,4 @@
-Ôªøusing SocialManager.frm.UserControls;
+using SocialManager.frm.UserControls;
 using SocialManager.middlewares;
 using SocialManager.services;
 using System;
@@ -75,7 +75,7 @@ namespace SocialManager.frm
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error in frmAdmin_Load: {ex.Message}");
-                MessageBox.Show($"Error initializing admin form: {ex.Message}", "Initialization Error",
+                MessageBox.Show($"L?i khi kh?i t?o form qu?n tr?: {ex.Message}", "L?i kh?i t?o",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
@@ -135,7 +135,7 @@ namespace SocialManager.frm
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"Error loading ucPosts: {ex.Message}");
-                    postsControl = CreateSimpleUserControl("Posts Management", "üìù Posts feature coming soon...");
+                    postsControl = CreateSimpleUserControl("Posts Management", "?? Posts feature coming soon...");
                 }
 
                 // Initialize Analytics Control
@@ -147,7 +147,7 @@ namespace SocialManager.frm
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"Error loading ucAnalytics: {ex.Message}");
-                    analyticsControl = CreateSimpleUserControl("Analytics & Reports", "üìä Analytics feature coming soon...");
+                    analyticsControl = CreateSimpleUserControl("Analytics & Reports", "?? Analytics feature coming soon...");
                 }
 
                 // Initialize Settings Control
@@ -159,7 +159,7 @@ namespace SocialManager.frm
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"Error loading ucSettings: {ex.Message}");
-                    settingsControl = CreateSimpleUserControl("Settings", "‚öôÔ∏è Settings feature coming soon...");
+                    settingsControl = CreateSimpleUserControl("Settings", "?? Settings feature coming soon...");
                 }
 
                 // Initialize Social Accounts Control
@@ -171,7 +171,7 @@ namespace SocialManager.frm
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"Error loading ucSocialAccounts: {ex.Message}");
-                    socialAccountsControl = CreateSimpleUserControl("Social Accounts", "üîó Social accounts feature coming soon...");
+                    socialAccountsControl = CreateSimpleUserControl("Social Accounts", "?? Social accounts feature coming soon...");
                 }
 
                 // Verify all controls are initialized
@@ -195,8 +195,8 @@ namespace SocialManager.frm
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Critical error in InitializeUserControls: {ex.Message}");
-                MessageBox.Show($"Error initializing application components: {ex.Message}\nThe application will continue with basic functionality.",
-                    "Initialization Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"L?i khi kh?i t?o c·c th‡nh ph?n ?ng d?ng: {ex.Message}\n?ng d?ng s? ti?p t?c v?i ch?c n„ng cı b?n.",
+                    "C?nh b·o kh?i t?o", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Absolute emergency fallback - create all controls as simple ones
                 dashboardControl = CreateSimpleUserControl("Dashboard", "System is starting up...");
@@ -353,8 +353,8 @@ namespace SocialManager.frm
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error in LoadUserControlIntoMainPanel: {ex.Message}");
-                MessageBox.Show($"Error loading view: {ex.Message}\nPlease try clicking the menu item again.",
-                    "View Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"L?i khi t?i giao di?n: {ex.Message}\nVui l?ng th? nh?p v‡o m?c menu l?i.",
+                    "L?i t?i giao di?n", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Try to recover by creating a simple error control
                 try
@@ -372,8 +372,8 @@ namespace SocialManager.frm
                 catch (Exception ex2)
                 {
                     System.Diagnostics.Debug.WriteLine($"Critical error in error recovery: {ex2.Message}");
-                    MessageBox.Show("Critical error loading application views. Please restart the application.",
-                        "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("L?i nghiÍm tr?ng khi t?i giao di?n ?ng d?ng. Vui l?ng kh?i ?ng l?i ?ng d?ng.",
+                        "L?i nghiÍm tr?ng", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -685,7 +685,7 @@ namespace SocialManager.frm
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to logout?", "Confirm Logout", 
+            var result = MessageBox.Show("B?n cÛ ch?c ch?n mu?n „ng xu?t?", "X·c nh?n „ng xu?t", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             
             if (result == DialogResult.Yes)
@@ -737,3 +737,4 @@ namespace SocialManager.frm
         }
     }
 }
+

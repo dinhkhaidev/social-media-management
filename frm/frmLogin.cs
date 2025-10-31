@@ -1,4 +1,4 @@
-ï»¿using SocialManager.services;
+using SocialManager.services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -98,7 +98,7 @@ namespace SocialManager.frm
       {
         // Force refresh user data before authentication to get latest data
         _userService.RefreshUser();
-        
+
         if (_userService.AuthenticateUser(username, password))
         {
           // Get the most current user data after authentication
@@ -109,7 +109,7 @@ namespace SocialManager.frm
             AuthSessionService.Login(foundUser);
 
             // Successful login
-            MessageBox.Show("Login successful!", "Success",
+            MessageBox.Show("Ðãng nh?p thành công!", "Thông báo ðãng nh?p",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             try
@@ -136,8 +136,8 @@ namespace SocialManager.frm
               }
               else
               {
-                MessageBox.Show("Your account does not have permission to access the dashboard.",
-                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Tài kho?n c?a b?n không có quy?n truy c?p Dashboard.",
+                    "Truy c?p b? t? ch?i", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Show login form again
                 this.Show();
@@ -158,8 +158,8 @@ namespace SocialManager.frm
             }
             catch (Exception adminEx)
             {
-              MessageBox.Show($"Error opening dashboard: {adminEx.Message}",
-                  "Dashboard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+              MessageBox.Show($"L?i khi m? Dashboard: {adminEx.Message}",
+                  "L?i Dashboard", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
               // Show login form again
               this.Show();
@@ -168,7 +168,7 @@ namespace SocialManager.frm
           else
           {
             // Failed to get user data after authentication
-            MessageBox.Show("Authentication successful but failed to load user data. Please try again.", "Login Error",
+            MessageBox.Show("Xác th?c thành công nhýng không th? t?i d? li?u ngý?i dùng. Vui l?ng th? l?i.", "L?i ðãng nh?p",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             txtPassword.Clear();
@@ -178,7 +178,7 @@ namespace SocialManager.frm
         else
         {
           // Failed login
-          MessageBox.Show("Invalid username or password. Please try again.", "Login Failed",
+          MessageBox.Show("Tên ðãng nh?p ho?c m?t kh?u không ðúng. Vui l?ng th? l?i.", "Ðãng nh?p th?t b?i",
               MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
           txtPassword.Clear();
@@ -187,7 +187,7 @@ namespace SocialManager.frm
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"An error occurred during login: {ex.Message}", "Error",
+        MessageBox.Show($"Ð? x?y ra l?i khi ðãng nh?p: {ex.Message}", "L?i",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
       finally
@@ -203,7 +203,7 @@ namespace SocialManager.frm
     {
       if (string.IsNullOrWhiteSpace(txtUsername.Text))
       {
-        MessageBox.Show("Please enter your username or email.", "Validation Error",
+        MessageBox.Show("Vui l?ng nh?p tên ðãng nh?p ho?c email.", "L?i xác th?c",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtUsername.Focus();
         return false;
@@ -211,7 +211,7 @@ namespace SocialManager.frm
 
       if (string.IsNullOrWhiteSpace(txtPassword.Text))
       {
-        MessageBox.Show("Please enter your password.", "Validation Error",
+        MessageBox.Show("Vui l?ng nh?p m?t kh?u.", "L?i xác th?c",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtPassword.Focus();
         return false;
@@ -222,13 +222,13 @@ namespace SocialManager.frm
 
     private void llblForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-      MessageBox.Show("Please contact your administrator to reset your password.", "Forgot Password",
+      MessageBox.Show("Vui l?ng liên h? qu?n tr? viên ð? ð?t l?i m?t kh?u.", "Quên m?t kh?u",
           MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void llblRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-      // Pass reference cá»§a login form hiá»‡n táº¡i Ä‘á»ƒ khÃ´ng táº¡o form má»›i
+      // Pass reference c?a login form hi?n t?i ð? không t?o form m?i
       frmRegister registerForm = new frmRegister(this); // Pass login form reference
 
       // Hide login form
@@ -372,3 +372,4 @@ namespace SocialManager.frm
     }
   }
 }
+

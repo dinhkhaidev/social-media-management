@@ -1,4 +1,4 @@
-ï»¿using Microsoft.VisualBasic.ApplicationServices;
+using Microsoft.VisualBasic.ApplicationServices;
 using SocialManager.services;
 using SocialManager.validations.register;
 using System;
@@ -25,12 +25,12 @@ public partial class frmRegister : Form
     private readonly UserService _userService;
     private readonly frmLogin _parentLoginForm; // Reference to parent login form
     
-    // Constructor cÅ© (Ä‘á»ƒ backward compatibility)
+    // Constructor c? (ð? backward compatibility)
     public frmRegister() : this(null)
     {
     }
     
-    // Constructor má»›i nháº­n login form reference
+    // Constructor m?i nh?n login form reference
     public frmRegister(frmLogin parentLoginForm)
     {
         InitializeComponent();
@@ -59,7 +59,7 @@ public partial class frmRegister : Form
 
     private void SetupValidation()
     {
-        // FIX: Sá»­ dá»¥ng static methods
+        // FIX: S? d?ng static methods
         txtUsername.TextChanged += inputValidateEvent.ValidateUsername;
         txtEmail.TextChanged += inputValidateEvent.ValidateEmail;
         txtPassword.TextChanged += inputValidateEvent.ValidatePassword;
@@ -95,10 +95,10 @@ public partial class frmRegister : Form
                 // Force refresh user service to ensure latest data is available for login
                 _userService.RefreshUser();
                 
-                MessageBox.Show("Account created successfully! You can now login with your credentials.",
+                MessageBox.Show("Tài kho?n ð? ðý?c t?o thành công! B?n có th? ðãng nh?p ngay bây gi?.",
                     "Registration Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 
-                // FIX: Sá»­ dá»¥ng parent login form náº¿u cÃ³, khÃ´ng táº¡o má»›i
+                // FIX: S? d?ng parent login form n?u có, không t?o m?i
                 if (_parentLoginForm != null)
                 {
                     // Refresh parent login form's user data
@@ -107,12 +107,12 @@ public partial class frmRegister : Form
                     // Set username trong parent login form
                     _parentLoginForm.SetUsername(username);
                     
-                    // Close register form vÃ  parent login sáº½ hiá»‡n láº¡i tá»± Ä‘á»™ng
+                    // Close register form và parent login s? hi?n l?i t? ð?ng
                     this.Close();
                 }
                 else
                 {
-                    // Fallback: táº¡o login form má»›i náº¿u khÃ´ng cÃ³ parent
+                    // Fallback: t?o login form m?i n?u không có parent
                     frmLogin loginForm = new frmLogin();
                     this.Hide();
                     loginForm.SetUsername(username);
@@ -122,13 +122,13 @@ public partial class frmRegister : Form
             }
             else
             {
-                MessageBox.Show("Failed to create account. Please try again.",
-                    "Registration Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Không th? t?o tài kho?n. Vui l?ng th? l?i.",
+                    "Ðãng k? th?t b?i", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"An error occurred during registration: {ex.Message}",
+            MessageBox.Show($"Ð? x?y ra l?i khi ðãng k?: {ex.Message}",
                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
@@ -198,7 +198,7 @@ public partial class frmRegister : Form
         // Terms validation
         if (!chkTerms.Checked)
         {
-            MessageBox.Show("Please accept the Terms of Service and Privacy Policy.",
+            MessageBox.Show("Vui l?ng ch?p nh?n Ði?u kho?n d?ch v? và Chính sách b?o m?t.",
                 "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
@@ -206,7 +206,7 @@ public partial class frmRegister : Form
         // Check if username or email already exists
         if (_userService.UserExists(txtUsername.Text, txtEmail.Text))
         {
-            MessageBox.Show("Username or email already exists. Please choose different ones.",
+            MessageBox.Show("Tên ðãng nh?p ho?c email ð? t?n t?i. Vui l?ng ch?n tên khác.",
                 "Registration Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
@@ -224,14 +224,14 @@ public partial class frmRegister : Form
 
     private void llblLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        // FIX: KhÃ´ng táº¡o form Login má»›i, chá»‰ Ä‘Ã³ng register form
-        // Parent login form sáº½ hiá»‡n láº¡i tá»± Ä‘á»™ng
+        // FIX: Không t?o form Login m?i, ch? ðóng register form
+        // Parent login form s? hi?n l?i t? ð?ng
         this.Close();
     }
     
     private void button1_Click(object sender, EventArgs e)
     {
-        // FIX: Same logic nhÆ° llblLogin_LinkClicked
+        // FIX: Same logic nhý llblLogin_LinkClicked
         this.Close();
     }
 
@@ -465,3 +465,4 @@ public partial class frmRegister : Form
 
     }
 }
+

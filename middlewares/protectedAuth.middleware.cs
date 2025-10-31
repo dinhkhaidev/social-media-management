@@ -1,4 +1,4 @@
-ï»¿//using SocialManager.frm;
+//using SocialManager.frm;
 //using SocialManager.services;
 //using System;
 //using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace SocialManager.middlewares
             {
                 _isRedirecting = true;
 
-                MessageBox.Show("Session expired. Please log in again.", "Authentication Required",
+                MessageBox.Show("Phiên ðãng nh?p ð? h?t h?n. Vui l?ng ðãng nh?p l?i.", "Yêu c?u xác th?c",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Create login form
@@ -76,3 +76,4 @@ namespace SocialManager.middlewares
         }
     }
 }
+

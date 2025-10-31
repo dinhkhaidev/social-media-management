@@ -1,4 +1,4 @@
-﻿using SocialManager.constants;
+using SocialManager.constants;
 using SocialManager.services;
 using SocialManager.utils;
 using System;
@@ -98,7 +98,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "UserName",
-        HeaderText = "👤 Username",
+        HeaderText = "?? Username",
         Width = 120,
         ReadOnly = true
       });
@@ -106,7 +106,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "FullName",
-        HeaderText = "📝 Full Name",
+        HeaderText = "?? Full Name",
         Width = 150,
         ReadOnly = true
       });
@@ -114,7 +114,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Email",
-        HeaderText = "📧 Email",
+        HeaderText = "?? Email",
         Width = 180,
         ReadOnly = true
       });
@@ -122,7 +122,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Phone",
-        HeaderText = "📱 Phone",
+        HeaderText = "?? Phone",
         Width = 120,
         ReadOnly = true
       });
@@ -130,7 +130,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Role",
-        HeaderText = "👑 Role",
+        HeaderText = "?? Role",
         Width = 100,
         ReadOnly = true
       });
@@ -146,7 +146,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Gender",
-        HeaderText = "⚧ Gender",
+        HeaderText = "? Gender",
         Width = 80,
         ReadOnly = true
       });
@@ -154,7 +154,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "CreatedAt",
-        HeaderText = "📅 Joined",
+        HeaderText = "?? Joined",
         Width = 120,
         ReadOnly = true
       });
@@ -170,7 +170,7 @@ namespace SocialManager.frm.UserControls
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error loading users: {ex.Message}", "Error",
+        MessageBox.Show($"L?i khi t?i danh s�ch ng�?i d�ng: {ex.Message}", "Error",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
         _allUsers = new List<User>();
       }
@@ -186,7 +186,7 @@ namespace SocialManager.frm.UserControls
       {
         var roleText = UserConstant.GetRoleText(user.Role);
         var statusText = UserConstant.GetStatusText(user.StatusId);
-        var genderText = user.Gender == 0 ? "👨 Male" : "👩 Female";
+        var genderText = user.Gender == 0 ? "?? Nam" : "?? FeNam";
         var joinedDate = user.CreatedAt.ToString("MMM dd, yyyy");
         var phoneDisplay = string.IsNullOrEmpty(user.Phone) ? "N/A" : user.Phone;
 
@@ -259,23 +259,23 @@ namespace SocialManager.frm.UserControls
       foreach (var user in recentUsers)
       {
         var timeAgo = TimeUtil.GetTimeAgo(user.CreatedAt);
-        var roleIcon = user.Role == 1 ? "👑" : "👤";
+        var roleIcon = user.Role == 1 ? "??" : "??";
         activities.Add($"{roleIcon} {user.UserName} joined ({timeAgo})");
       }
 
       // System statistics
-      activities.Add($"📊 Total users: {_allUsers.Count}");
-      activities.Add($"✅ Active: {_allUsers.Count(u => u.StatusId == 1)}");
-      activities.Add($"⏸️ Inactive: {_allUsers.Count(u => u.StatusId == 0)}");
-      activities.Add($"🚫 Banned: {_allUsers.Count(u => u.StatusId == -1)}");
+      activities.Add($"?? Total users: {_allUsers.Count}");
+      activities.Add($"? Active: {_allUsers.Count(u => u.StatusId == 1)}");
+      activities.Add($"?? Inactive: {_allUsers.Count(u => u.StatusId == 0)}");
+      activities.Add($"?? Banned: {_allUsers.Count(u => u.StatusId == -1)}");
 
       // Gender distribution
-      var maleCount = _allUsers.Count(u => u.Gender == 0);
-      var femaleCount = _allUsers.Count(u => u.Gender == 1);
-      activities.Add($"👨 Male users: {maleCount}");
-      activities.Add($"👩 Female users: {femaleCount}");
+      var NamCount = _allUsers.Count(u => u.Gender == 0);
+      var feNamCount = _allUsers.Count(u => u.Gender == 1);
+      activities.Add($"?? Nam users: {NamCount}");
+      activities.Add($"?? FeNam users: {feNamCount}");
 
-      activities.Add($"🔄 Updated: {DateTime.Now:HH:mm:ss}");
+      activities.Add($"?? Updated: {DateTime.Now:HH:mm:ss}");
 
       foreach (var activity in activities.Take(15))
       {
@@ -288,7 +288,7 @@ namespace SocialManager.frm.UserControls
     {
       if (dgvUsers.SelectedRows.Count == 0)
       {
-        MessageBox.Show("Vui lòng chọn người dùng để xem chi tiết.", "Chưa chọn người dùng",
+        MessageBox.Show("Vui l?ng ch?n ng�?i d�ng �? xem chi ti?t.", "Ch�a ch?n ng�?i d�ng",
             MessageBoxButtons.OK, MessageBoxIcon.Information);
         return;
       }
@@ -308,23 +308,23 @@ namespace SocialManager.frm.UserControls
 
     private void ShowDetailedUserInfo(User user)
     {
-      var details = $"👤 COMPLETE USER PROFILE\n" +
+      var details = $"?? COMPLETE USER PROFILE\n" +
                    $"{'=' * 50}\n\n" +
-                   $"🆔 User ID: {user.UserID}\n" +
-                   $"👤 Username: {user.UserName}\n" +
-                   $"📝 Full Name: {user.FullName}\n" +
-                   $"📧 Email: {user.Email}\n" +
-                   $"📱 Phone: {user.Phone ?? "Not provided"}\n" +
-                   $"👑 Role: {UserConstant.GetRoleText(user.Role)}\n" +
+                   $"?? User ID: {user.UserID}\n" +
+                   $"?? Username: {user.UserName}\n" +
+                   $"?? Full Name: {user.FullName}\n" +
+                   $"?? Email: {user.Email}\n" +
+                   $"?? Phone: {user.Phone ?? "Not provided"}\n" +
+                   $"?? Role: {UserConstant.GetRoleText(user.Role)}\n" +
                    $"Status: {UserConstant.GetStatusText(user.StatusId)}\n" +
-                   $"⚧ Gender: {(user.Gender == 0 ? "👨 Male" : "👩 Female")}\n" +
-                   $"🎂 Date of Birth: {user.DOB:yyyy-MM-dd}\n" +
-                   $"🏠 Address: {user.Address ?? "Not provided"}\n" +
-                   $"📝 Bio: {user.Bio ?? "No bio available"}\n" +
-                   $"📅 Member since: {user.CreatedAt:yyyy-MM-dd HH:mm:ss}\n" +
-                   $"🔗 Avatar URL: {user.AvatarUrl ?? "No avatar"}";
+                   $"? Gender: {(user.Gender == 0 ? "?? Nam" : "?? FeNam")}\n" +
+                   $"?? Date of Birth: {user.DOB:yyyy-MM-dd}\n" +
+                   $"?? Address: {user.Address ?? "Not provided"}\n" +
+                   $"?? Bio: {user.Bio ?? "No bio available"}\n" +
+                   $"?? Member since: {user.CreatedAt:yyyy-MM-dd HH:mm:ss}\n" +
+                   $"?? Avatar URL: {user.AvatarUrl ?? "No avatar"}";
 
-      MessageBox.Show(details, "User Profile Details", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      MessageBox.Show(details, "Chi ti?t h? s� ng�?i d�ng", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void btnExportUsers_Click(object sender, EventArgs e)
@@ -340,14 +340,14 @@ namespace SocialManager.frm.UserControls
           if (saveDialog.ShowDialog() == DialogResult.OK)
           {
             ExportUsersToCSV(saveDialog.FileName);
-            MessageBox.Show($"✅ Users exported successfully!\n\nFile: {saveDialog.FileName}\nTotal users: {_allUsers?.Count ?? 0}",
+            MessageBox.Show($"? Users exported successfully!\n\nFile: {saveDialog.FileName}\nTotal users: {_allUsers?.Count ?? 0}",
                 "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
           }
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"❌ Error exporting users:\n{ex.Message}", "Export Error",
+        MessageBox.Show($"? L?i khi xu?t danh s�ch ng�?i d�ng:\n{ex.Message}", "L?i xu?t d? li?u",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -359,9 +359,9 @@ namespace SocialManager.frm.UserControls
 
       foreach (var user in _allUsers)
       {
-        var roleText = UserConstant.GetRoleText(user.Role).Replace("👤 ", "").Replace("👑 ", "").Replace("🛡️ ", "");
-        var statusText = UserConstant.GetStatusText(user.StatusId).Replace("✅ ", "").Replace("⏸️ ", "").Replace("🚫 ", "");
-        var genderText = user.Gender == 0 ? "Male" : "Female";
+        var roleText = UserConstant.GetRoleText(user.Role).Replace("?? ", "").Replace("?? ", "").Replace("??? ", "");
+        var statusText = UserConstant.GetStatusText(user.StatusId).Replace("? ", "").Replace("?? ", "").Replace("?? ", "");
+        var genderText = user.Gender == 0 ? "Nam" : "FeNam";
 
         csv.AppendLine($"\"{user.UserID}\",\"{user.UserName}\",\"{user.FullName}\"," +
                       $"\"{user.Email}\",\"{user.Phone ?? ""}\",\"{roleText}\"," +
@@ -386,14 +386,14 @@ namespace SocialManager.frm.UserControls
           lblLastRefresh.Text = $"Last updated: {_lastRefresh:HH:mm:ss}";
         }
 
-        MessageBox.Show($"✅ Data refreshed successfully!\n\n" +
-                      $"📊 Users loaded: {_allUsers?.Count ?? 0}\n" +
-                      $"🕒 Time: {DateTime.Now:HH:mm:ss}",
+        MessageBox.Show($"? Data refreshed successfully!\n\n" +
+                      $"?? Users loaded: {_allUsers?.Count ?? 0}\n" +
+                      $"?? Time: {DateTime.Now:HH:mm:ss}",
                       "Refresh Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"❌ Error refreshing data:\n{ex.Message}", "Refresh Error",
+        MessageBox.Show($"? L?i khi l�m m?i d? li?u:\n{ex.Message}", "L?i l�m m?i",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -463,3 +463,4 @@ namespace SocialManager.frm.UserControls
     }
   }
 }
+

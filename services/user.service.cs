@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error loading users: {ex.Message}");
+        MessageBox.Show($"L?i khi t?i danh sách ngý?i dùng: {ex.Message}");
         return new List<User>();
       }
     }
@@ -47,7 +47,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error calculating user statistics: {ex.Message}");
+        MessageBox.Show($"L?i khi tính th?ng kê ngý?i dùng: {ex.Message}");
         return new UserStatistics();
       }
     }
@@ -61,7 +61,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error checking user existence: {ex.Message}");
+        MessageBox.Show($"L?i khi ki?m tra ngý?i dùng t?n t?i: {ex.Message}");
         return false;
       }
     }
@@ -95,7 +95,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error creating user: {ex.Message}\nStack trace: {ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show($"L?i khi t?o ngý?i dùng: {ex.Message}\nChi ti?t l?i: {ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
     }
@@ -183,7 +183,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error updating user: {ex.Message}");
+        MessageBox.Show($"L?i khi c?p nh?t ngý?i dùng: {ex.Message}");
         return false;
       }
     }
@@ -198,7 +198,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error updating password: {ex.Message}");
+        MessageBox.Show($"L?i khi c?p nh?t m?t kh?u: {ex.Message}");
         return false;
       }
     }
@@ -215,7 +215,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error updating user status: {ex.Message}");
+        MessageBox.Show($"L?i khi c?p nh?t tr?ng thái ngý?i dùng: {ex.Message}");
         return false;
       }
     }
@@ -235,7 +235,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Error saving users: {ex.Message}");
+        MessageBox.Show($"L?i khi lýu danh sách ngý?i dùng: {ex.Message}");
         return false;
       }
     }
@@ -256,3 +256,4 @@ namespace SocialManager.services
     public double GrowthWeekly => TotalUsers > 0 ? (NewUsersThisWeek * 100.0 / TotalUsers) : 0;
   }
 }
+

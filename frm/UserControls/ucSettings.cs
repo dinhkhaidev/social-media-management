@@ -41,39 +41,39 @@ namespace SocialManager.frm.UserControls
         {
             if (string.IsNullOrWhiteSpace(txtAppName.Text))
             {
-                MessageBox.Show("Please enter an application name.", "Validation Error", 
+                MessageBox.Show("Vui l?ng nh?p tên ?ng d?ng.", "Validation Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtUserName.Text))
             {
-                MessageBox.Show("Please enter a username.", "Validation Error", 
+                MessageBox.Show("Vui l?ng nh?p tên ðãng nh?p.", "Validation Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // Save settings (simulate)
-            MessageBox.Show("Settings saved successfully!", "Success", 
+            MessageBox.Show("Ð? lýu cài ð?t thành công!", "Success", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnResetSettings_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to reset all settings to default?", 
+            var result = MessageBox.Show("B?n có ch?c ch?n mu?n ð?t l?i t?t c? cài ð?t v? m?c ð?nh?", 
                 "Confirm Reset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
                 LoadSettings(); // Reset to defaults
-                MessageBox.Show("Settings reset to default values!", "Success", 
+                MessageBox.Show("Ð? ð?t l?i cài ð?t v? giá tr? m?c ð?nh!", "Success", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Change password feature coming soon!", "Info", 
+            MessageBox.Show("Tính nãng ð?i m?t kh?u s? s?m có!", "Thông tin", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -87,7 +87,7 @@ namespace SocialManager.frm.UserControls
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show($"Data backup created successfully at: {saveFileDialog.FileName}", "Success", 
+                    MessageBox.Show($"Sao lýu d? li?u thành công t?i: {saveFileDialog.FileName}", "Success", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -102,12 +102,12 @@ namespace SocialManager.frm.UserControls
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    var result = MessageBox.Show("Are you sure you want to restore data? This will overwrite current data.", 
+                    var result = MessageBox.Show("B?n có ch?c ch?n mu?n khôi ph?c d? li?u? Ði?u này s? ghi ðè d? li?u hi?n t?i.", 
                         "Confirm Restore", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                     if (result == DialogResult.Yes)
                     {
-                        MessageBox.Show("Data restored successfully!", "Success", 
+                        MessageBox.Show("Ð? khôi ph?c d? li?u thành công!", "Success", 
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
