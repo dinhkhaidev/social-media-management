@@ -1,4 +1,4 @@
-using Microsoft.VisualBasic.ApplicationServices;
+ï»¿using Microsoft.VisualBasic.ApplicationServices;
 using SocialManager.services;
 using SocialManager.validations.register;
 using System;
@@ -25,7 +25,7 @@ public partial class frmRegister : Form
     private readonly UserService _userService;
     private readonly frmLogin _parentLoginForm; // Reference to parent login form
     
-    // Constructor c? (ð? backward compatibility)
+    // Constructor c? (ï¿½? backward compatibility)
     public frmRegister() : this(null)
     {
     }
@@ -95,10 +95,10 @@ public partial class frmRegister : Form
                 // Force refresh user service to ensure latest data is available for login
                 _userService.RefreshUser();
                 
-                MessageBox.Show("Tài kho?n ð? ðý?c t?o thành công! B?n có th? ðãng nh?p ngay bây gi?.",
+                MessageBox.Show("Tï¿½i kho?n ï¿½? ï¿½ï¿½?c t?o thï¿½nh cï¿½ng! B?n cï¿½ th? ï¿½ï¿½ng nh?p ngay bï¿½y gi?.",
                     "Registration Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 
-                // FIX: S? d?ng parent login form n?u có, không t?o m?i
+                // FIX: S? d?ng parent login form n?u cï¿½, khï¿½ng t?o m?i
                 if (_parentLoginForm != null)
                 {
                     // Refresh parent login form's user data
@@ -107,12 +107,12 @@ public partial class frmRegister : Form
                     // Set username trong parent login form
                     _parentLoginForm.SetUsername(username);
                     
-                    // Close register form và parent login s? hi?n l?i t? ð?ng
+                    // Close register form vï¿½ parent login s? hi?n l?i t? ï¿½?ng
                     this.Close();
                 }
                 else
                 {
-                    // Fallback: t?o login form m?i n?u không có parent
+                    // Fallback: t?o login form m?i n?u khï¿½ng cï¿½ parent
                     frmLogin loginForm = new frmLogin();
                     this.Hide();
                     loginForm.SetUsername(username);
@@ -122,13 +122,13 @@ public partial class frmRegister : Form
             }
             else
             {
-                MessageBox.Show("Không th? t?o tài kho?n. Vui l?ng th? l?i.",
-                    "Ðãng k? th?t b?i", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Khï¿½ng th? t?o tï¿½i kho?n. Vui l?ng th? l?i.",
+                    "ï¿½ï¿½ng k? th?t b?i", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ð? x?y ra l?i khi ðãng k?: {ex.Message}",
+            MessageBox.Show($"ï¿½? x?y ra l?i khi ï¿½ï¿½ng k?: {ex.Message}",
                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
@@ -198,7 +198,7 @@ public partial class frmRegister : Form
         // Terms validation
         if (!chkTerms.Checked)
         {
-            MessageBox.Show("Vui l?ng ch?p nh?n Ði?u kho?n d?ch v? và Chính sách b?o m?t.",
+            MessageBox.Show("Vui l?ng ch?p nh?n ï¿½i?u kho?n d?ch v? vï¿½ Chï¿½nh sï¿½ch b?o m?t.",
                 "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
@@ -206,7 +206,7 @@ public partial class frmRegister : Form
         // Check if username or email already exists
         if (_userService.UserExists(txtUsername.Text, txtEmail.Text))
         {
-            MessageBox.Show("Tên ðãng nh?p ho?c email ð? t?n t?i. Vui l?ng ch?n tên khác.",
+            MessageBox.Show("Tï¿½n ï¿½ï¿½ng nh?p ho?c email ï¿½? t?n t?i. Vui l?ng ch?n tï¿½n khï¿½c.",
                 "Registration Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
@@ -224,14 +224,14 @@ public partial class frmRegister : Form
 
     private void llblLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        // FIX: Không t?o form Login m?i, ch? ðóng register form
-        // Parent login form s? hi?n l?i t? ð?ng
+        // FIX: Khï¿½ng t?o form Login m?i, ch? ï¿½ï¿½ng register form
+        // Parent login form s? hi?n l?i t? ï¿½?ng
         this.Close();
     }
     
     private void button1_Click(object sender, EventArgs e)
     {
-        // FIX: Same logic nhý llblLogin_LinkClicked
+        // FIX: Same logic nhï¿½ llblLogin_LinkClicked
         this.Close();
     }
 

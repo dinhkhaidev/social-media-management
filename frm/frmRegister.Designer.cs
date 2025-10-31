@@ -1,4 +1,4 @@
-namespace SocialManager.frm
+﻿namespace SocialManager.frm
 {
   partial class frmRegister
   {
@@ -146,7 +146,7 @@ namespace SocialManager.frm
       llblLogin.Size = new Size(56, 23);
       llblLogin.TabIndex = 1;
       llblLogin.TabStop = true;
-      llblLogin.Text = "��ng nh?p";
+      llblLogin.Text = "Đăng nhập";
       llblLogin.LinkClicked += llblLogin_LinkClicked;
       //
       // lblLoginPrompt
@@ -158,7 +158,7 @@ namespace SocialManager.frm
       lblLoginPrompt.Name = "lblLoginPrompt";
       lblLoginPrompt.Size = new Size(206, 23);
       lblLoginPrompt.TabIndex = 0;
-      lblLoginPrompt.Text = "�? c� t�i kho?n?";
+      lblLoginPrompt.Text = "Đã có tài khoản?";
       //
       // pnlRegisterForm
       //
@@ -220,7 +220,7 @@ namespace SocialManager.frm
       txtUsername.ForeColor = Color.FromArgb(44, 62, 80);
       txtUsername.Location = new Point(35, 12);
       txtUsername.Name = "txtUsername";
-      txtUsername.PlaceholderText = "T�n ��ng nh?p";
+      txtUsername.PlaceholderText = "Tên đăng nhập";
       txtUsername.Size = new Size(165, 23);
       txtUsername.TabIndex = 1;
       //
@@ -254,7 +254,7 @@ namespace SocialManager.frm
       txtEmail.ForeColor = Color.FromArgb(44, 62, 80);
       txtEmail.Location = new Point(35, 12);
       txtEmail.Name = "txtEmail";
-      txtEmail.PlaceholderText = "�?a ch? Email";
+      txtEmail.PlaceholderText = "Địa chỉ Email";
       txtEmail.Size = new Size(165, 23);
       txtEmail.TabIndex = 1;
       //
@@ -288,7 +288,7 @@ namespace SocialManager.frm
       txtFullName.ForeColor = Color.FromArgb(44, 62, 80);
       txtFullName.Location = new Point(35, 12);
       txtFullName.Name = "txtFullName";
-      txtFullName.PlaceholderText = "H? v� t�n";
+      txtFullName.PlaceholderText = "Họ và tên";
       txtFullName.Size = new Size(165, 23);
       txtFullName.TabIndex = 1;
       //
@@ -322,7 +322,7 @@ namespace SocialManager.frm
       txtPhone.ForeColor = Color.FromArgb(44, 62, 80);
       txtPhone.Location = new Point(35, 12);
       txtPhone.Name = "txtPhone";
-      txtPhone.PlaceholderText = "S? �i?n tho?i";
+      txtPhone.PlaceholderText = "Số điện thoại";
       txtPhone.Size = new Size(165, 23);
       txtPhone.TabIndex = 1;
       //
@@ -391,7 +391,7 @@ namespace SocialManager.frm
       txtConfirmPassword.ForeColor = Color.FromArgb(44, 62, 80);
       txtConfirmPassword.Location = new Point(35, 12);
       txtConfirmPassword.Name = "txtConfirmPassword";
-      txtConfirmPassword.PlaceholderText = "X�c nh?n m?t kh?u";
+      txtConfirmPassword.PlaceholderText = "Xác nhận mật khẩu";
       txtConfirmPassword.Size = new Size(165, 23);
       txtConfirmPassword.TabIndex = 1;
       txtConfirmPassword.UseSystemPasswordChar = true;
@@ -515,7 +515,7 @@ namespace SocialManager.frm
       btnRegister.Name = "btnRegister";
       btnRegister.Size = new Size(434, 50);
       btnRegister.TabIndex = 10;
-      btnRegister.Text = "T?O T�I KHO?N";
+      btnRegister.Text = "TẠO TÀI KHOẢN";
       btnRegister.UseVisualStyleBackColor = false;
       btnRegister.Click += btnRegister_Click;
       //
@@ -540,7 +540,7 @@ namespace SocialManager.frm
       lblSubtitle.Name = "lblSubtitle";
       lblSubtitle.Size = new Size(254, 23);
       lblSubtitle.TabIndex = 2;
-      lblSubtitle.Text = "T?o t�i kho?n qu?n tr? m?i";
+      lblSubtitle.Text = "Tạo tài khoản quản trị mới";
       //
       // lblTitle
       //
@@ -551,7 +551,7 @@ namespace SocialManager.frm
       lblTitle.Name = "lblTitle";
       lblTitle.Size = new Size(178, 54);
       lblTitle.TabIndex = 1;
-      lblTitle.Text = "��ng k?";
+      lblTitle.Text = "Đăng ký";
       //
       // picLogo
       //

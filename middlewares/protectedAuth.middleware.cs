@@ -1,4 +1,4 @@
-//using SocialManager.frm;
+ï»¿//using SocialManager.frm;
 //using SocialManager.services;
 //using System;
 //using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace SocialManager.middlewares
             {
                 _isRedirecting = true;
 
-                MessageBox.Show("Phiên ðãng nh?p ð? h?t h?n. Vui l?ng ðãng nh?p l?i.", "Yêu c?u xác th?c",
+                MessageBox.Show("Phiï¿½n ï¿½ï¿½ng nh?p ï¿½? h?t h?n. Vui l?ng ï¿½ï¿½ng nh?p l?i.", "Yï¿½u c?u xï¿½c th?c",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Create login form

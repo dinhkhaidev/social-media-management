@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"L?i khi t?i danh sách ngý?i dùng: {ex.Message}");
+        MessageBox.Show($"L?i khi t?i danh sï¿½ch ngï¿½?i dï¿½ng: {ex.Message}");
         return new List<User>();
       }
     }
@@ -47,7 +47,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"L?i khi tính th?ng kê ngý?i dùng: {ex.Message}");
+        MessageBox.Show($"L?i khi tï¿½nh th?ng kï¿½ ngï¿½?i dï¿½ng: {ex.Message}");
         return new UserStatistics();
       }
     }
@@ -61,7 +61,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"L?i khi ki?m tra ngý?i dùng t?n t?i: {ex.Message}");
+        MessageBox.Show($"L?i khi ki?m tra ngï¿½?i dï¿½ng t?n t?i: {ex.Message}");
         return false;
       }
     }
@@ -95,7 +95,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"L?i khi t?o ngý?i dùng: {ex.Message}\nChi ti?t l?i: {ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show($"L?i khi t?o ngï¿½?i dï¿½ng: {ex.Message}\nChi ti?t l?i: {ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
     }
@@ -183,7 +183,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"L?i khi c?p nh?t ngý?i dùng: {ex.Message}");
+        MessageBox.Show($"L?i khi c?p nh?t ngï¿½?i dï¿½ng: {ex.Message}");
         return false;
       }
     }
@@ -215,7 +215,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"L?i khi c?p nh?t tr?ng thái ngý?i dùng: {ex.Message}");
+        MessageBox.Show($"L?i khi c?p nh?t tr?ng thï¿½i ngï¿½?i dï¿½ng: {ex.Message}");
         return false;
       }
     }
@@ -235,7 +235,7 @@ namespace SocialManager.services
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"L?i khi lýu danh sách ngý?i dùng: {ex.Message}");
+        MessageBox.Show($"L?i khi lï¿½u danh sï¿½ch ngï¿½?i dï¿½ng: {ex.Message}");
         return false;
       }
     }

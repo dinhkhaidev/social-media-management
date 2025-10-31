@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -144,7 +144,7 @@ namespace SocialManager.frm.UserControls
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show($"Báo cáo ð? ðý?c xu?t thành công t?i: {saveFileDialog.FileName}", "Thành công", 
+                    MessageBox.Show($"Bï¿½o cï¿½o ï¿½? ï¿½ï¿½?c xu?t thï¿½nh cï¿½ng t?i: {saveFileDialog.FileName}", "Thï¿½nh cï¿½ng", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -153,7 +153,7 @@ namespace SocialManager.frm.UserControls
         private void btnRefreshData_Click(object sender, EventArgs e)
         {
             LoadAnalyticsData();
-            MessageBox.Show("D? li?u phân tích ð? ðý?c làm m?i!", "Thành công", 
+            MessageBox.Show("D? li?u phï¿½n tï¿½ch ï¿½? ï¿½ï¿½?c lï¿½m m?i!", "Thï¿½nh cï¿½ng", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -164,13 +164,13 @@ namespace SocialManager.frm.UserControls
 
             if (fromDate >= toDate)
             {
-                MessageBox.Show("Ngày b?t ð?u ph?i trý?c ngày k?t thúc.", "Validation Error", 
+                MessageBox.Show("Ngï¿½y b?t ï¿½?u ph?i trï¿½?c ngï¿½y k?t thï¿½c.", "Validation Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // Apply date filter (simulate)
-            MessageBox.Show($"Ð? áp d?ng b? l?c cho kho?ng th?i gian: {fromDate:dd/MM/yyyy} to {toDate:dd/MM/yyyy}", "Ð? áp d?ng b? l?c", 
+            MessageBox.Show($"ï¿½? ï¿½p d?ng b? l?c cho kho?ng th?i gian: {fromDate:dd/MM/yyyy} to {toDate:dd/MM/yyyy}", "ï¿½? ï¿½p d?ng b? l?c", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             
             LoadAnalyticsData(); // Reload with filter

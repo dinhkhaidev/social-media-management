@@ -1,4 +1,4 @@
-using SocialManager.frm.UserControls;
+ï»¿using SocialManager.frm.UserControls;
 using SocialManager.middlewares;
 using SocialManager.services;
 using System;
@@ -195,8 +195,8 @@ namespace SocialManager.frm
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Critical error in InitializeUserControls: {ex.Message}");
-                MessageBox.Show($"L?i khi kh?i t?o các thành ph?n ?ng d?ng: {ex.Message}\n?ng d?ng s? ti?p t?c v?i ch?c nãng cõ b?n.",
-                    "C?nh báo kh?i t?o", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"L?i khi kh?i t?o cï¿½c thï¿½nh ph?n ?ng d?ng: {ex.Message}\n?ng d?ng s? ti?p t?c v?i ch?c nï¿½ng cï¿½ b?n.",
+                    "C?nh bï¿½o kh?i t?o", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Absolute emergency fallback - create all controls as simple ones
                 dashboardControl = CreateSimpleUserControl("Dashboard", "System is starting up...");
@@ -353,7 +353,7 @@ namespace SocialManager.frm
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error in LoadUserControlIntoMainPanel: {ex.Message}");
-                MessageBox.Show($"L?i khi t?i giao di?n: {ex.Message}\nVui l?ng th? nh?p vào m?c menu l?i.",
+                MessageBox.Show($"L?i khi t?i giao di?n: {ex.Message}\nVui l?ng th? nh?p vï¿½o m?c menu l?i.",
                     "L?i t?i giao di?n", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Try to recover by creating a simple error control
@@ -372,8 +372,8 @@ namespace SocialManager.frm
                 catch (Exception ex2)
                 {
                     System.Diagnostics.Debug.WriteLine($"Critical error in error recovery: {ex2.Message}");
-                    MessageBox.Show("L?i nghiêm tr?ng khi t?i giao di?n ?ng d?ng. Vui l?ng kh?i ð?ng l?i ?ng d?ng.",
-                        "L?i nghiêm tr?ng", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("L?i nghiï¿½m tr?ng khi t?i giao di?n ?ng d?ng. Vui l?ng kh?i ï¿½?ng l?i ?ng d?ng.",
+                        "L?i nghiï¿½m tr?ng", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -685,7 +685,7 @@ namespace SocialManager.frm
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("B?n có ch?c ch?n mu?n ðãng xu?t?", "Xác nh?n ðãng xu?t", 
+            var result = MessageBox.Show("B?n cï¿½ ch?c ch?n mu?n ï¿½ï¿½ng xu?t?", "Xï¿½c nh?n ï¿½ï¿½ng xu?t", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             
             if (result == DialogResult.Yes)

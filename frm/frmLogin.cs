@@ -109,7 +109,7 @@ namespace SocialManager.frm
             AuthSessionService.Login(foundUser);
 
             // Successful login
-            MessageBox.Show("��ng nh?p th�nh c�ng!", "Th�ng b�o ��ng nh?p",
+            MessageBox.Show("Đăng nhập thành công!", "Thông báo đăng nhập",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             try
@@ -136,8 +136,8 @@ namespace SocialManager.frm
               }
               else
               {
-                MessageBox.Show("T�i kho?n c?a b?n kh�ng c� quy?n truy c?p Dashboard.",
-                    "Truy c?p b? t? ch?i", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Tài khoản của bạn không có quyền truy cập Dashboard.",
+                    "Truy cập bị từ chối", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Show login form again
                 this.Show();
@@ -158,8 +158,8 @@ namespace SocialManager.frm
             }
             catch (Exception adminEx)
             {
-              MessageBox.Show($"L?i khi m? Dashboard: {adminEx.Message}",
-                  "L?i Dashboard", MessageBoxButtons.OK, MessageBoxIcon.Error);
+              MessageBox.Show($"Lỗi khi mở Dashboard: {adminEx.Message}",
+                  "Lỗi Dashboard", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
               // Show login form again
               this.Show();
@@ -168,7 +168,7 @@ namespace SocialManager.frm
           else
           {
             // Failed to get user data after authentication
-            MessageBox.Show("X�c th?c th�nh c�ng nh�ng kh�ng th? t?i d? li?u ng�?i d�ng. Vui l?ng th? l?i.", "L?i ��ng nh?p",
+            MessageBox.Show("Xác thực thành công nhưng không thể tải dữ liệu người dùng. Vui lòng thử lại.", "Lỗi đăng nhập",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             txtPassword.Clear();
@@ -178,7 +178,7 @@ namespace SocialManager.frm
         else
         {
           // Failed login
-          MessageBox.Show("T�n ��ng nh?p ho?c m?t kh?u kh�ng ��ng. Vui l?ng th? l?i.", "��ng nh?p th?t b?i",
+          MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.", "Đăng nhập thất bại",
               MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
           txtPassword.Clear();
@@ -187,7 +187,7 @@ namespace SocialManager.frm
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"�? x?y ra l?i khi ��ng nh?p: {ex.Message}", "L?i",
+        MessageBox.Show($"Đã xảy ra lỗi khi đăng nhập: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
       finally
@@ -203,7 +203,7 @@ namespace SocialManager.frm
     {
       if (string.IsNullOrWhiteSpace(txtUsername.Text))
       {
-        MessageBox.Show("Vui l?ng nh?p t�n ��ng nh?p ho?c email.", "L?i x�c th?c",
+        MessageBox.Show("Vui lòng nhập tên đăng nhập hoặc email.", "Lỗi xác thực",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtUsername.Focus();
         return false;
@@ -211,7 +211,7 @@ namespace SocialManager.frm
 
       if (string.IsNullOrWhiteSpace(txtPassword.Text))
       {
-        MessageBox.Show("Vui l?ng nh?p m?t kh?u.", "L?i x�c th?c",
+        MessageBox.Show("Vui lòng nhập mật khẩu.", "Lỗi xác thực",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtPassword.Focus();
         return false;
@@ -222,13 +222,13 @@ namespace SocialManager.frm
 
     private void llblForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-      MessageBox.Show("Vui l?ng li�n h? qu?n tr? vi�n �? �?t l?i m?t kh?u.", "Qu�n m?t kh?u",
+      MessageBox.Show("Vui lòng liên hệ quản trị viên để đặt lại mật khẩu.", "Quên mật khẩu",
           MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void llblRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-      // Pass reference c?a login form hi?n t?i �? kh�ng t?o form m?i
+      // Pass reference của login form hiện tại để không tạo form mới
       frmRegister registerForm = new frmRegister(this); // Pass login form reference
 
       // Hide login form
