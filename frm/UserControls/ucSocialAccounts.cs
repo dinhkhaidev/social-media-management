@@ -186,7 +186,7 @@ namespace SocialManager.frm.UserControls
       {
         var roleText = UserConstant.GetRoleText(user.Role);
         var statusText = UserConstant.GetStatusText(user.StatusId);
-        var genderText = user.Gender == 0 ? "👨 Nam" : "👩 Nữ";
+        var genderText = user.Gender == 0 ? "Nam" : "Nữ";
         var joinedDate = user.CreatedAt.ToString("MMM dd, yyyy");
         var phoneDisplay = string.IsNullOrEmpty(user.Phone) ? "N/A" : user.Phone;
 
@@ -315,14 +315,14 @@ namespace SocialManager.frm.UserControls
                    $"?? Full Name: {user.FullName}\n" +
                    $"?? Email: {user.Email}\n" +
                    $"?? Phone: {user.Phone ?? "Not provided"}\n" +
-                   $"?? Role: {UserConstant.GetRoleText(user.Role)}\n" +
+                   $"Role: {UserConstant.GetRoleText(user.Role)}\n" +
                    $"Status: {UserConstant.GetStatusText(user.StatusId)}\n" +
-                   $"? Gender: {(user.Gender == 0 ? "?? Nam" : "?? FeNam")}\n" +
-                   $"?? Date of Birth: {user.DOB:yyyy-MM-dd}\n" +
-                   $"?? Address: {user.Address ?? "Not provided"}\n" +
-                   $"📧 Bio: {user.Bio ?? "No bio available"}\n" +
-                   $"📅 Member since: {user.CreatedAt:yyyy-MM-dd HH:mm:ss}\n" +
-                   $"🖼 Avatar URL: {user.AvatarUrl ?? "No avatar"}";
+                   $"Gender: {(user.Gender == 0 ? "Nam" : "Nữ")}\n" +
+                   $"Date of Birth: {user.DOB:yyyy-MM-dd}\n" +
+                   $"Address: {user.Address ?? "Not provided"}\n" +
+                   $"Bio: {user.Bio ?? "No bio available"}\n" +
+                   $"Member since: {user.CreatedAt:yyyy-MM-dd HH:mm:ss}\n" +
+                   $"Avatar URL: {user.AvatarUrl ?? "No avatar"}";
 
       MessageBox.Show(details, "Chi tiết hồ sơ người dùng", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
@@ -347,7 +347,7 @@ namespace SocialManager.frm.UserControls
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"❌ Lỗi khi xuất danh sách người dùng:\n{ex.Message}", "Lỗi xuất dữ liệu",
+        MessageBox.Show($"Lỗi khi xuất danh sách người dùng:\n{ex.Message}", "Lỗi xuất dữ liệu",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -359,8 +359,8 @@ namespace SocialManager.frm.UserControls
 
       foreach (var user in _allUsers)
       {
-        var roleText = UserConstant.GetRoleText(user.Role).Replace("👤 ", "").Replace("🔒 ", "").Replace("👑 ", "");
-        var statusText = UserConstant.GetStatusText(user.StatusId).Replace("✅ ", "").Replace("⏸ ", "").Replace("🚫 ", "");
+        var roleText = UserConstant.GetRoleText(user.Role).Replace("User", "User").Replace("Admin", "Admin");
+        var statusText = UserConstant.GetStatusText(user.StatusId).Replace("Active", "Active").Replace("Inactive", "Inactive").Replace("Banned", "Banned");
         var genderText = user.Gender == 0 ? "Nam" : "Nữ";
 
         csv.AppendLine($"\"{user.UserID}\",\"{user.UserName}\",\"{user.FullName}\"," +
@@ -393,7 +393,7 @@ namespace SocialManager.frm.UserControls
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"❌ Lỗi khi làm mới dữ liệu:\n{ex.Message}", "Lỗi làm mới",
+        MessageBox.Show($"Lỗi khi làm mới dữ liệu:\n{ex.Message}", "Lỗi làm mới",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }

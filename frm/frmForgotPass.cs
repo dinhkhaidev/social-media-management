@@ -85,7 +85,7 @@ namespace SocialManager.frm
 
         if (success)
         {
-          MessageBox.Show("✅ Cập nhật mật khẩu thành công!\n\nVui lòng đăng nhập lại với mật khẩu mới.",
+          MessageBox.Show("Cập nhật mật khẩu thành công!\n\nVui lòng đăng nhập lại với mật khẩu mới.",
               "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
           // Đăng xuất user
@@ -96,13 +96,13 @@ namespace SocialManager.frm
         }
         else
         {
-          MessageBox.Show("❌ Không thể cập nhật mật khẩu.\nVui lòng thử lại!",
+          MessageBox.Show("Không thể cập nhật mật khẩu.\nVui lòng thử lại!",
               "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"❌ Lỗi khi cập nhật mật khẩu:\n{ex.Message}",
+        MessageBox.Show($"Lỗi khi cập nhật mật khẩu:\n{ex.Message}",
             "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -112,7 +112,7 @@ namespace SocialManager.frm
       // Kiểm tra trường rỗng
       if (string.IsNullOrWhiteSpace(txtPass1.Text))
       {
-        MessageBox.Show("⚠️ Vui lòng nhập mật khẩu mới!", "Cảnh báo",
+        MessageBox.Show("Vui lòng nhập mật khẩu mới!", "Cảnh báo",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtPass1.Focus();
         return false;
@@ -120,7 +120,7 @@ namespace SocialManager.frm
 
       if (string.IsNullOrWhiteSpace(txtPass2.Text))
       {
-        MessageBox.Show("⚠️ Vui lòng xác nhận mật khẩu!", "Cảnh báo",
+        MessageBox.Show("Vui lòng xác nhận mật khẩu!", "Cảnh báo",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtPass2.Focus();
         return false;
@@ -129,7 +129,7 @@ namespace SocialManager.frm
       // Kiểm tra độ dài mật khẩu
       if (txtPass1.Text.Length < 6)
       {
-        MessageBox.Show("⚠️ Mật khẩu phải có ít nhất 6 ký tự!", "Cảnh báo",
+        MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự!", "Cảnh báo",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtPass1.Focus();
         return false;
@@ -138,7 +138,7 @@ namespace SocialManager.frm
       // Kiểm tra mật khẩu khớp
       if (txtPass1.Text != txtPass2.Text)
       {
-        MessageBox.Show("⚠️ Mật khẩu xác nhận không khớp!\nVui lòng nhập lại.", "Cảnh báo",
+        MessageBox.Show("Mật khẩu xác nhận không khớp!\nVui lòng nhập lại.", "Cảnh báo",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtPass2.Clear();
         txtPass2.Focus();
@@ -148,7 +148,7 @@ namespace SocialManager.frm
       // Kiểm tra mật khẩu mới khác mật khẩu cũ
       if (currentUser != null && txtPass1.Text == currentUser.Password)
       {
-        MessageBox.Show("⚠️ Mật khẩu mới phải khác mật khẩu cũ!", "Cảnh báo",
+        MessageBox.Show("Mật khẩu mới phải khác mật khẩu cũ!", "Cảnh báo",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtPass1.Clear();
         txtPass2.Clear();
