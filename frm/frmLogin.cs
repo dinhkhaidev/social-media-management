@@ -97,7 +97,7 @@ namespace SocialManager.frm
       try
       {
         // Force refresh user data before authentication to get latest data
-        _userService.RefreshUser();
+        //_userService.RefreshUser();
         
         if (_userService.AuthenticateUser(username, password))
         {
