@@ -1,4 +1,4 @@
-ï»¿namespace SocialManager.frm
+namespace SocialManager.frm
 {
     partial class frmAdmin
     {
@@ -96,7 +96,7 @@
             btnLogout.Padding = new Padding(50, 0, 0, 0);
             btnLogout.Size = new Size(240, 50);
             btnLogout.TabIndex = 5;
-            btnLogout.Text = "Logout";
+            btnLogout.Text = "Ðãng xu?t";
             btnLogout.TextAlign = ContentAlignment.MiddleLeft;
             btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += btnLogout_Click;
@@ -117,7 +117,7 @@
             btnSocialAccounts.Padding = new Padding(55, 0, 0, 0);
             btnSocialAccounts.Size = new Size(240, 55);
             btnSocialAccounts.TabIndex = 4;
-            btnSocialAccounts.Text = "Social Accounts";
+            btnSocialAccounts.Text = "Tài kho?n MXH";
             btnSocialAccounts.TextAlign = ContentAlignment.MiddleLeft;
             btnSocialAccounts.UseVisualStyleBackColor = false;
             btnSocialAccounts.Click += btnSocialAccounts_Click;
@@ -138,7 +138,7 @@
             btnSettings.Padding = new Padding(55, 0, 0, 0);
             btnSettings.Size = new Size(240, 55);
             btnSettings.TabIndex = 3;
-            btnSettings.Text = "Settings";
+            btnSettings.Text = "Cài ð?t";
             btnSettings.TextAlign = ContentAlignment.MiddleLeft;
             btnSettings.UseVisualStyleBackColor = false;
             btnSettings.Click += btnSettings_Click;
@@ -159,7 +159,7 @@
             btnAnalytics.Padding = new Padding(55, 0, 0, 0);
             btnAnalytics.Size = new Size(240, 55);
             btnAnalytics.TabIndex = 2;
-            btnAnalytics.Text = "Analytics";
+            btnAnalytics.Text = "Phân tích";
             btnAnalytics.TextAlign = ContentAlignment.MiddleLeft;
             btnAnalytics.UseVisualStyleBackColor = false;
             btnAnalytics.Click += btnAnalytics_Click;
@@ -180,7 +180,7 @@
             btnPosts.Padding = new Padding(55, 0, 0, 0);
             btnPosts.Size = new Size(240, 55);
             btnPosts.TabIndex = 1;
-            btnPosts.Text = "Posts";
+            btnPosts.Text = "Bài vi?t";
             btnPosts.TextAlign = ContentAlignment.MiddleLeft;
             btnPosts.UseVisualStyleBackColor = false;
             btnPosts.Click += btnPosts_Click;
@@ -201,7 +201,7 @@
             btnDashboard.Padding = new Padding(55, 0, 0, 0);
             btnDashboard.Size = new Size(240, 55);
             btnDashboard.TabIndex = 0;
-            btnDashboard.Text = "Dashboard";
+            btnDashboard.Text = "B?ng ði?u khi?n";
             btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
             btnDashboard.UseVisualStyleBackColor = false;
             btnDashboard.Click += btnDashboard_Click;
@@ -229,7 +229,7 @@
             lblSubtitle.Name = "lblSubtitle";
             lblSubtitle.Size = new Size(106, 23);
             lblSubtitle.TabIndex = 2;
-            lblSubtitle.Text = "Admin Panel";
+            lblSubtitle.Text = "B?ng qu?n tr?";
             // 
             // lblTitle
             // 
@@ -240,7 +240,7 @@
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(159, 32);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "Social Media";
+            lblTitle.Text = "M?ng X? H?i";
             lblTitle.Click += lblTitle_Click;
             // 
             // picLogo
@@ -295,7 +295,7 @@
             lblBreadcrumb.Padding = new Padding(0, 10, 0, 0);
             lblBreadcrumb.Size = new Size(161, 33);
             lblBreadcrumb.TabIndex = 0;
-            lblBreadcrumb.Text = "Home > Dashboard";
+            lblBreadcrumb.Text = "Trang ch? > B?ng ði?u khi?n";
             // 
             // lblCurrentView
             // 
@@ -306,7 +306,7 @@
             lblCurrentView.Name = "lblCurrentView";
             lblCurrentView.Size = new Size(171, 41);
             lblCurrentView.TabIndex = 1;
-            lblCurrentView.Text = "Dashboard";
+            lblCurrentView.Text = "B?ng ði?u khi?n";
             // 
             // btnToggleSidebar
             // 
@@ -321,7 +321,7 @@
             btnToggleSidebar.Name = "btnToggleSidebar";
             btnToggleSidebar.Size = new Size(40, 40);
             btnToggleSidebar.TabIndex = 0;
-            btnToggleSidebar.Text = "â˜°";
+            btnToggleSidebar.Text = "?";
             btnToggleSidebar.UseVisualStyleBackColor = false;
             btnToggleSidebar.Click += btnToggleSidebar_Click;
             // 

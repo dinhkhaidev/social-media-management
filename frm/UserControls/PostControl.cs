@@ -187,7 +187,7 @@ namespace SocialManager.controls
         {
           commentsCount++;
           UpdateCommentButton();
-          MessageBox.Show("✅ Đã thêm bình luận!", "Thành công",
+          MessageBox.Show("Đã thêm bình luận!", "Thành công",
               MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
       }

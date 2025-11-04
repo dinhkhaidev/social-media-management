@@ -178,7 +178,7 @@ namespace SocialManager.frm.UserControls
             lblLanguage.Name = "lblLanguage";
             lblLanguage.Size = new Size(86, 23);
             lblLanguage.TabIndex = 11;
-            lblLanguage.Text = "Language";
+            lblLanguage.Text = "Ngôn ng?";
             // 
             // cmbTheme
             // 
@@ -200,7 +200,7 @@ namespace SocialManager.frm.UserControls
             lblTheme.Name = "lblTheme";
             lblTheme.Size = new Size(61, 23);
             lblTheme.TabIndex = 9;
-            lblTheme.Text = "Theme";
+            lblTheme.Text = "Giao di?n";
             // 
             // chkAutoSchedule
             // 
@@ -211,7 +211,7 @@ namespace SocialManager.frm.UserControls
             chkAutoSchedule.Name = "chkAutoSchedule";
             chkAutoSchedule.Size = new Size(243, 27);
             chkAutoSchedule.TabIndex = 8;
-            chkAutoSchedule.Text = "Enable automatic post scheduling";
+            chkAutoSchedule.Text = "B?t l?ch ðãng bài t? ð?ng";
             chkAutoSchedule.UseVisualStyleBackColor = true;
             // 
             // chkNotifications
@@ -223,7 +223,7 @@ namespace SocialManager.frm.UserControls
             chkNotifications.Name = "chkNotifications";
             chkNotifications.Size = new Size(178, 27);
             chkNotifications.TabIndex = 7;
-            chkNotifications.Text = "Enable notifications";
+            chkNotifications.Text = "B?t thông báo";
             chkNotifications.UseVisualStyleBackColor = true;
             // 
             // txtEmail
@@ -264,7 +264,7 @@ namespace SocialManager.frm.UserControls
             lblUserName.Name = "lblUserName";
             lblUserName.Size = new Size(94, 23);
             lblUserName.TabIndex = 3;
-            lblUserName.Text = "Username";
+            lblUserName.Text = "Tên ðãng nh?p";
             // 
             // txtAppName
             // 
@@ -284,7 +284,7 @@ namespace SocialManager.frm.UserControls
             lblAppName.Name = "lblAppName";
             lblAppName.Size = new Size(134, 23);
             lblAppName.TabIndex = 1;
-            lblAppName.Text = "Application Name";
+            lblAppName.Text = "Tên ?ng d?ng";
             // 
             // lblGeneralTitle
             // 
@@ -295,7 +295,7 @@ namespace SocialManager.frm.UserControls
             lblGeneralTitle.Name = "lblGeneralTitle";
             lblGeneralTitle.Size = new Size(178, 32);
             lblGeneralTitle.TabIndex = 0;
-            lblGeneralTitle.Text = "General Settings";
+            lblGeneralTitle.Text = "Cài ð?t chung";
             // 
             // pnlDataManagement
             // 
@@ -359,7 +359,7 @@ namespace SocialManager.frm.UserControls
             lblDataInfo.Name = "lblDataInfo";
             lblDataInfo.Size = new Size(359, 100);
             lblDataInfo.TabIndex = 1;
-            lblDataInfo.Text = "Manage your application data with backup and restore functions. Regular backups are recommended to prevent data loss.";
+            lblDataInfo.Text = "Qu?n l? d? li?u ?ng d?ng v?i ch?c nãng sao lýu và khôi ph?c. Nên sao lýu thý?ng xuyên ð? tránh m?t d? li?u.";
             // 
             // lblDataTitle
             // 
@@ -370,7 +370,7 @@ namespace SocialManager.frm.UserControls
             lblDataTitle.Name = "lblDataTitle";
             lblDataTitle.Size = new Size(206, 32);
             lblDataTitle.TabIndex = 0;
-            lblDataTitle.Text = "Data Management";
+            lblDataTitle.Text = "Qu?n l? d? li?u";
             // 
             // ucSettings
             // 

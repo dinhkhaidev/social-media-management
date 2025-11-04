@@ -64,9 +64,9 @@ namespace SocialManager.frm
 
       string status = currentUser.StatusId switch
       {
-        1 => "✅ Active",
-        0 => "⏸️ Inactive",
-        -1 => "🚫 Banned",
+        1 => "Active",
+        0 => "Inactive",
+        -1 => "Banned",
         _ => "Unknown"
       };
       lblStatusId.Text = $"Trạng thái: {status}";
@@ -121,7 +121,7 @@ namespace SocialManager.frm
 
         if (success)
         {
-          MessageBox.Show("✅ Cập nhật thông tin thành công!", "Thành công",
+          MessageBox.Show("Cập nhật thông tin thành công!", "Thành công",
               MessageBoxButtons.OK, MessageBoxIcon.Information);
 
           // Reload lại dữ liệu
@@ -129,13 +129,13 @@ namespace SocialManager.frm
         }
         else
         {
-          MessageBox.Show("❌ Không thể cập nhật thông tin.\nVui lòng thử lại!", "Lỗi",
+          MessageBox.Show("Không thể cập nhật thông tin.\nVui lòng thử lại!", "Lỗi",
               MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"❌ Lỗi khi cập nhật thông tin:\n{ex.Message}", "Lỗi",
+        MessageBox.Show($"Lỗi khi cập nhật thông tin:\n{ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -145,7 +145,7 @@ namespace SocialManager.frm
       // Kiểm tra Username
       if (string.IsNullOrWhiteSpace(txtUserName.Text))
       {
-        MessageBox.Show("⚠️ Vui lòng nhập tên đăng nhập!", "Cảnh báo",
+        MessageBox.Show("Vui lòng nhập tên đăng nhập!", "Cảnh báo",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtUserName.Focus();
         return false;
@@ -154,7 +154,7 @@ namespace SocialManager.frm
       // Kiểm tra Full Name
       if (string.IsNullOrWhiteSpace(txtFullName.Text))
       {
-        MessageBox.Show("⚠️ Vui lòng nhập họ tên!", "Cảnh báo",
+        MessageBox.Show("Vui lòng nhập họ tên!", "Cảnh báo",
             MessageBoxButtons.OK, MessageBoxIcon.Warning);
         txtFullName.Focus();
         return false;
@@ -165,7 +165,7 @@ namespace SocialManager.frm
       {
         if (!IsValidEmail(txtEmail.Text))
         {
-          MessageBox.Show("⚠️ Email không hợp lệ!", "Cảnh báo",
+          MessageBox.Show("Email không hợp lệ!", "Cảnh báo",
               MessageBoxButtons.OK, MessageBoxIcon.Warning);
           txtEmail.Focus();
           return false;
@@ -177,7 +177,7 @@ namespace SocialManager.frm
       {
         if (!IsValidPhone(txtPhone.Text))
         {
-          MessageBox.Show("⚠️ Số điện thoại không hợp lệ!", "Cảnh báo",
+          MessageBox.Show("Số điện thoại không hợp lệ!", "Cảnh báo",
               MessageBoxButtons.OK, MessageBoxIcon.Warning);
           txtPhone.Focus();
           return false;

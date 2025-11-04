@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -144,7 +144,7 @@ namespace SocialManager.frm.UserControls
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show($"Report exported successfully to: {saveFileDialog.FileName}", "Success", 
+                    MessageBox.Show($"B�o c�o �? ��?c xu?t th�nh c�ng t?i: {saveFileDialog.FileName}", "Th�nh c�ng", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -153,7 +153,7 @@ namespace SocialManager.frm.UserControls
         private void btnRefreshData_Click(object sender, EventArgs e)
         {
             LoadAnalyticsData();
-            MessageBox.Show("Analytics data refreshed!", "Success", 
+            MessageBox.Show("D? li?u ph�n t�ch �? ��?c l�m m?i!", "Th�nh c�ng", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -164,13 +164,13 @@ namespace SocialManager.frm.UserControls
 
             if (fromDate >= toDate)
             {
-                MessageBox.Show("From date must be earlier than To date.", "Validation Error", 
+                MessageBox.Show("Ng�y b?t �?u ph?i tr�?c ng�y k?t th�c.", "Validation Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // Apply date filter (simulate)
-            MessageBox.Show($"Filter applied for period: {fromDate:dd/MM/yyyy} to {toDate:dd/MM/yyyy}", "Filter Applied", 
+            MessageBox.Show($"�? �p d?ng b? l?c cho kho?ng th?i gian: {fromDate:dd/MM/yyyy} to {toDate:dd/MM/yyyy}", "�? �p d?ng b? l?c", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             
             LoadAnalyticsData(); // Reload with filter
