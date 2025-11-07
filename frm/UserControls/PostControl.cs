@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using SocialManager.services;
+using SocialManager.utils;
 
 namespace SocialManager.controls
 {
@@ -80,13 +81,13 @@ namespace SocialManager.controls
     {
       if (isLiked)
       {
-        btnLike.Text = $"❤️ {likesCount}";
+        btnLike.Text = $"Đã thích ({likesCount})";
         btnLike.BackColor = System.Drawing.Color.FromArgb(255, 224, 230);
         btnLike.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
       }
       else
       {
-        btnLike.Text = $"🤍 {likesCount}";
+        btnLike.Text = $"Thích ({likesCount})";
         btnLike.BackColor = System.Drawing.Color.WhiteSmoke;
         btnLike.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
       }
@@ -94,7 +95,7 @@ namespace SocialManager.controls
 
     private void UpdateCommentButton()
     {
-      btnComment.Text = $"💬 {commentsCount}";
+      btnComment.Text = $"Bình luận ({commentsCount})";
     }
 
     private void SetupControl()
@@ -105,9 +106,24 @@ namespace SocialManager.controls
       this.lblContent.Click += (s, e) => OnPostClicked();
       this.lblPostInfo.Click += (s, e) => OnPostClicked();
 
-      // Đăng ký sự kiện cho nút Like và Comment
       this.btnLike.Click += BtnLike_Click;
       this.btnComment.Click += BtnComment_Click;
+
+      // Apply rounded corners
+      UIHelper.ApplyRoundedCorners(gbPostContainer, 15);
+      UIHelper.ApplyRoundedCorners(btnLike, 8);
+      UIHelper.ApplyRoundedCorners(btnComment, 8);
+
+      if (postData != null && currentUser != null)
+      {
+        bool canDelete = (postData.UserID == currentUser.UserID) || (currentUser.Role == 1);
+        if (canDelete && btnDelete != null)
+        {
+          btnDelete.Visible = true;
+          btnDelete.Click += BtnDelete_Click;
+          UIHelper.ApplyRoundedCorners(btnDelete, 8);
+        }
+      }
     }
 
     private void BtnLike_Click(object? sender, EventArgs e)
@@ -118,7 +134,6 @@ namespace SocialManager.controls
       {
         if (isLiked)
         {
-          // Unlike
           var like = new Like
           {
             PostID = postData.PostID,
@@ -134,7 +149,6 @@ namespace SocialManager.controls
         }
         else
         {
-          // Like
           var like = new Like
           {
             PostID = postData.PostID,
@@ -152,7 +166,7 @@ namespace SocialManager.controls
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Lỗi khi like/unlike: {ex.Message}", "Lỗi",
+        MessageBox.Show($"Lỗi khi thích/bỏ thích: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -194,6 +208,41 @@ namespace SocialManager.controls
       catch (Exception ex)
       {
         MessageBox.Show($"Lỗi khi thêm bình luận: {ex.Message}", "Lỗi",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void BtnDelete_Click(object? sender, EventArgs e)
+    {
+      if (postData == null || currentUser == null) return;
+
+      var result = MessageBox.Show(
+          "Bạn có chắc muốn xóa bài viết này?\n(Bài viết sẽ bị ẩn, không hiển thị với người dùng khác)",
+          "Xác nhận xóa",
+          MessageBoxButtons.YesNo,
+          MessageBoxIcon.Warning);
+
+      if (result != DialogResult.Yes)
+        return;
+
+      try
+      {
+        var postService = new PostService();
+        if (postService.SoftDeletePost(postData.PostID))
+        {
+          MessageBox.Show("Đã xóa bài viết!", "Thành công",
+              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          this.Visible = false;
+        }
+        else
+        {
+          MessageBox.Show("Không thể xóa bài viết!", "Lỗi",
+              MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi xóa bài viết: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }

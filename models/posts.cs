@@ -16,6 +16,7 @@ namespace SocialManager
     public int CommentsCount { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public bool IsDeleted { get; set; } // Soft delete flag (true = ẩn, false = hiển thị)
 
     public Post()
     {
@@ -25,6 +26,7 @@ namespace SocialManager
       LikesCount = 0;
       CommentsCount = 0;
       CreatedAt = DateTime.Now;
+      IsDeleted = false;
     }
 
     public Post(string csvLine)
@@ -33,6 +35,7 @@ namespace SocialManager
       Content = "";
       MediaUrl = "";
       Visibility = "Public";
+      IsDeleted = false;
 
       string[] values = csvLine.Split(',');
       if (values.Length >= 8)
@@ -64,6 +67,16 @@ namespace SocialManager
         else
         {
           this.UpdatedAt = null;
+        }
+
+        // Handle IsDeleted (column 10) - default to false if not present
+        if (values.Length > 9 && bool.TryParse(values[9], out bool isDeleted))
+        {
+          this.IsDeleted = isDeleted;
+        }
+        else
+        {
+          this.IsDeleted = false;
         }
       }
     }
@@ -108,7 +121,7 @@ namespace SocialManager
       string updatedAtStr = UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "";
       return $"{PostID},{UserID},\"{Content.Replace("\"", "\"\"")}\"," +
              $"{MediaUrl},{Visibility},{LikesCount},{CommentsCount}," +
-             $"{CreatedAt:yyyy-MM-dd HH:mm:ss},{updatedAtStr}";
+             $"{CreatedAt:yyyy-MM-dd HH:mm:ss},{updatedAtStr},{IsDeleted}";
     }
 
     public override string ToString()

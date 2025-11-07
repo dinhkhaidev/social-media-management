@@ -16,7 +16,10 @@ namespace SocialManager.frm
   {
     private User? currentUser;
     private UserService userService;
+    private VerifyService verifyService;
+#pragma warning disable CS0414
     private bool isPasswordValid = false;
+#pragma warning restore CS0414
 
     public frmForgotPass()
     {
@@ -24,6 +27,7 @@ namespace SocialManager.frm
 
       // Khởi tạo service
       userService = new UserService();
+      verifyService = new VerifyService();
       currentUser = AuthSessionService.CurrentUser;
 
       // Kiểm tra user đã đăng nhập chưa
@@ -31,6 +35,13 @@ namespace SocialManager.frm
       {
         MessageBox.Show("Bạn cần đăng nhập để đổi mật khẩu!", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
+        this.Close();
+        return;
+      }
+
+      // Kiểm tra email đã verify chưa
+      if (!CheckEmailVerification())
+      {
         this.Close();
         return;
       }
@@ -44,6 +55,49 @@ namespace SocialManager.frm
       // Thiết lập placeholder
       txtPass1.PlaceholderText = "Nhập mật khẩu mới...";
       txtPass2.PlaceholderText = "Nhập lại mật khẩu mới...";
+    }
+
+    private bool CheckEmailVerification()
+    {
+      if (currentUser == null) return false;
+
+      // Kiểm tra có email không
+      if (string.IsNullOrEmpty(currentUser.Email))
+      {
+        MessageBox.Show("Bạn cần cập nhật email trước khi đổi mật khẩu!", "Thông báo",
+            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        return false;
+      }
+
+      // Kiểm tra email đã verify chưa
+      bool isVerified = verifyService.IsEmailVerified(currentUser.UserID);
+
+      if (!isVerified)
+      {
+        MessageBox.Show("Bạn cần xác minh email trước khi đổi mật khẩu!\n\n" +
+                       "Vui lòng xác minh email để bảo mật tài khoản của bạn.",
+                       "Yêu Cầu Xác Minh Email",
+                       MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+        // Hiển thị form verify email
+        frmVerifyEmail verifyForm = new frmVerifyEmail(currentUser.UserID, currentUser.Email);
+        var result = verifyForm.ShowDialog();
+
+        if (result == DialogResult.OK && verifyForm.IsVerified)
+        {
+          MessageBox.Show("Xác minh email thành công!\nBây giờ bạn có thể đổi mật khẩu.", "Thành công",
+              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          return true;
+        }
+        else
+        {
+          MessageBox.Show("Bạn cần xác minh email để đổi mật khẩu!", "Thông báo",
+              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          return false;
+        }
+      }
+
+      return true;
     }
 
     private void txtPass2_TextChanged(object? sender, EventArgs e)

@@ -54,9 +54,9 @@ namespace SocialManager.frm
             pnlTopBar.SuspendLayout();
             pnlBreadcrumb.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // pnlSidebar
-            // 
+            //
             pnlSidebar.BackColor = Color.FromArgb(44, 62, 80);
             pnlSidebar.Controls.Add(pnlNavigation);
             pnlSidebar.Controls.Add(pnlSidebarHeader);
@@ -65,9 +65,9 @@ namespace SocialManager.frm
             pnlSidebar.Name = "pnlSidebar";
             pnlSidebar.Size = new Size(280, 653);
             pnlSidebar.TabIndex = 0;
-            // 
+            //
             // pnlNavigation
-            // 
+            //
             pnlNavigation.Controls.Add(btnLogout);
             pnlNavigation.Controls.Add(btnSocialAccounts);
             pnlNavigation.Controls.Add(btnSettings);
@@ -80,9 +80,9 @@ namespace SocialManager.frm
             pnlNavigation.Padding = new Padding(20);
             pnlNavigation.Size = new Size(280, 533);
             pnlNavigation.TabIndex = 1;
-            // 
+            //
             // btnLogout
-            // 
+            //
             btnLogout.BackColor = Color.FromArgb(231, 76, 60);
             btnLogout.Dock = DockStyle.Bottom;
             btnLogout.FlatAppearance.BorderSize = 0;
@@ -96,14 +96,14 @@ namespace SocialManager.frm
             btnLogout.Padding = new Padding(50, 0, 0, 0);
             btnLogout.Size = new Size(240, 50);
             btnLogout.TabIndex = 5;
-            btnLogout.Text = "��ng xu?t";
+            btnLogout.Text = "Đăng xuất";
             btnLogout.TextAlign = ContentAlignment.MiddleLeft;
             btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += btnLogout_Click;
             btnLogout.Paint += btnLogout_Paint;
-            // 
+            //
             // btnSocialAccounts
-            // 
+            //
             btnSocialAccounts.BackColor = Color.Transparent;
             btnSocialAccounts.FlatAppearance.BorderSize = 0;
             btnSocialAccounts.FlatAppearance.MouseDownBackColor = Color.FromArgb(52, 73, 94);
@@ -117,14 +117,14 @@ namespace SocialManager.frm
             btnSocialAccounts.Padding = new Padding(55, 0, 0, 0);
             btnSocialAccounts.Size = new Size(240, 55);
             btnSocialAccounts.TabIndex = 4;
-            btnSocialAccounts.Text = "T�i kho?n MXH";
+            btnSocialAccounts.Text = "Tài khoản MXH";
             btnSocialAccounts.TextAlign = ContentAlignment.MiddleLeft;
             btnSocialAccounts.UseVisualStyleBackColor = false;
             btnSocialAccounts.Click += btnSocialAccounts_Click;
             btnSocialAccounts.Paint += btnSocialAccounts_Paint;
-            // 
+            //
             // btnSettings
-            // 
+            //
             btnSettings.BackColor = Color.Transparent;
             btnSettings.FlatAppearance.BorderSize = 0;
             btnSettings.FlatAppearance.MouseDownBackColor = Color.FromArgb(52, 73, 94);
@@ -138,14 +138,14 @@ namespace SocialManager.frm
             btnSettings.Padding = new Padding(55, 0, 0, 0);
             btnSettings.Size = new Size(240, 55);
             btnSettings.TabIndex = 3;
-            btnSettings.Text = "C�i �?t";
+            btnSettings.Text = "Cài đặt";
             btnSettings.TextAlign = ContentAlignment.MiddleLeft;
             btnSettings.UseVisualStyleBackColor = false;
             btnSettings.Click += btnSettings_Click;
             btnSettings.Paint += btnSettings_Paint;
-            // 
+            //
             // btnAnalytics
-            // 
+            //
             btnAnalytics.BackColor = Color.Transparent;
             btnAnalytics.FlatAppearance.BorderSize = 0;
             btnAnalytics.FlatAppearance.MouseDownBackColor = Color.FromArgb(52, 73, 94);
@@ -159,14 +159,14 @@ namespace SocialManager.frm
             btnAnalytics.Padding = new Padding(55, 0, 0, 0);
             btnAnalytics.Size = new Size(240, 55);
             btnAnalytics.TabIndex = 2;
-            btnAnalytics.Text = "Ph�n t�ch";
+            btnAnalytics.Text = "Phân tích";
             btnAnalytics.TextAlign = ContentAlignment.MiddleLeft;
             btnAnalytics.UseVisualStyleBackColor = false;
             btnAnalytics.Click += btnAnalytics_Click;
             btnAnalytics.Paint += btnAnalytics_Paint;
-            // 
+            //
             // btnPosts
-            // 
+            //
             btnPosts.BackColor = Color.Transparent;
             btnPosts.FlatAppearance.BorderSize = 0;
             btnPosts.FlatAppearance.MouseDownBackColor = Color.FromArgb(52, 73, 94);
@@ -180,14 +180,14 @@ namespace SocialManager.frm
             btnPosts.Padding = new Padding(55, 0, 0, 0);
             btnPosts.Size = new Size(240, 55);
             btnPosts.TabIndex = 1;
-            btnPosts.Text = "B�i vi?t";
+            btnPosts.Text = "Bài viết";
             btnPosts.TextAlign = ContentAlignment.MiddleLeft;
             btnPosts.UseVisualStyleBackColor = false;
             btnPosts.Click += btnPosts_Click;
             btnPosts.Paint += btnPosts_Paint;
-            // 
+            //
             // btnDashboard
-            // 
+            //
             btnDashboard.BackColor = Color.FromArgb(52, 152, 219);
             btnDashboard.FlatAppearance.BorderSize = 0;
             btnDashboard.FlatAppearance.MouseDownBackColor = Color.FromArgb(41, 128, 185);
@@ -201,14 +201,14 @@ namespace SocialManager.frm
             btnDashboard.Padding = new Padding(55, 0, 0, 0);
             btnDashboard.Size = new Size(240, 55);
             btnDashboard.TabIndex = 0;
-            btnDashboard.Text = "B?ng �i?u khi?n";
+            btnDashboard.Text = "Bảng điều khiển";
             btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
             btnDashboard.UseVisualStyleBackColor = false;
             btnDashboard.Click += btnDashboard_Click;
             btnDashboard.Paint += btnDashboard_Paint;
-            // 
+            //
             // pnlSidebarHeader
-            // 
+            //
             pnlSidebarHeader.BackColor = Color.FromArgb(52, 73, 94);
             pnlSidebarHeader.Controls.Add(lblSubtitle);
             pnlSidebarHeader.Controls.Add(lblTitle);
@@ -219,9 +219,9 @@ namespace SocialManager.frm
             pnlSidebarHeader.Padding = new Padding(20);
             pnlSidebarHeader.Size = new Size(280, 120);
             pnlSidebarHeader.TabIndex = 0;
-            // 
+            //
             // lblSubtitle
-            // 
+            //
             lblSubtitle.AutoSize = true;
             lblSubtitle.Font = new Font("Segoe UI", 10F);
             lblSubtitle.ForeColor = Color.FromArgb(189, 195, 199);
@@ -229,10 +229,10 @@ namespace SocialManager.frm
             lblSubtitle.Name = "lblSubtitle";
             lblSubtitle.Size = new Size(106, 23);
             lblSubtitle.TabIndex = 2;
-            lblSubtitle.Text = "B?ng qu?n tr?";
-            // 
+            lblSubtitle.Text = "Bảng quản trị";
+            //
             // lblTitle
-            // 
+            //
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             lblTitle.ForeColor = Color.White;
@@ -240,20 +240,20 @@ namespace SocialManager.frm
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(159, 32);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "M?ng X? H?i";
+            lblTitle.Text = "Mạng Xã Hội";
             lblTitle.Click += lblTitle_Click;
-            // 
+            //
             // picLogo
-            // 
+            //
             picLogo.Location = new Point(20, 20);
             picLogo.Name = "picLogo";
             picLogo.Size = new Size(50, 50);
             picLogo.TabIndex = 0;
             picLogo.TabStop = false;
             picLogo.Paint += picLogo_Paint;
-            // 
+            //
             // pnlMain
-            // 
+            //
             pnlMain.BackColor = Color.FromArgb(247, 249, 252);
             pnlMain.Controls.Add(pnlTopBar);
             pnlMain.Dock = DockStyle.Fill;
@@ -261,9 +261,9 @@ namespace SocialManager.frm
             pnlMain.Name = "pnlMain";
             pnlMain.Size = new Size(902, 653);
             pnlMain.TabIndex = 1;
-            // 
+            //
             // pnlTopBar
-            // 
+            //
             pnlTopBar.BackColor = Color.White;
             pnlTopBar.Controls.Add(pnlBreadcrumb);
             pnlTopBar.Controls.Add(lblCurrentView);
@@ -274,18 +274,18 @@ namespace SocialManager.frm
             pnlTopBar.Padding = new Padding(30, 20, 30, 20);
             pnlTopBar.Size = new Size(902, 80);
             pnlTopBar.TabIndex = 0;
-            // 
+            //
             // pnlBreadcrumb
-            // 
+            //
             pnlBreadcrumb.Controls.Add(lblBreadcrumb);
             pnlBreadcrumb.Dock = DockStyle.Right;
             pnlBreadcrumb.Location = new Point(676, 20);
             pnlBreadcrumb.Name = "pnlBreadcrumb";
             pnlBreadcrumb.Size = new Size(196, 40);
             pnlBreadcrumb.TabIndex = 2;
-            // 
+            //
             // lblBreadcrumb
-            // 
+            //
             lblBreadcrumb.AutoSize = true;
             lblBreadcrumb.Dock = DockStyle.Right;
             lblBreadcrumb.Font = new Font("Segoe UI", 10F);
@@ -295,10 +295,10 @@ namespace SocialManager.frm
             lblBreadcrumb.Padding = new Padding(0, 10, 0, 0);
             lblBreadcrumb.Size = new Size(161, 33);
             lblBreadcrumb.TabIndex = 0;
-            lblBreadcrumb.Text = "Trang ch? > B?ng �i?u khi?n";
-            // 
+            lblBreadcrumb.Text = "Trang chủ > Bảng điều khiển";
+            //
             // lblCurrentView
-            // 
+            //
             lblCurrentView.AutoSize = true;
             lblCurrentView.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblCurrentView.ForeColor = Color.FromArgb(44, 62, 80);
@@ -306,10 +306,10 @@ namespace SocialManager.frm
             lblCurrentView.Name = "lblCurrentView";
             lblCurrentView.Size = new Size(171, 41);
             lblCurrentView.TabIndex = 1;
-            lblCurrentView.Text = "B?ng �i?u khi?n";
-            // 
+            lblCurrentView.Text = "Bảng điều khiển";
+            //
             // btnToggleSidebar
-            // 
+            //
             btnToggleSidebar.BackColor = Color.Transparent;
             btnToggleSidebar.FlatAppearance.BorderSize = 0;
             btnToggleSidebar.FlatAppearance.MouseDownBackColor = Color.FromArgb(236, 240, 241);
@@ -321,12 +321,12 @@ namespace SocialManager.frm
             btnToggleSidebar.Name = "btnToggleSidebar";
             btnToggleSidebar.Size = new Size(40, 40);
             btnToggleSidebar.TabIndex = 0;
-            btnToggleSidebar.Text = "?";
+            btnToggleSidebar.Text = "☰";
             btnToggleSidebar.UseVisualStyleBackColor = false;
             btnToggleSidebar.Click += btnToggleSidebar_Click;
-            // 
+            //
             // frmAdmin
-            // 
+            //
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(247, 249, 252);

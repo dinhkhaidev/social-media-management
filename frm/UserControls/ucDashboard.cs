@@ -1,3 +1,4 @@
+using SocialManager.utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -61,13 +62,27 @@ namespace SocialManager.frm.UserControls
     {
       this.BackColor = Color.FromArgb(247, 249, 252);
       LoadDashboardData();
+      ApplyRoundedCorners();
+    }
+
+    private void ApplyRoundedCorners()
+    {
+      try
+      {
+        // Apply rounded corners to button
+        if (btnViewAllActivity != null)
+          UIHelper.ApplyRoundedCorners(btnViewAllActivity, 8);
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error applying rounded corners: {ex.Message}");
+      }
     }
 
     private void LoadDashboardData()
     {
       try
       {
-        // Safely initialize controls with null checks
         if (lblTotalPostsValue != null)
           lblTotalPostsValue.Text = "1.2K";
 
@@ -76,14 +91,9 @@ namespace SocialManager.frm.UserControls
 
         if (lblInteractionsValue != null)
           lblInteractionsValue.Text = "85K";
-
-        // lblActiveAccountsValue control không tồn tại trong Designer
-        // if (lblActiveAccountsValue != null)
-        //     lblActiveAccountsValue.Text = "5";
       }
       catch (Exception ex)
       {
-        // Ghi log và hiển thị thông báo thân thiện
         System.Diagnostics.Debug.WriteLine($"Error loading dashboard data: {ex}");
         MessageBox.Show($"Lỗi khi tải dữ liệu bảng điều khiển: {ex.Message}", "Lỗi bảng điều khiển",
           MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -156,7 +166,6 @@ namespace SocialManager.frm.UserControls
       }
     }
 
-    // Custom paint events for modern UI
     private void pnlCard_Paint(object sender, PaintEventArgs e)
     {
       if (sender is Panel panel)
@@ -165,19 +174,16 @@ namespace SocialManager.frm.UserControls
         {
           e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-          // Draw shadow
           using (var shadowBrush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
           {
             GraphicsExtensions.FillRoundedRectangle(e.Graphics, shadowBrush, new Rectangle(3, 3, panel.Width - 3, panel.Height - 3), 12);
           }
 
-          // Draw main card
           using (var cardBrush = new SolidBrush(Color.White))
           {
             GraphicsExtensions.FillRoundedRectangle(e.Graphics, cardBrush, new Rectangle(0, 0, panel.Width - 3, panel.Height - 3), 12);
           }
 
-          // Draw subtle border
           using (var borderPen = new Pen(Color.FromArgb(230, 230, 230), 1))
           {
             GraphicsExtensions.DrawRoundedRectangle(e.Graphics, borderPen, new Rectangle(0, 0, panel.Width - 4, panel.Height - 4), 12);
@@ -185,7 +191,6 @@ namespace SocialManager.frm.UserControls
         }
         catch (Exception ex)
         {
-          // Fallback to simple rectangle if drawing fails
           System.Diagnostics.Debug.WriteLine(ex.ToString());
           e.Graphics.FillRectangle(Brushes.White, panel.ClientRectangle);
           e.Graphics.DrawRectangle(Pens.LightGray, 0, 0, panel.Width - 1, panel.Height - 1);
@@ -238,10 +243,10 @@ namespace SocialManager.frm.UserControls
                 path.AddEllipse(centerX - 8, centerY - 5, 8, 8);
                 path.AddEllipse(centerX, centerY - 5, 8, 8);
                 path.AddPolygon(new Point[] {
-                                    new Point(centerX - 4, centerY + 3),
-                                    new Point(centerX, centerY + 12),
-                                    new Point(centerX + 4, centerY + 3)
-                                });
+                  new Point(centerX - 4, centerY + 3),
+                  new Point(centerX, centerY + 12),
+                  new Point(centerX + 4, centerY + 3)
+                });
                 g.FillPath(brush, path);
               }
               break;
@@ -257,15 +262,14 @@ namespace SocialManager.frm.UserControls
               using (var pen = new Pen(brush, 3))
               {
                 Point[] points = {
-                                    new Point(centerX - 12, centerY + 8),
-                                    new Point(centerX - 6, centerY + 2),
-                                    new Point(centerX, centerY - 2),
-                                    new Point(centerX + 6, centerY - 6),
-                                    new Point(centerX + 12, centerY - 10)
-                                };
+                  new Point(centerX - 12, centerY + 8),
+                  new Point(centerX - 6, centerY + 2),
+                  new Point(centerX, centerY - 2),
+                  new Point(centerX + 6, centerY - 6),
+                  new Point(centerX + 12, centerY - 10)
+                };
                 g.DrawLines(pen, points);
 
-                // Arrow head
                 g.DrawLine(pen, centerX + 8, centerY - 6, centerX + 12, centerY - 10);
                 g.DrawLine(pen, centerX + 12, centerY - 6, centerX + 12, centerY - 10);
               }
@@ -275,7 +279,6 @@ namespace SocialManager.frm.UserControls
       }
       catch (Exception ex)
       {
-        // Fallback to simple rectangle if icon drawing fails
         System.Diagnostics.Debug.WriteLine(ex.ToString());
         g.FillRectangle(new SolidBrush(color), rect);
       }
@@ -283,17 +286,14 @@ namespace SocialManager.frm.UserControls
 
     private void picTotalPosts_Click(object sender, EventArgs e)
     {
-
     }
 
     private void label2_Click(object sender, EventArgs e)
     {
-
     }
 
     private void lblComposerTitle_Click(object sender, EventArgs e)
     {
-
     }
   }
 }
