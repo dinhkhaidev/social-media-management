@@ -442,5 +442,59 @@ namespace SocialManager.services
         return false;
       }
     }
+
+    public static bool ReportPost(int postId, Guid reporterUserId, out Guid? reportedUserId)
+    {
+      reportedUserId = null;
+      try
+      {
+        var postService = new PostService();
+        var post = postService.GetAllPosts(includeDeleted: true).FirstOrDefault(p => p.PostID == postId);
+
+        if (post == null)
+        {
+          System.Windows.Forms.MessageBox.Show("Không tìm thấy bài viết!", "Lỗi", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+          return false;
+        }
+
+        reportedUserId = post.UserID;
+
+        if (post.UserID == reporterUserId)
+        {
+          System.Windows.Forms.MessageBox.Show("Bạn không thể tố cáo bài viết của chính mình!", "Cảnh báo", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+          return false;
+        }
+
+        var reportService = new ReportService();
+        bool reportCreated = reportService.CreateReport("Post", postId, reporterUserId, post.UserID);
+        if (!reportCreated)
+        {
+          System.Windows.Forms.MessageBox.Show("Không thể tạo báo cáo tố cáo!", "Lỗi", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+          return false;
+        }
+
+        bool postDeleted = postService.SoftDeletePost(postId);
+        if (!postDeleted)
+        {
+          System.Windows.Forms.MessageBox.Show("Đã tạo báo cáo nhưng không thể ẩn bài viết!", "Cảnh báo", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+        }
+
+        var userService = new UserService();
+        var reportedUser = userService.GetAllUsers().FirstOrDefault(u => u.UserID == post.UserID);
+        if (reportedUser != null)
+        {
+          reportedUser.ReportCount++;
+          userService.UpdateUser(reportedUser);
+        }
+
+        return true;
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error reporting post: {ex.Message}");
+        System.Windows.Forms.MessageBox.Show($"Lỗi khi tố cáo bài viết: {ex.Message}", "Lỗi", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+        return false;
+      }
+    }
   }
 }

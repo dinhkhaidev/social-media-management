@@ -32,12 +32,14 @@ namespace SocialManager.controls
     private TextBox? txtComment;
     private Button? btnAddComment;
     private Button? btnClose;
+    private Button? btnReportPost;
 
 
     public ucPostDetail(int postId)
     {
       this.postId = postId;
       currentUser = AuthSessionService.CurrentUser;
+      userService = new UserService();
       comments = new List<Comment>();
       likes = new List<Like>();
       InitializeComponent();
@@ -57,7 +59,14 @@ namespace SocialManager.controls
       btnClose = new Button { Location = new Point(600, 15), Size = new Size(80, 35), Text = "Đóng", BackColor = Color.Gray, ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F, FontStyle.Bold) };
       btnClose.FlatAppearance.BorderSize = 0;
       btnClose.Click += (s, e) => CloseRequested?.Invoke(this, EventArgs.Empty);
-      pnlHeader.Controls.AddRange(new Control[] { lblAuthor, lblDate, btnClose });
+
+      // Report Post button
+      btnReportPost = new Button { Location = new Point(480, 15), Size = new Size(110, 35), Text = "Tố cáo", BackColor = Color.FromArgb(255, 152, 0), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F, FontStyle.Bold) };
+      btnReportPost.FlatAppearance.BorderSize = 0;
+      btnReportPost.Click += BtnReportPost_Click;
+      btnReportPost.Visible = false;
+
+      pnlHeader.Controls.AddRange(new Control[] { lblAuthor, lblDate, btnReportPost, btnClose });
 
       pnlContent = new Panel { Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(15, 10, 15, 15), BackColor = Color.White };
       lblContent = new Label { Dock = DockStyle.Fill, Font = new Font("Segoe UI", 10F), AutoSize = true, MaximumSize = new Size(650, 0) };
@@ -107,6 +116,13 @@ namespace SocialManager.controls
         if (lblAuthor != null) lblAuthor.Text = author?.FullName ?? "Người dùng";
         if (lblDate != null) lblDate.Text = post.CreatedAt.ToString("dd/MM/yyyy HH:mm");
         if (lblContent != null) lblContent.Text = post.Content;
+
+        // Show report button if not own post
+        if (currentUser != null && post.UserID != currentUser.UserID && btnReportPost != null)
+        {
+          btnReportPost.Visible = true;
+        }
+
         if (System.IO.File.Exists("datas\\Likes.csv"))
         {
           likes = Like.GetList("datas\\Likes.csv").Where(l => l.PostID == postId).ToList();
@@ -276,6 +292,38 @@ namespace SocialManager.controls
       catch (Exception ex)
       {
         System.Diagnostics.Debug.WriteLine($"Error updating post counts: {ex.Message}");
+      }
+    }
+
+    private void BtnReportPost_Click(object? sender, EventArgs e)
+    {
+      if (post == null || currentUser == null) return;
+
+      var result = MessageBox.Show(
+          "Bạn có chắc muốn tố cáo bài viết này?\n(Bài viết sẽ bị ẩn và tài khoản bị báo cáo sẽ được ghi nhận)",
+          "Xác nhận tố cáo",
+          MessageBoxButtons.YesNo,
+          MessageBoxIcon.Warning);
+
+      if (result != DialogResult.Yes)
+        return;
+
+      try
+      {
+        Guid? reportedUserId;
+        bool success = PostService.ReportPost(post.PostID, currentUser.UserID, out reportedUserId);
+
+        if (success)
+        {
+          MessageBox.Show("Đã tố cáo bài viết thành công!\nBài viết đã bị ẩn.", "Thành công",
+              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          CloseRequested?.Invoke(this, EventArgs.Empty);
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi tố cáo bài viết: {ex.Message}", "Lỗi",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
   }

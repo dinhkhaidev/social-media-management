@@ -19,6 +19,7 @@
     {
       this.gbPostContainer = new System.Windows.Forms.GroupBox();
       this.btnDelete = new System.Windows.Forms.Button();
+      this.btnReport = new System.Windows.Forms.Button();
       this.lblStatus = new System.Windows.Forms.Label();
       this.btnComment = new System.Windows.Forms.Button();
       this.btnLike = new System.Windows.Forms.Button();
@@ -30,6 +31,7 @@
       // gbPostContainer
       //
       this.gbPostContainer.Controls.Add(this.btnDelete);
+      this.gbPostContainer.Controls.Add(this.btnReport);
       this.gbPostContainer.Controls.Add(this.lblStatus);
       this.gbPostContainer.Controls.Add(this.btnComment);
       this.gbPostContainer.Controls.Add(this.btnLike);
@@ -86,6 +88,23 @@
       this.btnDelete.Text = "✕ Xóa";
       this.btnDelete.UseVisualStyleBackColor = false;
       this.btnDelete.Visible = false;
+      //
+      // btnReport
+      //
+      this.btnReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.btnReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
+      this.btnReport.FlatAppearance.BorderSize = 0;
+      this.btnReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnReport.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+      this.btnReport.ForeColor = System.Drawing.Color.White;
+      this.btnReport.Location = new System.Drawing.Point(225, 121);
+      this.btnReport.Name = "btnReport";
+      this.btnReport.Size = new System.Drawing.Size(90, 32);
+      this.btnReport.TabIndex = 6;
+      this.btnReport.Text = "Tố cáo";
+      this.btnReport.UseVisualStyleBackColor = false;
+      this.btnReport.Visible = false;
+      this.btnReport.Click += new System.EventHandler(this.BtnReport_Click);
       //
       // btnLike
       //
@@ -152,5 +171,6 @@
     private System.Windows.Forms.Button btnComment;
     private System.Windows.Forms.Label lblStatus;
     private System.Windows.Forms.Button btnDelete;
+    private System.Windows.Forms.Button btnReport;
   }
 }

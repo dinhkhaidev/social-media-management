@@ -123,6 +123,13 @@ namespace SocialManager.controls
           btnDelete.Click += BtnDelete_Click;
           UIHelper.ApplyRoundedCorners(btnDelete, 8);
         }
+
+        // Show report button if not own post
+        if (postData.UserID != currentUser.UserID && btnReport != null)
+        {
+          btnReport.Visible = true;
+          UIHelper.ApplyRoundedCorners(btnReport, 8);
+        }
       }
     }
 
@@ -243,6 +250,38 @@ namespace SocialManager.controls
       catch (Exception ex)
       {
         MessageBox.Show($"Lỗi khi xóa bài viết: {ex.Message}", "Lỗi",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void BtnReport_Click(object? sender, EventArgs e)
+    {
+      if (postData == null || currentUser == null) return;
+
+      var result = MessageBox.Show(
+          "Bạn có chắc muốn tố cáo bài viết này?\n(Bài viết sẽ bị ẩn và tài khoản bị báo cáo sẽ được ghi nhận)",
+          "Xác nhận tố cáo",
+          MessageBoxButtons.YesNo,
+          MessageBoxIcon.Warning);
+
+      if (result != DialogResult.Yes)
+        return;
+
+      try
+      {
+        Guid? reportedUserId;
+        bool success = PostService.ReportPost(postData.PostID, currentUser.UserID, out reportedUserId);
+
+        if (success)
+        {
+          MessageBox.Show("Đã tố cáo bài viết thành công!\nBài viết đã bị ẩn.", "Thành công",
+              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          this.Visible = false;
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi tố cáo bài viết: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
