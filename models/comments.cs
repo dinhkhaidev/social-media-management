@@ -15,18 +15,21 @@ namespace SocialManager
     public string Content { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public bool IsDeleted { get; set; } // Soft delete flag (true = ẩn, false = hiển thị)
 
     // --- Constructors ---
 
     public Comment()
     {
       Content = "";
+      IsDeleted = false;
     }
 
     public Comment(string csvLine)
     {
       // Khởi tạo mặc định
       Content = "";
+      IsDeleted = false;
 
       string[] values = csvLine.Split(',');
       if (values.Length >= 7)
@@ -63,6 +66,16 @@ namespace SocialManager
         else
         {
           this.UpdatedAt = null;
+        }
+
+        // Handle IsDeleted (column 8) - default to false if not present
+        if (values.Length > 7 && bool.TryParse(values[7], out bool isDeleted))
+        {
+          this.IsDeleted = isDeleted;
+        }
+        else
+        {
+          this.IsDeleted = false;
         }
       }
     }
@@ -116,7 +129,7 @@ namespace SocialManager
     {
       string parentId = ParentCommentID?.ToString() ?? "";
       string updatedAt = UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "";
-      return $"{CommentID},{PostID},{UserID},{parentId},{Content},{CreatedAt:yyyy-MM-dd HH:mm:ss},{updatedAt}";
+      return $"{CommentID},{PostID},{UserID},{parentId},{Content},{CreatedAt:yyyy-MM-dd HH:mm:ss},{updatedAt},{IsDeleted}";
     }
 
     // Lưu comment mới

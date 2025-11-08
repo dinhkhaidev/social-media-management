@@ -1,4 +1,5 @@
 ﻿using SocialManager.services;
+using SocialManager.utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,13 +12,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+#pragma warning disable CS8602, CS8604 // Suppress null reference warnings for this UserControl
+
 namespace SocialManager.frm.UserControls
 {
   public partial class ucPosts : UserControl
   {
-    private PostService postService;
-    private UserService userService;
-    private List<Post> allPosts;
+    private PostService? postService;
+    private UserService? userService;
+    private List<Post>? allPosts;
     private string selectedImagePath = "";
 
     public ucPosts()
@@ -36,17 +39,15 @@ namespace SocialManager.frm.UserControls
         userService = new UserService();
         allPosts = new List<Post>();
 
-        // Setup fonts first to prevent .NET 8 font errors
         SetupFonts();
-
-        // Setup placeholder text for Vietnamese to prevent font issues
         SetupPlaceholderTexts();
-
         SetupDataGridView();
 
-        // Set default filter
         if (cmbVisibilityFilter != null && cmbVisibilityFilter.Items.Count > 0)
           cmbVisibilityFilter.SelectedIndex = 0;
+
+        // Apply rounded corners to UI elements
+        ApplyRoundedCorners();
       }
       catch (Exception ex)
       {
@@ -58,24 +59,20 @@ namespace SocialManager.frm.UserControls
     {
       try
       {
-        // Create fonts with explicit GraphicsUnit.Point to prevent .NET 8 font issues
         var defaultFont = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
         var titleFont = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point);
         var buttonFont = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
         var textBoxFont = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
         var boldButtonFont = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
 
-        // Apply fonts to all controls to prevent font errors
         this.Font = defaultFont;
 
-        // Title labels
         if (lblPostCreatorTitle != null)
           lblPostCreatorTitle.Font = titleFont;
 
         if (lblPostsListTitle != null)
           lblPostsListTitle.Font = titleFont;
 
-        // Text inputs
         if (txtPostTitle != null)
           txtPostTitle.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
 
@@ -85,7 +82,6 @@ namespace SocialManager.frm.UserControls
         if (txtSearch != null)
           txtSearch.Font = defaultFont;
 
-        // Buttons
         if (btnCreatePost != null)
           btnCreatePost.Font = boldButtonFont;
 
@@ -101,32 +97,27 @@ namespace SocialManager.frm.UserControls
         if (btnRefreshPosts != null)
           btnRefreshPosts.Font = defaultFont;
 
-        // ComboBoxes
         if (cmbPlatform != null)
           cmbPlatform.Font = defaultFont;
 
         if (cmbVisibilityFilter != null)
           cmbVisibilityFilter.Font = defaultFont;
 
-        // Other controls
         if (chkSchedulePost != null)
           chkSchedulePost.Font = defaultFont;
 
         if (dtpScheduleDate != null)
           dtpScheduleDate.Font = defaultFont;
 
-        // Labels
         if (lblSearch != null)
           lblSearch.Font = defaultFont;
 
         if (lblFilter != null)
           lblFilter.Font = defaultFont;
-
       }
       catch (Exception ex)
       {
         System.Diagnostics.Debug.WriteLine($"Error setting up fonts: {ex.Message}");
-        // Use system default font as fallback
         this.Font = SystemFonts.DefaultFont;
       }
     }
@@ -135,22 +126,21 @@ namespace SocialManager.frm.UserControls
     {
       try
       {
-        // Set placeholder texts in runtime to avoid .NET 8 encoding issues
         if (txtPostTitle != null)
         {
-          txtPostTitle.PlaceholderText = ""; // Clear Designer placeholder first
+          txtPostTitle.PlaceholderText = "";
           txtPostTitle.PlaceholderText = "Nhập tiêu đề bài viết...";
         }
 
         if (txtPostContent != null)
         {
-          txtPostContent.PlaceholderText = ""; // Clear Designer placeholder first
+          txtPostContent.PlaceholderText = "";
           txtPostContent.PlaceholderText = "Viết nội dung bài post tại đây...";
         }
 
         if (txtSearch != null)
         {
-          txtSearch.PlaceholderText = ""; // Clear Designer placeholder first
+          txtSearch.PlaceholderText = "";
           txtSearch.PlaceholderText = "Tìm kiếm bài viết...";
         }
       }
@@ -168,7 +158,6 @@ namespace SocialManager.frm.UserControls
 
         dgvPosts.Columns.Clear();
 
-        // PostID column (hidden for internal use)
         var idColumn = new DataGridViewTextBoxColumn
         {
           Name = "PostID",
@@ -177,7 +166,6 @@ namespace SocialManager.frm.UserControls
           Visible = false
         };
 
-        // User column
         var userColumn = new DataGridViewTextBoxColumn
         {
           Name = "User",
@@ -185,7 +173,6 @@ namespace SocialManager.frm.UserControls
           Width = 120
         };
 
-        // Content column
         var contentColumn = new DataGridViewTextBoxColumn
         {
           Name = "Content",
@@ -197,7 +184,6 @@ namespace SocialManager.frm.UserControls
           }
         };
 
-        // Visibility column
         var visibilityColumn = new DataGridViewTextBoxColumn
         {
           Name = "Visibility",
@@ -205,7 +191,6 @@ namespace SocialManager.frm.UserControls
           Width = 100
         };
 
-        // Likes column
         var likesColumn = new DataGridViewTextBoxColumn
         {
           Name = "Likes",
@@ -213,7 +198,6 @@ namespace SocialManager.frm.UserControls
           Width = 80
         };
 
-        // Comments column
         var commentsColumn = new DataGridViewTextBoxColumn
         {
           Name = "Comments",
@@ -221,7 +205,6 @@ namespace SocialManager.frm.UserControls
           Width = 80
         };
 
-        // Date column
         var dateColumn = new DataGridViewTextBoxColumn
         {
           Name = "CreatedAt",
@@ -229,7 +212,6 @@ namespace SocialManager.frm.UserControls
           Width = 130
         };
 
-        // Media column
         var mediaColumn = new DataGridViewTextBoxColumn
         {
           Name = "HasMedia",
@@ -239,11 +221,10 @@ namespace SocialManager.frm.UserControls
 
         dgvPosts.Columns.AddRange(new DataGridViewColumn[]
         {
-                    idColumn, userColumn, contentColumn, visibilityColumn,
-                    likesColumn, commentsColumn, dateColumn, mediaColumn
+          idColumn, userColumn, contentColumn, visibilityColumn,
+          likesColumn, commentsColumn, dateColumn, mediaColumn
         });
 
-        // Style the DataGridView with proper font using GraphicsUnit.Point
         var cellFont = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
         var headerFont = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
 
@@ -270,14 +251,54 @@ namespace SocialManager.frm.UserControls
       }
     }
 
+    private void ApplyRoundedCorners()
+    {
+      try
+      {
+        // Apply rounded corners to text inputs
+        if (txtPostTitle != null)
+          UIHelper.ApplyRoundedCorners(txtPostTitle, 10);
+
+        if (txtPostContent != null)
+          UIHelper.ApplyRoundedCorners(txtPostContent, 10);
+
+        if (txtSearch != null)
+          UIHelper.ApplyRoundedCorners(txtSearch, 10);
+
+        // Apply rounded corners to buttons
+        if (btnCreatePost != null)
+          UIHelper.ApplyRoundedCorners(btnCreatePost, 10);
+
+        if (btnAddPhoto != null)
+          UIHelper.ApplyRoundedCorners(btnAddPhoto, 8);
+
+        if (btnEditPost != null)
+          UIHelper.ApplyRoundedCorners(btnEditPost, 8);
+
+        if (btnDeletePost != null)
+          UIHelper.ApplyRoundedCorners(btnDeletePost, 8);
+
+        if (btnRefreshPosts != null)
+          UIHelper.ApplyRoundedCorners(btnRefreshPosts, 8);
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error applying rounded corners: {ex.Message}");
+      }
+    }
+
     public void LoadPostsData()
     {
       try
       {
-        // Load all posts from service
+        if (postService == null) return;
+
         allPosts = postService.GetAllPosts();
-        DisplayPosts(allPosts);
-        // Set default platform selection
+        if (allPosts != null)
+        {
+          DisplayPosts(allPosts);
+        }
+
         if (cmbPlatform != null && cmbPlatform.Items.Count > 0)
           cmbPlatform.SelectedIndex = 0;
       }
@@ -296,37 +317,55 @@ namespace SocialManager.frm.UserControls
 
         dgvPosts.Rows.Clear();
 
+        List<Like> likesList = new List<Like>();
+        List<Comment> commentsList = new List<Comment>();
+        try
+        {
+          likesList = Like.GetList(GlobalSetting.LikesFilePath);
+        }
+        catch { }
+
+        try
+        {
+          commentsList = Comment.GetList(GlobalSetting.CommentsFilePath);
+        }
+        catch { }
+
+        var likesCountByPost = likesList
+          .GroupBy(l => l.PostID)
+          .ToDictionary(g => g.Key, g => g.Count());
+
+        var commentsCountByPost = commentsList
+          .GroupBy(c => c.PostID)
+          .ToDictionary(g => g.Key, g => g.Count());
+
         foreach (var post in posts.OrderByDescending(p => p.CreatedAt))
         {
           try
           {
-            // Get user information
             var user = userService.GetUserById(post.UserID);
             string userName = user?.UserName ?? "Unknown User";
 
-            // Format content (truncate if too long)
             string content = post.Content;
             if (content.Length > 100)
             {
               content = content.Substring(0, 100) + "...";
             }
 
-            // Format visibility
             string visibility = GetVisibilityDisplay(post.Visibility);
-
-            // Format date
             string createdAt = post.CreatedAt.ToString("dd/MM/yyyy HH:mm");
+            string hasMedia = !string.IsNullOrEmpty(post.MediaUrl) ? "Có" : "Không";
 
-            // Check for media
-            string hasMedia = !string.IsNullOrEmpty(post.MediaUrl) ? "✓ Có" : "✗ Không";
+            int liveLikes = likesCountByPost.TryGetValue(post.PostID, out var lc) ? lc : 0;
+            int liveComments = commentsCountByPost.TryGetValue(post.PostID, out var cc) ? cc : 0;
 
             dgvPosts.Rows.Add(
                 post.PostID,
                 userName,
                 content,
                 visibility,
-                post.LikesCount.ToString(),
-                post.CommentsCount.ToString(),
+                liveLikes.ToString(),
+                liveComments.ToString(),
                 createdAt,
                 hasMedia
             );
@@ -337,7 +376,6 @@ namespace SocialManager.frm.UserControls
           }
         }
 
-        // Update status
         if (lblPostsListTitle != null)
           lblPostsListTitle.Text = $"Quản lý bài viết ({posts.Count} bài viết)";
       }
@@ -360,7 +398,6 @@ namespace SocialManager.frm.UserControls
 
     private void btnCreatePost_Click(object sender, EventArgs e)
     {
-      // Check if we're in edit mode
       if (btnCreatePost?.Tag != null && btnCreatePost.Text == "CẬP NHẬT BÀI VIẾT")
       {
         UpdatePost();
@@ -389,7 +426,6 @@ namespace SocialManager.frm.UserControls
           MessageBox.Show("Bài viết đã được tạo thành công!", "Thành công",
               MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-          // Clear form and reload data
           ClearForm();
           LoadPostsData();
         }
@@ -481,7 +517,7 @@ namespace SocialManager.frm.UserControls
 
     private string GetVisibilityValue()
     {
-      return "Public"; // For admin, default to Public
+      return "Public";
     }
 
     private void ClearForm()
@@ -494,10 +530,9 @@ namespace SocialManager.frm.UserControls
       if (cmbPlatform != null && cmbPlatform.Items.Count > 0)
         cmbPlatform.SelectedIndex = 0;
 
-      // Reset button appearance
       if (btnAddPhoto != null)
       {
-        btnAddPhoto.Text = "📷 Thêm hình ảnh";
+        btnAddPhoto.Text = "Thêm hình ảnh";
         btnAddPhoto.BackColor = Color.FromArgb(149, 165, 166);
       }
     }
@@ -523,18 +558,16 @@ namespace SocialManager.frm.UserControls
           return;
         }
 
-        // Fill form with post data for editing
         if (txtPostContent != null)
           txtPostContent.Text = post.Content;
 
         MessageBox.Show("Bạn có thể chỉnh sửa nội dung bài viết và nhấn 'Cập nhật bài viết' để lưu thay đổi.",
             "Chỉnh sửa bài viết", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-        // Change button text to indicate edit mode
         if (btnCreatePost != null)
         {
           btnCreatePost.Text = "CẬP NHẬT BÀI VIẾT";
-          btnCreatePost.Tag = postId; // Store post ID for update
+          btnCreatePost.Tag = postId;
         }
       }
       catch (Exception ex)
@@ -618,7 +651,7 @@ namespace SocialManager.frm.UserControls
 
             if (btnAddPhoto != null)
             {
-              btnAddPhoto.Text = $"✓ {fileInfo.Name}";
+              btnAddPhoto.Text = $"{fileInfo.Name}";
               btnAddPhoto.BackColor = Color.FromArgb(46, 204, 113);
             }
 
@@ -634,7 +667,6 @@ namespace SocialManager.frm.UserControls
       }
     }
 
-    // Search functionality
     private void TxtSearch_TextChanged(object sender, EventArgs e)
     {
       SearchPosts(txtSearch?.Text ?? "");
@@ -642,6 +674,8 @@ namespace SocialManager.frm.UserControls
 
     private void SearchPosts(string searchTerm)
     {
+      if (allPosts == null) return;
+
       if (string.IsNullOrWhiteSpace(searchTerm))
       {
         DisplayPosts(allPosts);
@@ -650,7 +684,7 @@ namespace SocialManager.frm.UserControls
 
       var filteredPosts = allPosts.Where(p =>
           p.Content.ToLower().Contains(searchTerm.ToLower()) ||
-          userService.GetUserById(p.UserID)?.UserName?.ToLower().Contains(searchTerm.ToLower()) == true
+          (userService != null && userService.GetUserById(p.UserID)?.UserName?.ToLower().Contains(searchTerm.ToLower()) == true)
       ).ToList();
 
       DisplayPosts(filteredPosts);
@@ -659,12 +693,17 @@ namespace SocialManager.frm.UserControls
     // Filter by visibility
     private void CmbVisibilityFilter_SelectedIndexChanged(object sender, EventArgs e)
     {
-      string selectedFilter = cmbVisibilityFilter?.SelectedItem?.ToString();
-      FilterPostsByVisibility(selectedFilter);
+      string? selectedFilter = cmbVisibilityFilter?.SelectedItem?.ToString();
+      if (!string.IsNullOrEmpty(selectedFilter))
+      {
+        FilterPostsByVisibility(selectedFilter);
+      }
     }
 
     private void FilterPostsByVisibility(string visibility)
     {
+      if (allPosts == null) return;
+
       if (string.IsNullOrWhiteSpace(visibility) || visibility == "Tất cả")
       {
         DisplayPosts(allPosts);
@@ -675,7 +714,6 @@ namespace SocialManager.frm.UserControls
       DisplayPosts(filteredPosts);
     }
 
-    // Event for double-click to view full content
     private void dgvPosts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
     {
       if (e.RowIndex >= 0 && dgvPosts != null)
@@ -712,29 +750,25 @@ namespace SocialManager.frm.UserControls
       }
     }
 
-    // Custom paint events
     private void pnlCard_Paint(object sender, PaintEventArgs e)
     {
-      Panel panel = sender as Panel;
+      Panel? panel = sender as Panel;
       if (panel != null)
       {
         try
         {
           e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-          // Draw shadow
           using (var shadowBrush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
           {
             GraphicsExtensions.FillRoundedRectangle(e.Graphics, shadowBrush, new Rectangle(3, 3, panel.Width - 3, panel.Height - 3), 12);
           }
 
-          // Draw main card
           using (var cardBrush = new SolidBrush(Color.White))
           {
             GraphicsExtensions.FillRoundedRectangle(e.Graphics, cardBrush, new Rectangle(0, 0, panel.Width - 3, panel.Height - 3), 12);
           }
 
-          // Draw subtle border
           using (var borderPen = new Pen(Color.FromArgb(230, 230, 230), 1))
           {
             GraphicsExtensions.DrawRoundedRectangle(e.Graphics, borderPen, new Rectangle(0, 0, panel.Width - 4, panel.Height - 4), 12);
@@ -743,7 +777,6 @@ namespace SocialManager.frm.UserControls
         catch (Exception ex)
         {
           System.Diagnostics.Debug.WriteLine($"Error in pnlCard_Paint: {ex.Message}");
-          // Fallback to simple rectangle if drawing fails
           e.Graphics.FillRectangle(Brushes.White, panel.ClientRectangle);
           e.Graphics.DrawRectangle(Pens.LightGray, 0, 0, panel.Width - 1, panel.Height - 1);
         }

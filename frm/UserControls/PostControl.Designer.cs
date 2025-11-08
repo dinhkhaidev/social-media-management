@@ -18,6 +18,7 @@
     private void InitializeComponent()
     {
       this.gbPostContainer = new System.Windows.Forms.GroupBox();
+      this.btnDelete = new System.Windows.Forms.Button();
       this.lblStatus = new System.Windows.Forms.Label();
       this.btnComment = new System.Windows.Forms.Button();
       this.btnLike = new System.Windows.Forms.Button();
@@ -28,6 +29,7 @@
       //
       // gbPostContainer
       //
+      this.gbPostContainer.Controls.Add(this.btnDelete);
       this.gbPostContainer.Controls.Add(this.lblStatus);
       this.gbPostContainer.Controls.Add(this.btnComment);
       this.gbPostContainer.Controls.Add(this.btnLike);
@@ -68,6 +70,22 @@
       this.btnComment.TabIndex = 3;
       this.btnComment.Text = "Bình luận";
       this.btnComment.UseVisualStyleBackColor = false;
+      //
+      // btnDelete
+      //
+      this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.btnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+      this.btnDelete.FlatAppearance.BorderSize = 0;
+      this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+      this.btnDelete.ForeColor = System.Drawing.Color.White;
+      this.btnDelete.Location = new System.Drawing.Point(139, 121);
+      this.btnDelete.Name = "btnDelete";
+      this.btnDelete.Size = new System.Drawing.Size(80, 32);
+      this.btnDelete.TabIndex = 5;
+      this.btnDelete.Text = "✕ Xóa";
+      this.btnDelete.UseVisualStyleBackColor = false;
+      this.btnDelete.Visible = false;
       //
       // btnLike
       //
@@ -133,5 +151,6 @@
     private System.Windows.Forms.Button btnLike;
     private System.Windows.Forms.Button btnComment;
     private System.Windows.Forms.Label lblStatus;
+    private System.Windows.Forms.Button btnDelete;
   }
 }

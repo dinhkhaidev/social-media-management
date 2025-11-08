@@ -8,6 +8,26 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <!-- Ensure root duplicates are not included -->
+  <ItemGroup>
+    <Compile Remove="frmDashboard.cs" />
+    <Compile Remove="frmDashboard.Designer.cs" />
+    <EmbeddedResource Remove="frmDashboard.resx" />
+  </ItemGroup>
+
+  <!-- Attach designer metadata to frm/ files that are included implicitly by SDK -->
+  <ItemGroup>
+    <Compile Update="frm\frmDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmDashboard.Designer.cs">
+      <DependentUpon>frmDashboard.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="frm\frmDashboard.resx">
+      <DependentUpon>frmDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Remove="Function\**" />
     <EmbeddedResource Remove="Function\**" />

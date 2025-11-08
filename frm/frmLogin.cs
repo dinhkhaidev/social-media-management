@@ -1,4 +1,5 @@
-﻿using SocialManager.services;
+using SocialManager.services;
+using SocialManager.utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +16,17 @@ namespace SocialManager.frm
 {
   public partial class frmLogin : Form
   {
-    private readonly UserService _userService;
+    private readonly UserService? _userService;
     public frmLogin()
     {
       InitializeComponent();
+
+      // Skip initialization in design mode
+      if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+      {
+        return;
+      }
+
       InitializeForm();
       _userService = new UserService();
     }
@@ -47,13 +55,20 @@ namespace SocialManager.frm
       txtUsername.KeyPress += Input_KeyPress;
       txtPassword.KeyPress += Input_KeyPress;
       this.AcceptButton = btnLogin;
+
+      // Apply rounded corners
+      UIHelper.ApplyRoundedCorners(pnlLoginForm, 20);
+      UIHelper.ApplyRoundedCorners(pnlUsername, 12);
+      UIHelper.ApplyRoundedCorners(pnlPassword, 12);
+      UIHelper.ApplyRoundedCorners(btnLogin, 10);
+      // btnRegister and btnForgotPassword are LinkLabels, not Buttons - skip
     }
 
-    private void Input_KeyPress(object sender, KeyPressEventArgs e)
+    private void Input_KeyPress(object? sender, KeyPressEventArgs e)
     {
       if (e.KeyChar == (char)Keys.Enter)
       {
-        btnLogin_Click(sender, e);
+        btnLogin_Click(sender!, e);
       }
     }
 
@@ -96,13 +111,21 @@ namespace SocialManager.frm
 
       try
       {
+        // Check if service is initialized
+        if (_userService == null)
+        {
+          MessageBox.Show("Lỗi khởi tạo dịch vụ. Vui lòng khởi động lại ứng dụng.", "Lỗi",
+              MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+
         // Force refresh user data before authentication to get latest data
         //_userService.RefreshUser();
         
         if (_userService.AuthenticateUser(username, password))
         {
           // Get the most current user data after authentication
-          User foundUser = _userService.GetUserByUsername(username);
+          User? foundUser = _userService.GetUserByUsername(username);
 
           if (foundUser != null)
           {
@@ -128,16 +151,17 @@ namespace SocialManager.frm
               }
               else if (AuthSessionService.CurrentUser != null)
               {
-                frmDashboard userForm = new frmDashboard();
+                // Mở Newsfeed thay vì Dashboard
+                frmNewsfeed newsfeedForm = new frmNewsfeed();
                 this.Hide();
 
-                // Show dashboard form as dialog
-                var dashboardResult = userForm.ShowDialog();
+                // Show newsfeed form as dialog
+                var newsfeedResult = newsfeedForm.ShowDialog();
               }
               else
               {
-                MessageBox.Show("Your account does not have permission to access the dashboard.",
-                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Tài khoản của bạn không có quyền truy cập.",
+                    "Truy cập bị từ chối", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Show login form again
                 this.Show();
@@ -238,7 +262,7 @@ namespace SocialManager.frm
       var result = registerForm.ShowDialog();
 
       // Refresh user service data when returning from registration
-      _userService.RefreshUser();
+      _userService?.RefreshUser();
 
       // Show login form again after register is closed
       this.Show();
@@ -260,7 +284,7 @@ namespace SocialManager.frm
     {
       try
       {
-        _userService.RefreshUser();
+        _userService?.RefreshUser();
       }
       catch (Exception ex)
       {
@@ -271,7 +295,7 @@ namespace SocialManager.frm
     // Custom paint events for modern UI - using GraphicsExtensions from Admin form
     private void pnlLoginCard_Paint(object sender, PaintEventArgs e)
     {
-      Panel panel = sender as Panel;
+      Panel? panel = sender as Panel;
       if (panel != null)
       {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -292,7 +316,7 @@ namespace SocialManager.frm
 
     private void pnlInput_Paint(object sender, PaintEventArgs e)
     {
-      Panel panel = sender as Panel;
+      Panel? panel = sender as Panel;
       if (panel != null)
       {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;

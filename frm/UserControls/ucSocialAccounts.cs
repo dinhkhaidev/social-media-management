@@ -18,8 +18,8 @@ namespace SocialManager.frm.UserControls
   public partial class ucSocialAccounts : UserControl
   {
     private readonly UserService _userService;
-    private List<User> _allUsers;
-    private System.Windows.Forms.Timer _refreshTimer;
+    private List<User>? _allUsers;
+    private System.Windows.Forms.Timer? _refreshTimer;
     private DateTime _lastRefresh;
 
     public ucSocialAccounts()
@@ -48,7 +48,7 @@ namespace SocialManager.frm.UserControls
       _refreshTimer.Start();
     }
 
-    private void RefreshTimer_Tick(object sender, EventArgs e)
+    private void RefreshTimer_Tick(object? sender, EventArgs e)
     {
       try
       {
@@ -60,7 +60,7 @@ namespace SocialManager.frm.UserControls
         // Update last refresh time
         if (lblLastRefresh != null)
         {
-          lblLastRefresh.Text = $"Last updated: {_lastRefresh:HH:mm:ss}";
+          lblLastRefresh.Text = $"Cập nhật lúc: {_lastRefresh:HH:mm:ss}";
         }
       }
       catch (Exception ex)
@@ -98,7 +98,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "UserName",
-        HeaderText = "?? Username",
+        HeaderText = "Tên đăng nhập",
         Width = 120,
         ReadOnly = true
       });
@@ -106,7 +106,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "FullName",
-        HeaderText = "?? Full Name",
+        HeaderText = "Họ và tên",
         Width = 150,
         ReadOnly = true
       });
@@ -114,7 +114,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Email",
-        HeaderText = "?? Email",
+        HeaderText = "Email",
         Width = 180,
         ReadOnly = true
       });
@@ -122,7 +122,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Phone",
-        HeaderText = "?? Phone",
+        HeaderText = "Số điện thoại",
         Width = 120,
         ReadOnly = true
       });
@@ -130,7 +130,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Role",
-        HeaderText = "?? Role",
+        HeaderText = "Vai trò",
         Width = 100,
         ReadOnly = true
       });
@@ -138,7 +138,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Status",
-        HeaderText = "Status",
+        HeaderText = "Trạng thái",
         Width = 100,
         ReadOnly = true
       });
@@ -146,7 +146,7 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "Gender",
-        HeaderText = "? Gender",
+        HeaderText = "Giới tính",
         Width = 80,
         ReadOnly = true
       });
@@ -154,18 +154,18 @@ namespace SocialManager.frm.UserControls
       dgvUsers.Columns.Add(new DataGridViewTextBoxColumn
       {
         Name = "CreatedAt",
-        HeaderText = "?? Joined",
+        HeaderText = "Ngày tham gia",
         Width = 120,
         ReadOnly = true
       });
     }
 
-    //query truc tiep trong form, khong su dung service
+    //sử dụng UserService để load users
     private void LoadAllUsers()
     {
       try
       {
-        _allUsers = User.GetList(GlobalSetting.UsersFilePath);
+        _allUsers = _userService.GetAllUsers();
         LoadUsersToGrid();
       }
       catch (Exception ex)
@@ -259,23 +259,23 @@ namespace SocialManager.frm.UserControls
       foreach (var user in recentUsers)
       {
         var timeAgo = TimeUtil.GetTimeAgo(user.CreatedAt);
-        var roleIcon = user.Role == 1 ? "??" : "??";
-        activities.Add($"{roleIcon} {user.UserName} joined ({timeAgo})");
+        var roleLabel = user.Role == 1 ? "Quản trị viên" : "Người dùng";
+        activities.Add($"{roleLabel} {user.UserName} đã tham gia ({timeAgo})");
       }
 
-      // System statistics
-      activities.Add($"?? Total users: {_allUsers.Count}");
-      activities.Add($"? Active: {_allUsers.Count(u => u.StatusId == 1)}");
-      activities.Add($"?? Inactive: {_allUsers.Count(u => u.StatusId == 0)}");
-      activities.Add($"?? Banned: {_allUsers.Count(u => u.StatusId == -1)}");
+      // Thống kê hệ thống
+      activities.Add($"Tổng người dùng: {_allUsers.Count}");
+      activities.Add($"Hoạt động: {_allUsers.Count(u => u.StatusId == 1)}");
+      activities.Add($"Không hoạt động: {_allUsers.Count(u => u.StatusId == 0)}");
+      activities.Add($"Bị cấm: {_allUsers.Count(u => u.StatusId == -1)}");
 
-      // Gender distribution
+      // Phân bố giới tính
       var NamCount = _allUsers.Count(u => u.Gender == 0);
-      var feNamCount = _allUsers.Count(u => u.Gender == 1);
-      activities.Add($"?? Nam users: {NamCount}");
-      activities.Add($"?? FeNam users: {feNamCount}");
+      var NuCount = _allUsers.Count(u => u.Gender == 1);
+      activities.Add($"Nam: {NamCount}");
+      activities.Add($"Nữ: {NuCount}");
 
-      activities.Add($"?? Updated: {DateTime.Now:HH:mm:ss}");
+      activities.Add($"Cập nhật: {DateTime.Now:HH:mm:ss}");
 
       foreach (var activity in activities.Take(15))
       {
@@ -308,21 +308,21 @@ namespace SocialManager.frm.UserControls
 
     private void ShowDetailedUserInfo(User user)
     {
-      var details = $"?? COMPLETE USER PROFILE\n" +
-                   $"{'=' * 50}\n\n" +
-                   $"?? User ID: {user.UserID}\n" +
-                   $"?? Username: {user.UserName}\n" +
-                   $"?? Full Name: {user.FullName}\n" +
-                   $"?? Email: {user.Email}\n" +
-                   $"?? Phone: {user.Phone ?? "Not provided"}\n" +
-                   $"Role: {UserConstant.GetRoleText(user.Role)}\n" +
-                   $"Status: {UserConstant.GetStatusText(user.StatusId)}\n" +
-                   $"Gender: {(user.Gender == 0 ? "Nam" : "Nữ")}\n" +
-                   $"Date of Birth: {user.DOB:yyyy-MM-dd}\n" +
-                   $"Address: {user.Address ?? "Not provided"}\n" +
-                   $"Bio: {user.Bio ?? "No bio available"}\n" +
-                   $"Member since: {user.CreatedAt:yyyy-MM-dd HH:mm:ss}\n" +
-                   $"Avatar URL: {user.AvatarUrl ?? "No avatar"}";
+      string separator = new string('=', 50);
+      var details = "CHI TIẾT HỒ SƠ NGƯỜI DÙNG\n" + separator + "\n\n" +
+                    $"ID: {user.UserID}\n" +
+                    $"Tên đăng nhập: {user.UserName}\n" +
+                    $"Họ và tên: {user.FullName}\n" +
+                    $"Email: {user.Email}\n" +
+                    $"Số điện thoại: {user.Phone ?? "Chưa cung cấp"}\n" +
+                    $"Vai trò: {UserConstant.GetRoleText(user.Role)}\n" +
+                    $"Trạng thái: {UserConstant.GetStatusText(user.StatusId)}\n" +
+                    $"Giới tính: {(user.Gender == 0 ? "Nam" : "Nữ")}\n" +
+                    $"Ngày sinh: {user.DOB:yyyy-MM-dd}\n" +
+                    $"Địa chỉ: {user.Address ?? "Chưa cung cấp"}\n" +
+                    $"Tiểu sử: {user.Bio ?? "Chưa có"}\n" +
+                    $"Ngày tham gia: {user.CreatedAt:yyyy-MM-dd HH:mm:ss}\n" +
+                    $"Avatar: {user.AvatarUrl ?? "Không có"}";
 
       MessageBox.Show(details, "Chi tiết hồ sơ người dùng", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
@@ -340,8 +340,8 @@ namespace SocialManager.frm.UserControls
           if (saveDialog.ShowDialog() == DialogResult.OK)
           {
             ExportUsersToCSV(saveDialog.FileName);
-            MessageBox.Show($"? Users exported successfully!\n\nFile: {saveDialog.FileName}\nTotal users: {_allUsers?.Count ?? 0}",
-                "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Xuất danh sách người dùng thành công!\n\nTệp: {saveDialog.FileName}\nTổng người dùng: {_allUsers?.Count ?? 0}",
+              "Hoàn thành xuất", MessageBoxButtons.OK, MessageBoxIcon.Information);
           }
         }
       }
@@ -357,16 +357,19 @@ namespace SocialManager.frm.UserControls
       var csv = new StringBuilder();
       csv.AppendLine("UserID,Username,FullName,Email,Phone,Role,Status,Gender,DateOfBirth,Address,Bio,JoinedDate");
 
-      foreach (var user in _allUsers)
+      if (_allUsers != null)
       {
-        var roleText = UserConstant.GetRoleText(user.Role).Replace("User", "User").Replace("Admin", "Admin");
-        var statusText = UserConstant.GetStatusText(user.StatusId).Replace("Active", "Active").Replace("Inactive", "Inactive").Replace("Banned", "Banned");
-        var genderText = user.Gender == 0 ? "Nam" : "Nữ";
+        foreach (var user in _allUsers)
+        {
+          var roleText = UserConstant.GetRoleText(user.Role).Replace("User", "User").Replace("Admin", "Admin");
+          var statusText = UserConstant.GetStatusText(user.StatusId).Replace("Active", "Active").Replace("Inactive", "Inactive").Replace("Banned", "Banned");
+          var genderText = user.Gender == 0 ? "Nam" : "Nữ";
 
-        csv.AppendLine($"\"{user.UserID}\",\"{user.UserName}\",\"{user.FullName}\"," +
-                      $"\"{user.Email}\",\"{user.Phone ?? ""}\",\"{roleText}\"," +
-                      $"\"{statusText}\",\"{genderText}\",\"{user.DOB:yyyy-MM-dd}\"," +
-                      $"\"{user.Address ?? ""}\",\"{user.Bio ?? ""}\",\"{user.CreatedAt:yyyy-MM-dd HH:mm:ss}\"");
+          csv.AppendLine($"\"{user.UserID}\",\"{user.UserName}\",\"{user.FullName}\"," +
+                        $"\"{user.Email}\",\"{user.Phone ?? ""}\",\"{roleText}\"," +
+                        $"\"{statusText}\",\"{genderText}\",\"{user.DOB:yyyy-MM-dd}\"," +
+                        $"\"{user.Address ?? ""}\",\"{user.Bio ?? ""}\",\"{user.CreatedAt:yyyy-MM-dd HH:mm:ss}\"");
+        }
       }
 
       File.WriteAllText(filePath, csv.ToString(), Encoding.UTF8);
@@ -383,13 +386,13 @@ namespace SocialManager.frm.UserControls
 
         if (lblLastRefresh != null)
         {
-          lblLastRefresh.Text = $"Last updated: {_lastRefresh:HH:mm:ss}";
+          lblLastRefresh.Text = $"Cập nhật lúc: {_lastRefresh:HH:mm:ss}";
         }
 
-        MessageBox.Show($"? Data refreshed successfully!\n\n" +
-                      $"?? Users loaded: {_allUsers?.Count ?? 0}\n" +
-                      $"?? Time: {DateTime.Now:HH:mm:ss}",
-                      "Refresh Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show($"Làm mới dữ liệu thành công!\n\n" +
+                      $"Tổng người dùng: {_allUsers?.Count ?? 0}\n" +
+                      $"Thời gian: {DateTime.Now:HH:mm:ss}",
+                      "Làm mới hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
       catch (Exception ex)
       {
@@ -401,7 +404,7 @@ namespace SocialManager.frm.UserControls
     // Custom paint events for modern UI
     private void pnlCard_Paint(object sender, PaintEventArgs e)
     {
-      Panel panel = sender as Panel;
+      Panel? panel = sender as Panel;
       if (panel != null)
       {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;

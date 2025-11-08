@@ -8,17 +8,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SocialManager.services;
+using SocialManager.utils;
 
 namespace SocialManager.frm
 {
   public partial class frmInfor : Form
   {
     private User? currentUser;
-    private UserService userService;
+    private UserService? userService;
+    private bool isDarkMode = false; // Theme state
+    private const string DarkModeKey = "isDarkMode"; // Registry key
 
     public frmInfor()
     {
       InitializeComponent();
+
+      // Skip initialization in design mode
+      if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+      {
+        return;
+      }
 
       // Khởi tạo service
       userService = new UserService();
@@ -28,7 +37,30 @@ namespace SocialManager.frm
       this.btnUpdate.Click += new EventHandler(this.btnUpdate_Click!);
       this.btnCancel.Click += new EventHandler(this.btnCancel_Click!);
 
+      // Load theme từ Dashboard
+      isDarkMode = LoadDarkModePreference();
+      ApplyTheme(isDarkMode);
+
       LoadUserData();
+      ApplyRoundedCorners();
+    }
+
+    private void ApplyRoundedCorners()
+    {
+      try
+      {
+        // Apply rounded corners to buttons
+        UIHelper.ApplyRoundedCorners(btnUpdate, 10);
+        UIHelper.ApplyRoundedCorners(btnCancel, 10);
+
+        // Avatar circular
+        if (picAvatar != null)
+          UIHelper.MakeCircular(picAvatar);
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error applying rounded corners: {ex.Message}");
+      }
     }
 
     private void LoadUserData()
@@ -54,7 +86,24 @@ namespace SocialManager.frm
       else
         cboGender.SelectedIndex = 2; // Other
 
-      dtpDOB.Value = currentUser.DOB;
+      // Xử lý DateTimePicker với giới hạn an toàn
+      try
+      {
+        if (currentUser.DOB >= dtpDOB.MinDate && currentUser.DOB <= dtpDOB.MaxDate)
+        {
+          dtpDOB.Value = currentUser.DOB;
+        }
+        else
+        {
+          // Nếu ngày sinh nằm ngoài phạm vi, set về giá trị mặc định
+          dtpDOB.Value = DateTime.Now.AddYears(-18);
+        }
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error setting DOB: {ex.Message}");
+        dtpDOB.Value = DateTime.Now.AddYears(-18);
+      }
 
       txtEmail.Text = currentUser.Email ?? "";
       txtPhone.Text = currentUser.Phone ?? "";
@@ -70,6 +119,32 @@ namespace SocialManager.frm
         _ => "Unknown"
       };
       lblStatusId.Text = $"Trạng thái: {status}";
+
+      // Lấy số lần bị tố cáo từ ReportService
+      int reportCount = userService?.GetReportCount(currentUser.UserID) ?? 0;
+      currentUser.ReportCount = reportCount; // Sync lại
+
+      // Hiển thị thông tin vi phạm và trạng thái tài khoản
+      if (reportCount > 0)
+      {
+        lblStatusId.Text += $"\n\nVi phạm: {reportCount} lần";
+        lblStatusId.Text += $"\nTình trạng: {currentUser.AccountStatus}";
+
+        // Đổi màu cảnh báo
+        if (reportCount >= 100)
+        {
+          lblStatusId.ForeColor = Color.Red;
+        }
+        else if (reportCount >= 50)
+        {
+          lblStatusId.ForeColor = Color.Orange;
+        }
+        else
+        {
+          lblStatusId.ForeColor = isDarkMode ? Color.FromArgb(200, 200, 200) : Color.FromArgb(66, 66, 66);
+        }
+      }
+
       LoadAvatar();
     }
 
@@ -214,6 +289,12 @@ namespace SocialManager.frm
 
       try
       {
+        // Check if services are initialized
+        if (currentUser == null || userService == null)
+        {
+          throw new Exception("Không tìm thấy thông tin người dùng hoặc dịch vụ chưa được khởi tạo.");
+        }
+
         // Cập nhật thông tin vào currentUser object
         currentUser.UserName = txtUserName.Text?.Trim() ?? "";
         currentUser.FullName = txtFullName.Text?.Trim() ?? "";
@@ -243,6 +324,98 @@ namespace SocialManager.frm
     private void btnCancel_Click(object? sender, EventArgs e)
     {
       this.Close();
+    }
+
+    // Theme management - đồng bộ với frmDashboard
+    private bool LoadDarkModePreference()
+    {
+      try
+      {
+        using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\SocialManager"))
+        {
+          if (key != null)
+          {
+            object? value = key.GetValue(DarkModeKey);
+            if (value != null)
+            {
+              return (int)value == 1;
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error loading dark mode preference: {ex.Message}");
+      }
+      return false;
+    }
+
+    private void ApplyTheme(bool darkMode)
+    {
+      if (darkMode)
+      {
+        // Dark theme
+        this.BackColor = Color.FromArgb(24, 25, 26);
+
+        // GroupBoxes
+        gbAccount.ForeColor = Color.FromArgb(242, 242, 242);
+        gbDetails.ForeColor = Color.FromArgb(242, 242, 242);
+
+        // Labels
+        foreach (Control ctrl in gbAccount.Controls)
+        {
+          if (ctrl is Label lbl)
+          {
+            lbl.ForeColor = Color.FromArgb(200, 200, 200);
+          }
+        }
+
+        foreach (Control ctrl in gbDetails.Controls)
+        {
+          if (ctrl is Label lbl)
+          {
+            lbl.ForeColor = Color.FromArgb(200, 200, 200);
+          }
+        }
+
+        // Buttons
+        btnUpdate.BackColor = Color.FromArgb(10, 102, 194);
+        btnUpdate.ForeColor = Color.White;
+        btnCancel.BackColor = Color.FromArgb(60, 60, 60);
+        btnCancel.ForeColor = Color.FromArgb(242, 242, 242);
+      }
+      else
+      {
+        // Light theme (default)
+        this.BackColor = Color.FromArgb(240, 242, 245);
+
+        // GroupBoxes
+        gbAccount.ForeColor = Color.FromArgb(33, 33, 33);
+        gbDetails.ForeColor = Color.FromArgb(33, 33, 33);
+
+        // Labels
+        foreach (Control ctrl in gbAccount.Controls)
+        {
+          if (ctrl is Label lbl)
+          {
+            lbl.ForeColor = Color.FromArgb(66, 66, 66);
+          }
+        }
+
+        foreach (Control ctrl in gbDetails.Controls)
+        {
+          if (ctrl is Label lbl)
+          {
+            lbl.ForeColor = Color.FromArgb(66, 66, 66);
+          }
+        }
+
+        // Buttons
+        btnUpdate.BackColor = Color.FromArgb(10, 102, 194);
+        btnUpdate.ForeColor = Color.White;
+        btnCancel.BackColor = Color.FromArgb(228, 230, 235);
+        btnCancel.ForeColor = Color.FromArgb(33, 33, 33);
+      }
     }
   }
 }

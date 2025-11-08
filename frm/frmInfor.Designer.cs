@@ -173,6 +173,8 @@
       dtpDOB.Name = "dtpDOB";
       dtpDOB.Size = new Size(397, 30);
       dtpDOB.TabIndex = 2;
+      dtpDOB.MinDate = new DateTime(1900, 1, 1);
+      dtpDOB.MaxDate = DateTime.Now;
       //
       // cboGender
       //
