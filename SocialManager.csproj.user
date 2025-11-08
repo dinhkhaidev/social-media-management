@@ -17,6 +17,9 @@
     <Compile Update="frm\frmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frm\frmNewsfeed.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frm\frmPost.cs">
       <SubType>Form</SubType>
     </Compile>
