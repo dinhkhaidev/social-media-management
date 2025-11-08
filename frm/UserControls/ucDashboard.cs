@@ -1,4 +1,5 @@
 using SocialManager.utils;
+using SocialManager.services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,10 @@ namespace SocialManager.frm.UserControls
 {
   public partial class ucDashboard : UserControl
   {
+    private DashboardService dashboardService;
+    private UserService userService;
+    private PostService postService;
+
     public ucDashboard()
     {
       System.Diagnostics.Debug.WriteLine("ucDashboard constructor started");
@@ -61,36 +66,257 @@ namespace SocialManager.frm.UserControls
     private void InitializeDashboard()
     {
       this.BackColor = Color.FromArgb(247, 249, 252);
-      LoadDashboardData();
-      ApplyRoundedCorners();
-    }
-
-    private void ApplyRoundedCorners()
-    {
+      
+      // Initialize services
       try
       {
-        // Apply rounded corners to button
-        if (btnViewAllActivity != null)
-          UIHelper.ApplyRoundedCorners(btnViewAllActivity, 8);
+        dashboardService = new DashboardService();
+        userService = new UserService();
+        postService = new PostService();
       }
       catch (Exception ex)
       {
-        System.Diagnostics.Debug.WriteLine($"Error applying rounded corners: {ex.Message}");
+        System.Diagnostics.Debug.WriteLine($"Error initializing services: {ex.Message}");
       }
+      
+      CreateModernDashboardLayout();
+      LoadDashboardData();
+    }
+
+    private void CreateModernDashboardLayout()
+    {
+      this.Controls.Clear();
+      
+      var mainPanel = new Panel
+      {
+        Dock = DockStyle.Fill,
+        BackColor = Color.FromArgb(247, 249, 252),
+        Padding = new Padding(30)
+      };
+
+      // Header section
+      var headerPanel = new Panel
+      {
+        Height = 60,
+        Dock = DockStyle.Top,
+        BackColor = Color.Transparent,
+        Margin = new Padding(0, 0, 0, 20)
+      };
+
+      var lblTitle = new Label
+      {
+        Text = "📊 Bảng Điều Khiển Quản Trị",
+        Font = new Font("Segoe UI", 24F, FontStyle.Bold),
+        ForeColor = Color.FromArgb(44, 62, 80),
+        AutoSize = true,
+        Location = new Point(0, 0)
+      };
+
+      headerPanel.Controls.Add(lblTitle);
+
+      // Metrics row
+      var metricsPanel = new Panel
+      {
+        Height = 150,
+        Dock = DockStyle.Top,
+        BackColor = Color.Transparent,
+        Margin = new Padding(0, 0, 0, 20)
+      };
+
+      // Create metric cards
+      var totalPostsCard = CreateMetricCard("Tổng Bài Viết", "1,200", Color.FromArgb(52, 152, 219), 0);
+      var growthCard = CreateMetricCard("Tăng Trưởng", "+12%", Color.FromArgb(46, 204, 113), 1);
+      var interactionsCard = CreateMetricCard("Tương Tác", "85K", Color.FromArgb(230, 126, 34), 2);
+      var reachCard = CreateMetricCard("Tiếp Cận", "125.4K", Color.FromArgb(155, 89, 182), 3);
+
+      metricsPanel.Controls.Add(totalPostsCard);
+      metricsPanel.Controls.Add(growthCard);
+      metricsPanel.Controls.Add(interactionsCard);
+      metricsPanel.Controls.Add(reachCard);
+
+      // Summary section
+      var summaryPanel = CreateSummaryPanel();
+      summaryPanel.Height = 250;
+      summaryPanel.Dock = DockStyle.Top;
+      summaryPanel.Margin = new Padding(0, 0, 0, 20);
+
+      // Action buttons
+      var actionsPanel = CreateActionsPanel();
+      actionsPanel.Height = 60;
+      actionsPanel.Dock = DockStyle.Top;
+
+      mainPanel.Controls.Add(headerPanel);
+      mainPanel.Controls.Add(metricsPanel);
+      mainPanel.Controls.Add(summaryPanel);
+      mainPanel.Controls.Add(actionsPanel);
+
+      this.Controls.Add(mainPanel);
+    }
+
+    private Panel CreateMetricCard(string title, string value, Color accentColor, int position)
+    {
+      var card = new Panel
+      {
+        Size = new Size(240, 120),
+        Location = new Point(position * 260, 10),
+        BackColor = Color.White,
+        Name = $"card_{position}"
+      };
+
+      card.Paint += (sender, e) => DrawMetricCard(e.Graphics, card.ClientRectangle, accentColor);
+
+      var lblTitle = new Label
+      {
+        Text = title,
+        Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+        ForeColor = Color.FromArgb(127, 140, 141),
+        Location = new Point(20, 20),
+        Size = new Size(200, 25),
+        AutoSize = false
+      };
+
+      var lblValue = new Label
+      {
+        Text = value,
+        Font = new Font("Segoe UI", 20F, FontStyle.Bold),
+        ForeColor = Color.FromArgb(52, 73, 94),
+        Location = new Point(20, 50),
+        Size = new Size(200, 35),
+        AutoSize = false,
+        Name = $"value_{position}"
+      };
+
+      card.Controls.Add(lblTitle);
+      card.Controls.Add(lblValue);
+
+      return card;
+    }
+
+    private void DrawMetricCard(Graphics g, Rectangle rect, Color accentColor)
+    {
+      g.SmoothingMode = SmoothingMode.AntiAlias;
+
+      // Draw rounded rectangle for card
+      int radius = 10;
+      using (var brush = new SolidBrush(Color.White))
+      {
+        GraphicsExtensions.FillRoundedRectangle(g, brush, rect, radius);
+      }
+
+      using (var pen = new Pen(Color.FromArgb(220, 221, 222), 1))
+      {
+        GraphicsExtensions.DrawRoundedRectangle(g, pen, rect, radius);
+      }
+
+      // Draw accent bar on top
+      using (var brush = new SolidBrush(accentColor))
+      {
+        g.FillRectangle(brush, new Rectangle(rect.X, rect.Y, rect.Width, 4));
+      }
+    }
+
+    private Panel CreateSummaryPanel()
+    {
+      var panel = new Panel
+      {
+        BackColor = Color.White,
+        BorderStyle = BorderStyle.None
+      };
+
+      panel.Paint += (sender, e) =>
+      {
+        int radius = 10;
+        GraphicsExtensions.DrawRoundedRectangle(e.Graphics, new Pen(Color.FromArgb(220, 221, 222), 1), e.ClipRectangle, radius);
+      };
+
+      var lblSummaryTitle = new Label
+      {
+        Text = "📈 Tóm Tắt Hoạt Động Gần Đây",
+        Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+        ForeColor = Color.FromArgb(44, 62, 80),
+        Location = new Point(20, 15),
+        Size = new Size(300, 30),
+        AutoSize = false
+      };
+
+      var summaryText = new Label
+      {
+        Text = "• Bài viết mới: 5 bài trong ngày hôm nay\n" +
+               "• Lượt tương tác: 245 (tăng 15% so với hôm qua)\n" +
+               "• Người theo dõi mới: 12 người\n" +
+               "• Bình luận chưa trả lời: 8 bình luận",
+        Font = new Font("Segoe UI", 10F),
+        ForeColor = Color.FromArgb(84, 102, 115),
+        Location = new Point(20, 50),
+        Size = new Size(400, 150),
+        AutoSize = false
+      };
+
+      panel.Controls.Add(lblSummaryTitle);
+      panel.Controls.Add(summaryText);
+
+      return panel;
+    }
+
+    private Panel CreateActionsPanel()
+    {
+      var panel = new Panel
+      {
+        BackColor = Color.Transparent
+      };
+
+      var btnRefresh = new Button
+      {
+        Text = "🔄 Làm Mới",
+        Location = new Point(0, 10),
+        Size = new Size(120, 40),
+        BackColor = Color.FromArgb(52, 152, 219),
+        ForeColor = Color.White,
+        Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+        FlatStyle = FlatStyle.Flat,
+        Cursor = Cursors.Hand
+      };
+
+      btnRefresh.Click += (s, e) => LoadDashboardData();
+      btnRefresh.FlatAppearance.BorderSize = 0;
+
+      var btnExport = new Button
+      {
+        Text = "📥 Xuất Báo Cáo",
+        Location = new Point(130, 10),
+        Size = new Size(130, 40),
+        BackColor = Color.FromArgb(46, 204, 113),
+        ForeColor = Color.White,
+        Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+        FlatStyle = FlatStyle.Flat,
+        Cursor = Cursors.Hand
+      };
+
+      btnExport.FlatAppearance.BorderSize = 0;
+
+      panel.Controls.Add(btnRefresh);
+      panel.Controls.Add(btnExport);
+
+      return panel;
     }
 
     private void LoadDashboardData()
     {
       try
       {
-        if (lblTotalPostsValue != null)
-          lblTotalPostsValue.Text = "1.2K";
+        // Update metric card values
+        var cards = this.Controls.OfType<Panel>()
+          .SelectMany(p => p.Controls.OfType<Panel>())
+          .Where(c => c.Name?.StartsWith("card_") == true)
+          .ToList();
 
-        if (lblGrowthValue != null)
-          lblGrowthValue.Text = "+12%";
-
-        if (lblInteractionsValue != null)
-          lblInteractionsValue.Text = "85K";
+        if (cards.Count >= 4)
+        {
+          UpdateCardValue(cards[0], "1,200");
+          UpdateCardValue(cards[1], "+12%");
+          UpdateCardValue(cards[2], "85,000");
+          UpdateCardValue(cards[3], "125.4K");
+        }
       }
       catch (Exception ex)
       {
@@ -100,200 +326,11 @@ namespace SocialManager.frm.UserControls
       }
     }
 
-    private void btnPostNow_Click(object sender, EventArgs e)
+    private void UpdateCardValue(Panel card, string value)
     {
-      try
-      {
-      }
-      catch (Exception ex)
-      {
-        System.Diagnostics.Debug.WriteLine(ex.ToString());
-        MessageBox.Show($"Lỗi khi đăng: {ex.Message}", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-    }
-
-    private void btnSchedule_Click(object sender, EventArgs e)
-    {
-      try
-      {
-
-      }
-      catch (Exception ex)
-      {
-        System.Diagnostics.Debug.WriteLine(ex.ToString());
-        MessageBox.Show($"Lỗi khi lên lịch: {ex.Message}", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-    }
-
-    private void btnViewAllActivity_Click(object sender, EventArgs e)
-    {
-      MessageBox.Show("Tính năng lịch sử hoạt động sẽ sớm có!", "Thông tin",
-              MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private void btnAddPhoto_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        using (OpenFileDialog openFileDialog = new OpenFileDialog())
-        {
-          openFileDialog.Filter = "Tệp hình ảnh (*.jpg, *.jpeg, *.png, *.gif, *.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
-          openFileDialog.Title = "Chọn hình ảnh";
-
-          if (openFileDialog.ShowDialog() == DialogResult.OK)
-          {
-            var selected = openFileDialog.FileName;
-            if (!string.IsNullOrEmpty(selected))
-            {
-              MessageBox.Show($"Đã chọn hình: {Path.GetFileName(selected)}", "Thành công",
-                  MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-              MessageBox.Show("Không có tệp nào được chọn.", "Thông tin",
-                  MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        System.Diagnostics.Debug.WriteLine(ex.ToString());
-        MessageBox.Show($"Lỗi khi chọn hình ảnh: {ex.Message}", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-    }
-
-    private void pnlCard_Paint(object sender, PaintEventArgs e)
-    {
-      if (sender is Panel panel)
-      {
-        try
-        {
-          e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-          using (var shadowBrush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
-          {
-            GraphicsExtensions.FillRoundedRectangle(e.Graphics, shadowBrush, new Rectangle(3, 3, panel.Width - 3, panel.Height - 3), 12);
-          }
-
-          using (var cardBrush = new SolidBrush(Color.White))
-          {
-            GraphicsExtensions.FillRoundedRectangle(e.Graphics, cardBrush, new Rectangle(0, 0, panel.Width - 3, panel.Height - 3), 12);
-          }
-
-          using (var borderPen = new Pen(Color.FromArgb(230, 230, 230), 1))
-          {
-            GraphicsExtensions.DrawRoundedRectangle(e.Graphics, borderPen, new Rectangle(0, 0, panel.Width - 4, panel.Height - 4), 12);
-          }
-        }
-        catch (Exception ex)
-        {
-          System.Diagnostics.Debug.WriteLine(ex.ToString());
-          e.Graphics.FillRectangle(Brushes.White, panel.ClientRectangle);
-          e.Graphics.DrawRectangle(Pens.LightGray, 0, 0, panel.Width - 1, panel.Height - 1);
-        }
-      }
-    }
-
-    private void picTotalPosts_Paint(object sender, PaintEventArgs e)
-    {
-      DrawStatIcon(e.Graphics, new Rectangle(5, 5, 30, 30), Color.FromArgb(52, 152, 219), "posts");
-    }
-
-    private void picGrowth_Paint(object sender, PaintEventArgs e)
-    {
-      DrawStatIcon(e.Graphics, new Rectangle(5, 5, 30, 30), Color.FromArgb(39, 174, 96), "growth");
-    }
-
-    private void picInteractions_Paint(object sender, PaintEventArgs e)
-    {
-      DrawStatIcon(e.Graphics, new Rectangle(5, 5, 30, 30), Color.FromArgb(231, 76, 60), "heart");
-    }
-
-    private void picActiveAccounts_Paint(object sender, PaintEventArgs e)
-    {
-      DrawStatIcon(e.Graphics, new Rectangle(5, 5, 30, 30), Color.FromArgb(46, 204, 113), "users");
-    }
-
-    private void DrawStatIcon(Graphics g, Rectangle rect, Color color, string iconType)
-    {
-      try
-      {
-        g.SmoothingMode = SmoothingMode.AntiAlias;
-        using (var brush = new SolidBrush(color))
-        {
-          int centerX = rect.X + rect.Width / 2;
-          int centerY = rect.Y + rect.Height / 2;
-
-          switch (iconType)
-          {
-            case "posts":
-              g.FillRectangle(brush, centerX - 10, centerY - 12, 20, 24);
-              g.FillRectangle(Brushes.White, centerX - 7, centerY - 6, 14, 2);
-              g.FillRectangle(Brushes.White, centerX - 7, centerY - 2, 14, 2);
-              g.FillRectangle(Brushes.White, centerX - 7, centerY + 2, 10, 2);
-              break;
-
-            case "heart":
-              using (var path = new GraphicsPath())
-              {
-                path.AddEllipse(centerX - 8, centerY - 5, 8, 8);
-                path.AddEllipse(centerX, centerY - 5, 8, 8);
-                path.AddPolygon(new Point[] {
-                  new Point(centerX - 4, centerY + 3),
-                  new Point(centerX, centerY + 12),
-                  new Point(centerX + 4, centerY + 3)
-                });
-                g.FillPath(brush, path);
-              }
-              break;
-
-            case "users":
-              g.FillEllipse(brush, centerX - 12, centerY - 8, 10, 10);
-              g.FillEllipse(brush, centerX + 2, centerY - 8, 10, 10);
-              g.FillRectangle(brush, centerX - 14, centerY + 4, 14, 8);
-              g.FillRectangle(brush, centerX, centerY + 4, 14, 8);
-              break;
-
-            case "growth":
-              using (var pen = new Pen(brush, 3))
-              {
-                Point[] points = {
-                  new Point(centerX - 12, centerY + 8),
-                  new Point(centerX - 6, centerY + 2),
-                  new Point(centerX, centerY - 2),
-                  new Point(centerX + 6, centerY - 6),
-                  new Point(centerX + 12, centerY - 10)
-                };
-                g.DrawLines(pen, points);
-
-                g.DrawLine(pen, centerX + 8, centerY - 6, centerX + 12, centerY - 10);
-                g.DrawLine(pen, centerX + 12, centerY - 6, centerX + 12, centerY - 10);
-              }
-              break;
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        System.Diagnostics.Debug.WriteLine(ex.ToString());
-        g.FillRectangle(new SolidBrush(color), rect);
-      }
-    }
-
-    private void picTotalPosts_Click(object sender, EventArgs e)
-    {
-    }
-
-    private void label2_Click(object sender, EventArgs e)
-    {
-    }
-
-    private void lblComposerTitle_Click(object sender, EventArgs e)
-    {
+      var valueLabel = card.Controls.OfType<Label>().FirstOrDefault(l => l.Name?.StartsWith("value_") == true);
+      if (valueLabel != null)
+        valueLabel.Text = value;
     }
   }
 }
