@@ -28,7 +28,24 @@ namespace SocialManager.frm
     private bool isDarkMode = false; // Chế độ giao diện
     private const string DarkModeKey = "isDarkMode"; // Registry key for dark mode
 
-    public frmDashboard()
+    // Navigation bar controls
+    private Panel? pnlSidebar;
+    private Button? btnNavHome;
+    private Button? btnNavDashboard;
+    private Button? btnNavCommented;
+    private Button? btnNavLiked;
+    private Button? btnNavSettings;
+    private Panel? pnlSettingsDropdown;
+    private bool isSettingsDropdownOpen = false;
+    private string currentView = "Home"; // Track current view
+
+    // UserControls for different views
+    private UserControls.ucNewsfeed? ucNewsfeed;
+
+    // Lazy loading variables
+    private int currentPostIndex = 0;
+    private const int postsPerLoad = 15;
+    private List<Post>? allAvailablePosts; public frmDashboard()
     {
       InitializeComponent();
 
@@ -56,18 +73,10 @@ namespace SocialManager.frm
       this.btnThemeToggle.Paint += new PaintEventHandler(btnThemeToggle_Paint); // Vẽ hình tròn
       this.btnNewPost.Paint += new PaintEventHandler(btnNewPost_Paint); // Vẽ hình tròn cho nút tạo bài viết
 
-      // Add hover effects for modern buttons
+      // Only keep btnNewPost hover effect
       AddButtonHoverEffect(this.btnNewPost, Color.FromArgb(10, 102, 194), Color.FromArgb(8, 82, 155));
-      AddButtonHoverEffect(this.btnLogout, Color.FromArgb(228, 230, 235), Color.FromArgb(208, 210, 215));
-      AddButtonHoverEffect(this.btnSettings, Color.FromArgb(228, 230, 235), Color.FromArgb(208, 210, 215));
-      AddButtonHoverEffect(this.btnThemeToggle, Color.FromArgb(228, 230, 235), Color.FromArgb(208, 210, 215));
-      AddButtonHoverEffect(this.btnEditProfile, Color.FromArgb(228, 230, 235), Color.FromArgb(208, 210, 215));
-
-      // Add rounded corners to modern buttons - KHÔNG thêm cho btnNewPost vì nó là hình tròn
-      AddRoundedButton(this.btnLogout, 6);
-      AddRoundedButton(this.btnSettings, 6);
-      AddRoundedButton(this.btnEditProfile, 6);
       this.flowLayoutPanelPosts.Resize += new EventHandler(flowLayoutPanelPosts_Resize);
+      this.flowLayoutPanelPosts.Scroll += new ScrollEventHandler(flowLayoutPanelPosts_Scroll);
 
       // Load dữ liệu user
       LoadUserInfo();
@@ -91,20 +100,540 @@ namespace SocialManager.frm
 
       // Đánh dấu hoàn tất load
       isLoading = false;
+
+      // Initialize navigation bar
+      InitializeSidebar();
+
+      // Add app title header
+      CreateAppTitle();
+
+      ShowHome();
     }
 
-    // Event handler khi form load - điều chỉnh vị trí các nút ở góc dưới trái
+    // Event handler khi form load - điều chỉnh vị trí các controls
     private void frmDashboard_Load(object? sender, EventArgs e)
     {
-      // Đặt vị trí btnThemeToggle ở góc dưới TRÁI và btnNewPost ở góc dưới PHẢI
+      // Only position btnNewPost at bottom right
       int bottomMargin = 20;
-      btnThemeToggle.Location = new Point(20, this.ClientSize.Height - btnThemeToggle.Height - bottomMargin);
       btnNewPost.Location = new Point(this.ClientSize.Width - btnNewPost.Width - 20, this.ClientSize.Height - btnNewPost.Height - bottomMargin);
-
-      // Đưa các nút lên trên cùng (BringToFront) để không bị che bởi các control khác
-      btnThemeToggle.BringToFront();
       btnNewPost.BringToFront();
+
+      // Hide old buttons by making them invisible
+      if (this.Controls.Contains(btnThemeToggle)) btnThemeToggle.Visible = false;
+      if (this.Controls.Contains(btnLogout)) btnLogout.Visible = false;
+      if (this.Controls.Contains(btnSettings)) btnSettings.Visible = false;
+      if (this.Controls.Contains(btnEditProfile)) btnEditProfile.Visible = false;
+
+      // Bring navigation bar to front and position it in center
+      if (pnlSidebar != null)
+      {
+        pnlSidebar.BringToFront();
+      }
     }
+
+    #region Navigation Bar Implementation
+
+    private void InitializeSidebar()
+    {
+      // Create navigation panel - positioned in center, not docked
+      pnlSidebar = new Panel
+      {
+        Height = 70,
+        BackColor = Color.FromArgb(250, 248, 246), // Ivory white
+        Name = "pnlSidebar"
+      };
+
+      // Calculate button positions with spacing
+      int buttonSize = 70;
+      int spacing = 20;
+      int totalWidth = 5 * buttonSize + 4 * spacing; // 5 buttons + 4 gaps
+      pnlSidebar.Width = totalWidth;
+
+      // Position navbar in center of form (replace old buttons position)
+      PositionNavbarInCenter();
+
+      int startX = 0; // Relative to panel, not form
+
+      // Create Home button
+      btnNavHome = new Button
+      {
+        Text = "⌂", // Unicode house symbol
+        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
+        Size = new Size(buttonSize, buttonSize),
+        Location = new Point(startX, 0),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.Transparent,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        Cursor = Cursors.Hand,
+        Name = "btnNavHome"
+      };
+      btnNavHome.FlatAppearance.BorderSize = 0;
+      btnNavHome.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnNavHome.Click += (s, e) =>
+      {
+        if (isSettingsDropdownOpen) ToggleSettingsDropdown();
+        ShowHome();
+      };
+      // Add rounded corners
+      AddRoundedCorners(btnNavHome, 15);
+
+      // Create Dashboard button
+      btnNavDashboard = new Button
+      {
+        Text = "✎", // Unicode pencil symbol
+        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
+        Size = new Size(buttonSize, buttonSize),
+        Location = new Point(startX + buttonSize + spacing, 0),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.Transparent,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        Cursor = Cursors.Hand,
+        Name = "btnNavDashboard"
+      };
+      btnNavDashboard.FlatAppearance.BorderSize = 0;
+      btnNavDashboard.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnNavDashboard.Click += (s, e) =>
+      {
+        if (isSettingsDropdownOpen) ToggleSettingsDropdown();
+        ShowDashboard();
+      };
+      // Add rounded corners
+      AddRoundedCorners(btnNavDashboard, 15);
+
+      // Create Commented button
+      btnNavCommented = new Button
+      {
+        Text = "✉", // Unicode envelope symbol
+        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
+        Size = new Size(buttonSize, buttonSize),
+        Location = new Point(startX + 2 * (buttonSize + spacing), 0),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.Transparent,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        Cursor = Cursors.Hand,
+        Name = "btnNavCommented"
+      };
+      btnNavCommented.FlatAppearance.BorderSize = 0;
+      btnNavCommented.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnNavCommented.Click += (s, e) =>
+      {
+        if (isSettingsDropdownOpen) ToggleSettingsDropdown();
+        ShowCommentedPosts();
+      };
+      // Add rounded corners
+      AddRoundedCorners(btnNavCommented, 15);
+
+      // Create Liked button
+      btnNavLiked = new Button
+      {
+        Text = "♥", // Unicode heart symbol
+        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
+        Size = new Size(buttonSize, buttonSize),
+        Location = new Point(startX + 3 * (buttonSize + spacing), 0),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.Transparent,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        Cursor = Cursors.Hand,
+        Name = "btnNavLiked"
+      };
+      btnNavLiked.FlatAppearance.BorderSize = 0;
+      btnNavLiked.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnNavLiked.Click += (s, e) =>
+      {
+        if (isSettingsDropdownOpen) ToggleSettingsDropdown();
+        ShowLikedPosts();
+      };
+      // Add rounded corners
+      AddRoundedCorners(btnNavLiked, 15);
+
+      // Create Settings button
+      btnNavSettings = new Button
+      {
+        Text = "⚙", // Unicode gear symbol
+        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
+        Size = new Size(buttonSize, buttonSize),
+        Location = new Point(startX + 4 * (buttonSize + spacing), 0),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.Transparent,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        Cursor = Cursors.Hand,
+        Name = "btnNavSettings"
+      };
+      btnNavSettings.FlatAppearance.BorderSize = 0;
+      btnNavSettings.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnNavSettings.Click += (s, e) => ToggleSettingsDropdown();
+      // Add rounded corners
+      AddRoundedCorners(btnNavSettings, 15);
+
+      // Add buttons to panel
+      pnlSidebar.Controls.Add(btnNavHome);
+      pnlSidebar.Controls.Add(btnNavDashboard);
+      pnlSidebar.Controls.Add(btnNavCommented);
+      pnlSidebar.Controls.Add(btnNavLiked);
+      pnlSidebar.Controls.Add(btnNavSettings);
+
+      // Add panel to form
+      this.Controls.Add(pnlSidebar);
+      pnlSidebar.BringToFront();
+
+      // Handle resize to recalculate button positions
+      this.Resize += (s, e) => UpdateNavigationLayout();
+
+      // Create settings dropdown
+      CreateSettingsDropdown();
+    }
+
+    private void PositionNavbarInCenter()
+    {
+      if (pnlSidebar == null) return;
+
+      // Position in center of form, where old buttons were (around profile area)
+      int centerX = (this.ClientSize.Width - pnlSidebar.Width) / 2;
+      int centerY = 150; // Position near profile area
+
+      pnlSidebar.Location = new Point(centerX, centerY);
+    }
+
+    private void UpdateNavigationLayout()
+    {
+      if (pnlSidebar == null || btnNavHome == null || btnNavDashboard == null ||
+          btnNavCommented == null || btnNavLiked == null || btnNavSettings == null)
+        return;
+
+      // Reposition the entire navbar panel
+      PositionNavbarInCenter();
+
+      // Update button positions within panel (relative to panel, not form)
+      int buttonSize = 70;
+      int spacing = 20;
+      int startX = 0;
+
+      btnNavHome.Location = new Point(startX, 0);
+      btnNavDashboard.Location = new Point(startX + buttonSize + spacing, 0);
+      btnNavCommented.Location = new Point(startX + 2 * (buttonSize + spacing), 0);
+      btnNavLiked.Location = new Point(startX + 3 * (buttonSize + spacing), 0);
+      btnNavSettings.Location = new Point(startX + 4 * (buttonSize + spacing), 0);
+    }
+    private void CreateSettingsDropdown()
+    {
+      pnlSettingsDropdown = new Panel
+      {
+        Size = new Size(200, 120),
+        BackColor = Color.White,
+        Visible = false,
+        BorderStyle = BorderStyle.FixedSingle,
+        Name = "pnlSettingsDropdown"
+      };
+
+      // Edit Profile button
+      var btnEditProfileDropdown = new Button
+      {
+        Text = "Edit Profile",
+        Location = new Point(0, 0),
+        Size = new Size(198, 40),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.White,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(10, 0, 0, 0),
+        Cursor = Cursors.Hand
+      };
+      btnEditProfileDropdown.FlatAppearance.BorderSize = 0;
+      btnEditProfileDropdown.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnEditProfileDropdown.Click += (s, e) =>
+      {
+        ToggleSettingsDropdown();
+        OpenEditProfile();
+      };
+
+      // Toggle Theme button
+      var btnToggleThemeDropdown = new Button
+      {
+        Text = "Toggle Theme",
+        Location = new Point(0, 40),
+        Size = new Size(198, 40),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.White,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(10, 0, 0, 0),
+        Cursor = Cursors.Hand
+      };
+      btnToggleThemeDropdown.FlatAppearance.BorderSize = 0;
+      btnToggleThemeDropdown.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnToggleThemeDropdown.Click += (s, e) =>
+      {
+        ToggleSettingsDropdown();
+        isDarkMode = !isDarkMode;
+        ApplyTheme(isDarkMode);
+        SaveDarkModePreference(isDarkMode);
+      };
+
+      // Logout button
+      var btnLogoutDropdown = new Button
+      {
+        Text = "Logout",
+        Location = new Point(0, 80),
+        Size = new Size(198, 40),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.White,
+        ForeColor = Color.FromArgb(231, 76, 60),
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(10, 0, 0, 0),
+        Cursor = Cursors.Hand
+      };
+      btnLogoutDropdown.FlatAppearance.BorderSize = 0;
+      btnLogoutDropdown.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 240, 240);
+      btnLogoutDropdown.Click += (s, e) =>
+      {
+        ToggleSettingsDropdown();
+        var result = MessageBox.Show("Are you sure you want to logout?", "Confirm Logout",
+          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        if (result == DialogResult.Yes)
+        {
+          AuthSessionService.Logout();
+          this.Close();
+        }
+      };
+
+      pnlSettingsDropdown.Controls.Add(btnEditProfileDropdown);
+      pnlSettingsDropdown.Controls.Add(btnToggleThemeDropdown);
+      pnlSettingsDropdown.Controls.Add(btnLogoutDropdown);
+
+      this.Controls.Add(pnlSettingsDropdown);
+      pnlSettingsDropdown.BringToFront();
+    }
+
+    private void ToggleSettingsDropdown()
+    {
+      if (pnlSettingsDropdown == null || btnNavSettings == null) return;
+
+      isSettingsDropdownOpen = !isSettingsDropdownOpen;
+      pnlSettingsDropdown.Visible = isSettingsDropdownOpen;
+
+      if (isSettingsDropdownOpen)
+      {
+        // Position dropdown below settings button
+        pnlSettingsDropdown.Location = new Point(
+          btnNavSettings.Location.X + btnNavSettings.Width - pnlSettingsDropdown.Width,
+          pnlSidebar!.Height
+        );
+      }
+    }
+
+    private void SetActiveNavButton(Button? activeButton)
+    {
+      if (btnNavHome == null || btnNavDashboard == null || btnNavCommented == null ||
+          btnNavLiked == null || btnNavSettings == null)
+        return;
+
+      // Reset all buttons
+      btnNavHome.BackColor = Color.Transparent;
+      btnNavHome.ForeColor = Color.FromArgb(90, 90, 90);
+      btnNavDashboard.BackColor = Color.Transparent;
+      btnNavDashboard.ForeColor = Color.FromArgb(90, 90, 90);
+      btnNavCommented.BackColor = Color.Transparent;
+      btnNavCommented.ForeColor = Color.FromArgb(90, 90, 90);
+      btnNavLiked.BackColor = Color.Transparent;
+      btnNavLiked.ForeColor = Color.FromArgb(90, 90, 90);
+      btnNavSettings.BackColor = Color.Transparent;
+      btnNavSettings.ForeColor = Color.FromArgb(90, 90, 90);
+
+      // Highlight active button
+      if (activeButton != null)
+      {
+        activeButton.BackColor = Color.FromArgb(240, 240, 240);
+        activeButton.ForeColor = Color.FromArgb(52, 152, 219); // Blue accent
+      }
+    }
+
+    #endregion
+
+    #region View Navigation Methods
+
+    private void ShowHome()
+    {
+      currentView = "Home";
+      SetActiveNavButton(btnNavHome);
+
+      // Hide user profile info in newsfeed mode
+      if (panelProfileHeader != null) panelProfileHeader.Visible = false;
+
+      // Load all posts for newsfeed (not just user's posts)
+      LoadAllPosts();
+    }
+
+    private void ShowDashboard()
+    {
+      currentView = "Dashboard";
+      SetActiveNavButton(btnNavDashboard);
+
+      // Show user profile info in user posts view
+      if (panelProfileHeader != null) panelProfileHeader.Visible = true;
+
+      // Show user's own posts (already implemented in LoadPosts)
+      LoadPosts();
+
+      // Ensure navigation bar stays on top
+      if (pnlSidebar != null) pnlSidebar.BringToFront();
+    }
+
+    private void ShowCommentedPosts()
+    {
+      currentView = "Commented";
+      SetActiveNavButton(btnNavCommented);
+
+      // Show user profile info in user-specific views
+      if (panelProfileHeader != null) panelProfileHeader.Visible = true;
+
+      // Load posts with comments
+      LoadCommentedPosts();
+
+      // Ensure navigation bar stays on top
+      if (pnlSidebar != null) pnlSidebar.BringToFront();
+    }
+
+    private void ShowLikedPosts()
+    {
+      currentView = "Liked";
+      SetActiveNavButton(btnNavLiked);
+
+      // Show user profile info in user-specific views
+      if (panelProfileHeader != null) panelProfileHeader.Visible = true;
+
+      // Load liked posts
+      LoadLikedPosts();
+
+      // Ensure navigation bar stays on top
+      if (pnlSidebar != null) pnlSidebar.BringToFront();
+    }
+    private void LoadCommentedPosts()
+    {
+      try
+      {
+        if (postService == null || currentUser == null) return;
+
+        // Get posts that the current user has commented on
+        var commentedPosts = postService.GetPostsCommentedByUser(currentUser.UserID);
+        allUserPosts = commentedPosts;
+        DisplayPosts(commentedPosts);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Error loading commented posts: {ex.Message}", "Error",
+          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void LoadLikedPosts()
+    {
+      try
+      {
+        if (postService == null || currentUser == null) return;
+
+        // Get posts that the current user has liked
+        var likedPosts = postService.GetPostsLikedByUser(currentUser.UserID);
+        allUserPosts = likedPosts;
+        DisplayPosts(likedPosts);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Error loading liked posts: {ex.Message}", "Error",
+          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void LoadAllPosts()
+    {
+      try
+      {
+        if (postService == null) return;
+
+        // Get all posts from all users (for newsfeed)
+        allAvailablePosts = postService.GetAllPosts();
+        currentPostIndex = 0;
+
+        // Clear existing posts
+        flowLayoutPanelPosts.Controls.Clear();
+
+        // Load first batch
+        LoadMorePosts();
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Error loading newsfeed: {ex.Message}", "Error",
+          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void LoadMorePosts()
+    {
+      if (allAvailablePosts == null || currentPostIndex >= allAvailablePosts.Count) return;
+
+      try
+      {
+        int endIndex = Math.Min(currentPostIndex + postsPerLoad, allAvailablePosts.Count);
+        var postsToLoad = allAvailablePosts.Skip(currentPostIndex).Take(endIndex - currentPostIndex).ToList();
+
+        foreach (var postData in postsToLoad)
+        {
+          var postControl = new PostControl(postData);
+          postControl.PostClicked += PostControl_PostClicked;
+          flowLayoutPanelPosts.Controls.Add(postControl);
+        }
+
+        currentPostIndex = endIndex;
+        flowLayoutPanelPosts_Resize(this, EventArgs.Empty);
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error loading more posts: {ex.Message}");
+      }
+    }
+
+    private void CreateAppTitle()
+    {
+      var lblAppTitle = new Label
+      {
+        Text = "Social Media Management",
+        Font = new Font("Segoe UI", 18F, FontStyle.Bold),
+        ForeColor = Color.FromArgb(23, 162, 184), // Cyan/aqua color
+        Location = new Point(20, 20),
+        Size = new Size(350, 30),
+        BackColor = Color.Transparent,
+        Name = "lblAppTitle"
+      };
+
+      // Add to form
+      this.Controls.Add(lblAppTitle);
+      lblAppTitle.BringToFront();
+
+      // Apply theme-aware colors
+      if (isDarkMode)
+      {
+        lblAppTitle.ForeColor = Color.FromArgb(79, 172, 254); // Lighter blue for dark theme
+      }
+    }
+
+    private void OpenEditProfile()
+    {
+      try
+      {
+        var editForm = new frmInfor();
+        editForm.ShowDialog();
+
+        // Refresh user info after editing
+        LoadUserInfo();
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Error opening edit profile: {ex.Message}", "Error",
+          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    #endregion
+
 
     // Vẽ btnNewPost thành hình tròn (giống btnThemeToggle)
     private void btnNewPost_Paint(object? sender, PaintEventArgs e)
@@ -259,9 +788,9 @@ namespace SocialManager.frm
       panelComposer.BackColor = Color.Transparent; // Card paint sẽ phủ
       flowLayoutPanelPosts.BackColor = this.BackColor;
 
-      // Text màu
-      var primaryText = dark ? Color.FromArgb(228, 230, 235) : Color.FromArgb(33, 33, 33);
-      var secondaryText = dark ? Color.FromArgb(176, 179, 184) : Color.FromArgb(102, 102, 102);
+      // Text màu - Fix for dark mode
+      var primaryText = dark ? Color.FromArgb(240, 242, 245) : Color.FromArgb(33, 33, 33);
+      var secondaryText = dark ? Color.FromArgb(185, 187, 190) : Color.FromArgb(102, 102, 102);
 
       // XÓA lblUsername vì không còn dùng
       lblProfileName.ForeColor = primaryText;
@@ -273,33 +802,72 @@ namespace SocialManager.frm
       lblToDate.ForeColor = primaryText;
       lblPostId.ForeColor = primaryText;
 
-      // Input controls
-      txtSearch.ForeColor = dark ? Color.White : Color.FromArgb(64, 64, 64);
-      txtPostId.ForeColor = dark ? Color.White : Color.FromArgb(64, 64, 64);
+      // Input controls - Fix for dark mode
+      txtSearch.ForeColor = dark ? Color.FromArgb(240, 242, 245) : Color.FromArgb(64, 64, 64);
+      txtSearch.BackColor = dark ? Color.FromArgb(58, 59, 60) : Color.White;
+      txtPostId.ForeColor = dark ? Color.FromArgb(240, 242, 245) : Color.FromArgb(64, 64, 64);
+      txtPostId.BackColor = dark ? Color.FromArgb(58, 59, 60) : Color.White;
       cboType.ForeColor = primaryText;
       cboType.BackColor = dark ? Color.FromArgb(58, 59, 60) : Color.White;
       dtpFrom.CalendarForeColor = primaryText;
       dtpTo.CalendarForeColor = primaryText;
 
-      // Buttons
-      var buttonBg = dark ? Color.FromArgb(58, 59, 60) : Color.FromArgb(228, 230, 235);
-      var buttonFg = dark ? Color.FromArgb(228, 230, 235) : Color.FromArgb(33, 33, 33);
+      // Apply theme to navigation bar if exists
+      if (pnlSidebar != null)
+      {
+        pnlSidebar.BackColor = dark ? Color.FromArgb(36, 37, 38) : Color.FromArgb(250, 248, 246);
 
-      btnLogout.BackColor = buttonBg;
-      btnLogout.ForeColor = buttonFg;
-      btnSettings.BackColor = buttonBg;
-      btnSettings.ForeColor = buttonFg;
-      btnThemeToggle.BackColor = buttonBg;
-      btnThemeToggle.ForeColor = buttonFg;
-      btnEditProfile.BackColor = buttonBg;
-      btnEditProfile.ForeColor = buttonFg;
+        // Update navigation buttons
+        var navButtonColor = dark ? Color.FromArgb(185, 187, 190) : Color.FromArgb(90, 90, 90);
+        var navHoverColor = dark ? Color.FromArgb(58, 59, 60) : Color.FromArgb(240, 240, 240);
+
+        if (btnNavHome != null)
+        {
+          btnNavHome.ForeColor = navButtonColor;
+          btnNavHome.FlatAppearance.MouseOverBackColor = navHoverColor;
+        }
+        if (btnNavDashboard != null)
+        {
+          btnNavDashboard.ForeColor = navButtonColor;
+          btnNavDashboard.FlatAppearance.MouseOverBackColor = navHoverColor;
+        }
+        if (btnNavCommented != null)
+        {
+          btnNavCommented.ForeColor = navButtonColor;
+          btnNavCommented.FlatAppearance.MouseOverBackColor = navHoverColor;
+        }
+        if (btnNavLiked != null)
+        {
+          btnNavLiked.ForeColor = navButtonColor;
+          btnNavLiked.FlatAppearance.MouseOverBackColor = navHoverColor;
+        }
+        if (btnNavSettings != null)
+        {
+          btnNavSettings.ForeColor = navButtonColor;
+          btnNavSettings.FlatAppearance.MouseOverBackColor = navHoverColor;
+        }
+      }
+
+      // Apply theme to settings dropdown if exists
+      if (pnlSettingsDropdown != null)
+      {
+        pnlSettingsDropdown.BackColor = dark ? Color.FromArgb(36, 37, 38) : Color.White;
+
+        foreach (Control ctrl in pnlSettingsDropdown.Controls)
+        {
+          if (ctrl is Button btn)
+          {
+            btn.BackColor = dark ? Color.FromArgb(36, 37, 38) : Color.White;
+            btn.ForeColor = ctrl.Name?.Contains("Logout") == true
+              ? (dark ? Color.FromArgb(255, 100, 100) : Color.FromArgb(231, 76, 60))
+              : primaryText;
+            btn.FlatAppearance.MouseOverBackColor = dark ? Color.FromArgb(58, 59, 60) : Color.FromArgb(240, 240, 240);
+          }
+        }
+      }
+
+      // Only btnNewPost styling (other buttons are hidden)
       btnNewPost.BackColor = Color.FromArgb(10, 102, 194);
-
-      // Update hover colors
-      AddButtonHoverEffect(this.btnLogout, buttonBg, dark ? Color.FromArgb(68, 69, 70) : Color.FromArgb(208, 210, 215));
-      AddButtonHoverEffect(this.btnSettings, buttonBg, dark ? Color.FromArgb(68, 69, 70) : Color.FromArgb(208, 210, 215));
-      AddButtonHoverEffect(this.btnThemeToggle, buttonBg, dark ? Color.FromArgb(68, 69, 70) : Color.FromArgb(208, 210, 215));
-      AddButtonHoverEffect(this.btnEditProfile, buttonBg, dark ? Color.FromArgb(68, 69, 70) : Color.FromArgb(208, 210, 215));
 
       // Update tab colors
       foreach (Control ctrl in panelTabs.Controls)
@@ -351,6 +919,12 @@ namespace SocialManager.frm
           btn.Region = new Region(path);
         }
       }
+    }
+
+    // Helper: Add rounded corners (alias for AddRoundedButton)
+    private void AddRoundedCorners(Button btn, int radius)
+    {
+      AddRoundedButton(btn, radius);
     }
 
     // Helper: Create rounded rect path
@@ -646,15 +1220,35 @@ namespace SocialManager.frm
 
     private void flowLayoutPanelPosts_Resize(object? sender, EventArgs e)
     {
+      // Match post width with composer panel width
+      int targetWidth = panelComposer?.Width ?? (flowLayoutPanelPosts.ClientSize.Width - SystemInformation.VerticalScrollBarWidth);
+
       foreach (Control c in flowLayoutPanelPosts.Controls)
       {
-        c.Width = flowLayoutPanelPosts.ClientSize.Width - SystemInformation.VerticalScrollBarWidth;
+        c.Width = targetWidth;
       }
 
       // XÓA lblUsername vì không còn dùng - cập nhật profile name thay vì
       if (currentUser != null)
       {
         lblProfileName.Text = currentUser.UserName;
+      }
+    }
+
+    private void flowLayoutPanelPosts_Scroll(object? sender, ScrollEventArgs e)
+    {
+      // Check if user scrolled near the bottom (when at 10th post from end)
+      if (flowLayoutPanelPosts.Controls.Count >= 10)
+      {
+        var scrollPosition = e.NewValue;
+        var maxScroll = flowLayoutPanelPosts.VerticalScroll.Maximum;
+        var visibleHeight = flowLayoutPanelPosts.ClientSize.Height;
+
+        // Load more when scrolled to 80% of content
+        if (scrollPosition >= (maxScroll - visibleHeight) * 0.8)
+        {
+          LoadMorePosts();
+        }
       }
     }
 
