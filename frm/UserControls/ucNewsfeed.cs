@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using SocialManager.services;
 using SocialManager.utils;
+using SocialManager.controls;
 
 namespace SocialManager.frm.UserControls
 {
@@ -17,6 +18,9 @@ namespace SocialManager.frm.UserControls
     private Panel pnlMainContent = null!;
     private FlowLayoutPanel flpPosts = null!;
     private TextBox txtSearch = null!;
+    private PictureBox? picHeaderAvatar;
+    private Label? lblHeaderUserName;
+    private Label? lblAppTitle;
 
     // Filter controls
     private Panel pnlFilterSection = null!;
@@ -25,12 +29,18 @@ namespace SocialManager.frm.UserControls
     private DateTimePicker dtpFrom = null!;
     private DateTimePicker dtpTo = null!;
     private TextBox txtPostId = null!;
-    private Button btnApplyFilter = null!;
-    private Button btnClearFilter = null!;
+    private RoundedButton btnApplyFilter = null!;
+    private RoundedButton btnClearFilter = null!;
 
     // Lưu tất cả bài viết để lọc
     private List<Post>? allPosts;
     private bool isLoading = false;
+
+    // Lazy loading variables
+    private const int PostsPerPage = 15;
+    private int currentLoadedCount = 0;
+    private bool isLoadingMore = false;
+    private Label? lblLoadingIndicator;
 
     public ucNewsfeed()
     {
@@ -66,6 +76,17 @@ namespace SocialManager.frm.UserControls
         BorderStyle = BorderStyle.None
       };
 
+      // App Title (left)
+      lblAppTitle = new Label
+      {
+        Text = "Social Media Management",
+        AutoSize = true,
+        Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+        ForeColor = Color.FromArgb(23, 162, 184), // cyan-ish
+        Location = new Point(15, 18)
+      };
+      pnlHeader.Controls.Add(lblAppTitle);
+
       // Search Box - ĐẶT GIỮA HEADER
       txtSearch = new TextBox
       {
@@ -82,12 +103,51 @@ namespace SocialManager.frm.UserControls
 
       pnlHeader.Controls.Add(txtSearch);
 
+      // User avatar + name (right)
+      picHeaderAvatar = new PictureBox
+      {
+        Size = new Size(34, 34),
+        Location = new Point(pnlHeader.Width - 130, 13),
+        SizeMode = PictureBoxSizeMode.Zoom,
+        BackColor = Color.LightGray,
+        Cursor = Cursors.Hand
+      };
+      UIHelper.MakeCircular(picHeaderAvatar);
+
+      lblHeaderUserName = new Label
+      {
+        AutoSize = true,
+        Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+        ForeColor = Color.FromArgb(33, 33, 33),
+        Text = currentUser?.FullName ?? currentUser?.UserName ?? "User",
+        Location = new Point((picHeaderAvatar.Left - 5) + 40, 18)
+      };
+
+      // Load avatar image if available
+      if (currentUser != null && !string.IsNullOrEmpty(currentUser.AvatarUrl) && File.Exists(currentUser.AvatarUrl))
+      {
+        picHeaderAvatar.Image = Image.FromFile(currentUser.AvatarUrl);
+      }
+
+      pnlHeader.Controls.Add(picHeaderAvatar);
+      pnlHeader.Controls.Add(lblHeaderUserName);
+
       // Thêm sự kiện resize để căn giữa search box
       pnlHeader.Resize += (s, e) =>
       {
         if (txtSearch != null)
         {
           txtSearch.Location = new Point((pnlHeader.Width - txtSearch.Width) / 2, 13);
+        }
+        if (picHeaderAvatar != null)
+        {
+          picHeaderAvatar.Left = pnlHeader.Width - 130;
+          picHeaderAvatar.Top = 13;
+        }
+        if (lblHeaderUserName != null && picHeaderAvatar != null)
+        {
+          lblHeaderUserName.Left = picHeaderAvatar.Right + 8;
+          lblHeaderUserName.Top = 18;
         }
       };
 
@@ -121,6 +181,11 @@ namespace SocialManager.frm.UserControls
         BackColor = Color.FromArgb(240, 242, 245),
         Padding = new Padding(0, 155, 0, 0) // Top padding cho CreatePost section
       };
+
+      // Add scroll/resize events for lazy loading and responsive width
+      flpPosts.Scroll += FlpPosts_Scroll;
+      flpPosts.MouseWheel += FlpPosts_MouseWheel;
+      flpPosts.Resize += (s, e) => UpdatePostControlsWidth();
 
       pnlMainContent.Controls.Add(flpPosts);
       pnlMainContent.Controls.Add(pnlCreatePost); // Add sau để nó nằm trên flpPosts
@@ -201,21 +266,23 @@ namespace SocialManager.frm.UserControls
       return panel;
     }
 
-    private Button CreatePostActionButton(string text, int x)
+    private RoundedButton CreatePostActionButton(string text, int x)
     {
-      Button btn = new Button
+      RoundedButton btn = new RoundedButton
       {
         Text = text,
-        Font = new Font("Segoe UI", 10F),
+        Font = new Font("Segoe UI", 10F, FontStyle.Bold),
         Size = new Size(150, 30),
         Location = new Point(x, 2),
         FlatStyle = FlatStyle.Flat,
         BackColor = Color.White,
+        BackgroundColor = Color.White,
+        BorderRadius = 10,
         Cursor = Cursors.Hand,
         TextAlign = ContentAlignment.MiddleCenter
       };
       btn.FlatAppearance.BorderSize = 0;
-      btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 242, 245);
+      // hover visual stays default for RoundedButton
       return btn;
     }
 
@@ -224,6 +291,7 @@ namespace SocialManager.frm.UserControls
       try
       {
         flpPosts.Controls.Clear();
+        currentLoadedCount = 0;
 
         // Load tất cả bài viết và lưu vào biến toàn cục
         allPosts = postService.GetAllPosts()
@@ -231,13 +299,125 @@ namespace SocialManager.frm.UserControls
             .OrderByDescending(p => p.CreatedAt)
             .ToList();
 
-        DisplayPosts(allPosts);
+        // Load 15 posts đầu tiên
+        DisplayInitialPosts();
       }
       catch (Exception ex)
       {
         MessageBox.Show($"Lỗi khi tải newsfeed: {ex.Message}", "Lỗi",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
+    }
+
+    private void DisplayInitialPosts()
+    {
+      if (allPosts == null || allPosts.Count == 0)
+      {
+        Label lblNoPost = new Label
+        {
+          Text = "Không tìm thấy bài viết nào",
+          Font = new Font("Segoe UI", 12F, FontStyle.Italic),
+          ForeColor = Color.Gray,
+          AutoSize = true,
+          Padding = new Padding(20)
+        };
+        flpPosts.Controls.Add(lblNoPost);
+        return;
+      }
+
+      // Load 15 posts đầu tiên
+      var postsToLoad = allPosts.Take(PostsPerPage).ToList();
+      DisplayPosts(postsToLoad);
+      currentLoadedCount = postsToLoad.Count;
+
+      // Add loading indicator if there are more posts
+      if (currentLoadedCount < allPosts.Count)
+      {
+        AddLoadingIndicator();
+      }
+    }
+
+    private void AddLoadingIndicator()
+    {
+      if (lblLoadingIndicator != null && flpPosts.Controls.Contains(lblLoadingIndicator))
+      {
+        flpPosts.Controls.Remove(lblLoadingIndicator);
+      }
+
+      lblLoadingIndicator = new Label
+      {
+        Text = "⌛ Đang tải thêm bài viết...",
+        Font = new Font("Segoe UI", 10F, FontStyle.Italic),
+        ForeColor = Color.FromArgb(23, 162, 184),
+        AutoSize = true,
+        Padding = new Padding(20),
+        TextAlign = ContentAlignment.MiddleCenter,
+        Visible = false // Hidden by default, shown when loading
+      };
+      flpPosts.Controls.Add(lblLoadingIndicator);
+    }
+
+    private void LoadMorePosts()
+    {
+      if (isLoadingMore || allPosts == null || currentLoadedCount >= allPosts.Count)
+        return;
+
+      isLoadingMore = true;
+
+      // Show loading indicator
+      if (lblLoadingIndicator != null)
+        lblLoadingIndicator.Visible = true;
+
+      // Simulate async loading (can be replaced with actual async operation)
+      System.Windows.Forms.Timer delayTimer = new System.Windows.Forms.Timer { Interval = 300 };
+      delayTimer.Tick += (s, e) =>
+      {
+        delayTimer.Stop();
+        delayTimer.Dispose();
+
+        try
+        {
+          // Load next 15 posts
+          var nextPosts = allPosts.Skip(currentLoadedCount).Take(PostsPerPage).ToList();
+
+          if (nextPosts.Count > 0)
+          {
+            // Remove loading indicator temporarily
+            if (lblLoadingIndicator != null && flpPosts.Controls.Contains(lblLoadingIndicator))
+            {
+              flpPosts.Controls.Remove(lblLoadingIndicator);
+            }
+
+            // Add new posts
+            foreach (var post in nextPosts)
+            {
+              var postControl = new controls.PostControl(post);
+              postControl.Width = flpPosts.ClientSize.Width - 20;
+              postControl.Margin = new Padding(0, 0, 0, 15);
+              postControl.PostClicked += PostControl_PostClicked;
+              postControl.PostReported += PostControl_PostReported;
+              // Apply current theme to new post
+              postControl.ApplyTheme(GlobalSettings.DarkMode);
+              flpPosts.Controls.Add(postControl);
+            }
+
+            currentLoadedCount += nextPosts.Count;
+
+            // Re-add loading indicator if more posts available
+            if (currentLoadedCount < allPosts.Count)
+            {
+              AddLoadingIndicator();
+            }
+          }
+        }
+        finally
+        {
+          isLoadingMore = false;
+          if (lblLoadingIndicator != null)
+            lblLoadingIndicator.Visible = false;
+        }
+      };
+      delayTimer.Start();
     }
 
     private void DisplayPosts(List<Post> posts)
@@ -431,35 +611,37 @@ namespace SocialManager.frm.UserControls
       };
 
       // Buttons
-      btnApplyFilter = new Button
+      btnApplyFilter = new RoundedButton
       {
         Text = "Áp dụng lọc",
         Font = new Font("Segoe UI", 10F, FontStyle.Bold),
         Location = new Point(15, 260),
         Size = new Size(280, 38),
         BackColor = Color.FromArgb(24, 119, 242),
+        BackgroundColor = Color.FromArgb(24, 119, 242),
+        BorderRadius = 10,
         ForeColor = Color.White,
         FlatStyle = FlatStyle.Flat,
         Cursor = Cursors.Hand
       };
       btnApplyFilter.FlatAppearance.BorderSize = 0;
       btnApplyFilter.Click += BtnApplyFilter_Click;
-      UIHelper.ApplyRoundedCorners(btnApplyFilter, 10);
 
-      btnClearFilter = new Button
+      btnClearFilter = new RoundedButton
       {
         Text = "Xóa bộ lọc",
         Font = new Font("Segoe UI", 10F),
         Location = new Point(15, 308),
         Size = new Size(280, 38),
         BackColor = Color.FromArgb(228, 230, 235),
+        BackgroundColor = Color.FromArgb(228, 230, 235),
+        BorderRadius = 10,
         ForeColor = Color.FromArgb(33, 33, 33),
         FlatStyle = FlatStyle.Flat,
         Cursor = Cursors.Hand
       };
       btnClearFilter.FlatAppearance.BorderSize = 0;
       btnClearFilter.Click += BtnClearFilter_Click;
-      UIHelper.ApplyRoundedCorners(btnClearFilter, 10);
 
       gbFilter.Controls.AddRange(new Control[] {
         lblPostId, txtPostId, lblType, cboType,
@@ -536,6 +718,57 @@ namespace SocialManager.frm.UserControls
       {
         isLoading = false;
       }
+    }
+
+    private void FlpPosts_Scroll(object? sender, ScrollEventArgs e)
+    {
+      CheckAndLoadMorePosts();
+    }
+
+    private void FlpPosts_MouseWheel(object? sender, MouseEventArgs e)
+    {
+      CheckAndLoadMorePosts();
+    }
+
+    private void CheckAndLoadMorePosts()
+    {
+      if (isLoadingMore || allPosts == null || currentLoadedCount >= allPosts.Count)
+        return;
+
+      // Get visible post controls (excluding loading indicator and "no post" labels)
+      var postControls = flpPosts.Controls.OfType<controls.PostControl>().ToList();
+
+      if (postControls.Count < 10)
+        return;
+
+      // Check if we've scrolled past the 10th post
+      var tenthPost = postControls.ElementAtOrDefault(Math.Min(9, postControls.Count - 1));
+      if (tenthPost != null)
+      {
+        var tenthPostBottom = tenthPost.Location.Y + tenthPost.Height;
+        var visibleBottom = flpPosts.VerticalScroll.Value + flpPosts.ClientSize.Height;
+
+        // If 10th post is visible or scrolled past, load more
+        if (tenthPostBottom <= visibleBottom + 200) // 200px threshold
+        {
+          LoadMorePosts();
+        }
+      }
+    }
+
+    private void UpdatePostControlsWidth()
+    {
+      try
+      {
+        foreach (Control ctrl in flpPosts.Controls)
+        {
+          if (ctrl is controls.PostControl pc)
+          {
+            pc.Width = flpPosts.ClientSize.Width - 20;
+          }
+        }
+      }
+      catch { }
     }
 
     private void ApplyFilters()
@@ -620,6 +853,175 @@ namespace SocialManager.frm.UserControls
     public void RefreshNewsfeed()
     {
       LoadNewsfeed();
+    }
+
+    // Public method để apply theme
+    public void ApplyTheme(bool isDark)
+    {
+      if (isDark)
+      {
+        // Dark theme colors
+        this.BackColor = Color.FromArgb(24, 25, 26);
+
+        if (pnlHeader != null)
+        {
+          pnlHeader.BackColor = Color.FromArgb(36, 37, 38);
+        }
+
+        if (txtSearch != null)
+        {
+          txtSearch.BackColor = Color.FromArgb(58, 59, 60);
+          txtSearch.ForeColor = Color.White;
+        }
+        if (lblAppTitle != null)
+        {
+          lblAppTitle.ForeColor = Color.FromArgb(88, 101, 242); // Keep accent in dark
+        }
+        if (lblHeaderUserName != null)
+        {
+          lblHeaderUserName.ForeColor = Color.White;
+        }
+        if (picHeaderAvatar != null && picHeaderAvatar.Image == null)
+        {
+          picHeaderAvatar.BackColor = Color.FromArgb(58, 59, 60);
+        }
+
+        if (pnlMainContent != null)
+        {
+          pnlMainContent.BackColor = Color.FromArgb(24, 25, 26);
+        }
+
+        if (flpPosts != null)
+        {
+          flpPosts.BackColor = Color.FromArgb(24, 25, 26);
+        }
+
+        if (pnlFilterSection != null)
+        {
+          pnlFilterSection.BackColor = Color.FromArgb(36, 37, 38);
+        }
+
+        if (gbFilter != null)
+        {
+          gbFilter.BackColor = Color.FromArgb(36, 37, 38);
+          gbFilter.ForeColor = Color.White;
+        }
+
+        // Update filter controls
+        if (txtPostId != null)
+        {
+          txtPostId.BackColor = Color.FromArgb(58, 59, 60);
+          txtPostId.ForeColor = Color.White;
+        }
+
+        if (cboType != null)
+        {
+          cboType.BackColor = Color.FromArgb(58, 59, 60);
+          cboType.ForeColor = Color.White;
+        }
+
+        if (btnApplyFilter != null)
+        {
+          btnApplyFilter.BackColor = Color.FromArgb(24, 119, 242);
+          btnApplyFilter.BackgroundColor = Color.FromArgb(24, 119, 242);
+          btnApplyFilter.ForeColor = Color.White;
+        }
+
+        if (btnClearFilter != null)
+        {
+          btnClearFilter.BackColor = Color.FromArgb(58, 59, 60);
+          btnClearFilter.BackgroundColor = Color.FromArgb(58, 59, 60);
+          btnClearFilter.ForeColor = Color.White;
+        }
+      }
+      else
+      {
+        // Light theme colors
+        this.BackColor = Color.FromArgb(240, 242, 245);
+
+        if (pnlHeader != null)
+        {
+          pnlHeader.BackColor = Color.White;
+        }
+
+        if (txtSearch != null)
+        {
+          txtSearch.BackColor = Color.White;
+          txtSearch.ForeColor = Color.Black;
+        }
+        if (lblAppTitle != null)
+        {
+          lblAppTitle.ForeColor = Color.FromArgb(23, 162, 184);
+        }
+        if (lblHeaderUserName != null)
+        {
+          lblHeaderUserName.ForeColor = Color.FromArgb(33, 33, 33);
+        }
+        if (picHeaderAvatar != null && picHeaderAvatar.Image == null)
+        {
+          picHeaderAvatar.BackColor = Color.LightGray;
+        }
+
+        if (pnlMainContent != null)
+        {
+          pnlMainContent.BackColor = Color.FromArgb(240, 242, 245);
+        }
+
+        if (flpPosts != null)
+        {
+          flpPosts.BackColor = Color.FromArgb(240, 242, 245);
+        }
+
+        if (pnlFilterSection != null)
+        {
+          pnlFilterSection.BackColor = Color.White;
+        }
+
+        if (gbFilter != null)
+        {
+          gbFilter.BackColor = Color.White;
+          gbFilter.ForeColor = Color.FromArgb(44, 62, 80);
+        }
+
+        // Update filter controls
+        if (txtPostId != null)
+        {
+          txtPostId.BackColor = Color.White;
+          txtPostId.ForeColor = Color.Black;
+        }
+
+        if (cboType != null)
+        {
+          cboType.BackColor = Color.White;
+          cboType.ForeColor = Color.Black;
+        }
+
+        if (btnApplyFilter != null)
+        {
+          btnApplyFilter.BackColor = Color.FromArgb(24, 119, 242);
+          btnApplyFilter.BackgroundColor = Color.FromArgb(24, 119, 242);
+          btnApplyFilter.ForeColor = Color.White;
+        }
+
+        if (btnClearFilter != null)
+        {
+          btnClearFilter.BackColor = Color.FromArgb(228, 230, 235);
+          btnClearFilter.BackgroundColor = Color.FromArgb(228, 230, 235);
+          btnClearFilter.ForeColor = Color.FromArgb(33, 33, 33);
+        }
+      }
+
+      // Apply theme to all post controls
+      if (flpPosts != null)
+      {
+        foreach (Control ctrl in flpPosts.Controls)
+        {
+          if (ctrl is controls.PostControl postControl)
+          {
+            postControl.ApplyTheme(isDark);
+          }
+        }
+      }
     }
   }
 }

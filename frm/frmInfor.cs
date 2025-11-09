@@ -17,8 +17,6 @@ namespace SocialManager.frm
   {
     private User? currentUser;
     private UserService? userService;
-    private bool isDarkMode = false; // Theme state
-    private const string DarkModeKey = "isDarkMode"; // Registry key
 
     public frmInfor()
     {
@@ -38,12 +36,12 @@ namespace SocialManager.frm
       this.btnUpdate.Click += new EventHandler(this.btnUpdate_Click!);
       this.btnCancel.Click += new EventHandler(this.btnCancel_Click!);
 
-      // Load theme từ Dashboard
-      isDarkMode = LoadDarkModePreference();
-      ApplyTheme(isDarkMode);
-
       LoadUserData();
       ApplyRoundedCorners();
+
+      // Apply theme from GlobalSettings
+      bool isDarkMode = GlobalSettings.Theme == "Dark";
+      DashboardTheme.ApplyThemeToForm(this, isDarkMode);
     }
 
     private void ApplyRoundedCorners()
@@ -142,6 +140,7 @@ namespace SocialManager.frm
         }
         else
         {
+          bool isDarkMode = GlobalSettings.Theme == "Dark";
           lblStatusId.ForeColor = isDarkMode ? Color.FromArgb(200, 200, 200) : Color.FromArgb(66, 66, 66);
         }
       }
@@ -325,95 +324,6 @@ namespace SocialManager.frm
     private void btnCancel_Click(object? sender, EventArgs e)
     {
       this.Close();
-    }
-
-    // Theme management - đồng bộ với frmDashboard
-    private bool LoadDarkModePreference()
-    {
-      try
-      {
-        if (currentUser == null) return false;
-
-        string settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datas", $"settings_{currentUser.UserID}.txt");
-        if (File.Exists(settingsFile))
-        {
-          string content = File.ReadAllText(settingsFile);
-          return content.Contains("dark=true");
-        }
-      }
-      catch (Exception ex)
-      {
-        System.Diagnostics.Debug.WriteLine($"Error loading dark mode preference: {ex.Message}");
-      }
-      return false;
-    }
-
-    private void ApplyTheme(bool darkMode)
-    {
-      if (darkMode)
-      {
-        // Dark theme
-        this.BackColor = Color.FromArgb(24, 25, 26);
-
-        // GroupBoxes
-        gbAccount.ForeColor = Color.FromArgb(242, 242, 242);
-        gbDetails.ForeColor = Color.FromArgb(242, 242, 242);
-
-        // Labels
-        foreach (Control ctrl in gbAccount.Controls)
-        {
-          if (ctrl is Label lbl)
-          {
-            lbl.ForeColor = Color.FromArgb(200, 200, 200);
-          }
-        }
-
-        foreach (Control ctrl in gbDetails.Controls)
-        {
-          if (ctrl is Label lbl)
-          {
-            lbl.ForeColor = Color.FromArgb(200, 200, 200);
-          }
-        }
-
-        // Buttons
-        btnUpdate.BackColor = Color.FromArgb(10, 102, 194);
-        btnUpdate.ForeColor = Color.White;
-        btnCancel.BackColor = Color.FromArgb(60, 60, 60);
-        btnCancel.ForeColor = Color.FromArgb(242, 242, 242);
-      }
-      else
-      {
-        // Light theme (default)
-        this.BackColor = Color.FromArgb(240, 242, 245);
-
-        // GroupBoxes
-        gbAccount.ForeColor = Color.FromArgb(33, 33, 33);
-        gbDetails.ForeColor = Color.FromArgb(33, 33, 33);
-
-        // Labels
-        foreach (Control ctrl in gbAccount.Controls)
-        {
-          if (ctrl is Label lbl)
-          {
-            lbl.ForeColor = Color.FromArgb(66, 66, 66);
-          }
-        }
-
-        foreach (Control ctrl in gbDetails.Controls)
-        {
-          if (ctrl is Label lbl)
-          {
-            lbl.ForeColor = Color.FromArgb(66, 66, 66);
-          }
-        }
-
-        // Buttons
-        btnUpdate.BackColor = Color.FromArgb(10, 102, 194);
-        btnUpdate.ForeColor = Color.White;
-        btnCancel.BackColor = Color.FromArgb(228, 230, 235);
-        btnCancel.ForeColor = Color.FromArgb(33, 33, 33);
-      }
     }
   }
 }

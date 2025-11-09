@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using SocialManager.services;
+using SocialManager.utils;
 
 namespace SocialManager.controls
 {
@@ -44,6 +45,10 @@ namespace SocialManager.controls
       likes = new List<Like>();
       InitializeComponent();
       LoadPostData();
+
+      // Apply theme from GlobalSettings
+      bool isDarkMode = GlobalSettings.Theme == "Dark";
+      DashboardTheme.ApplyThemeToUserControl(this, isDarkMode);
     }
 
     private void InitializeComponent()
@@ -182,12 +187,22 @@ namespace SocialManager.controls
       foreach (var comment in comments)
       {
         var commenter = users.FirstOrDefault(u => u.UserID == comment.UserID);
-        Panel commentPanel = new Panel { Width = flpComments.ClientSize.Width - 40, AutoSize = true, Padding = new Padding(10), Margin = new Padding(0, 5, 0, 5), BackColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
+        bool isDark = GlobalSettings.DarkMode;
+        Panel commentPanel = new Panel
+        {
+          Width = flpComments.ClientSize.Width - 40,
+          AutoSize = true,
+          Padding = new Padding(10),
+          Margin = new Padding(0, 5, 0, 5),
+          BackColor = isDark ? Color.FromArgb(36, 37, 38) : Color.White,
+          BorderStyle = BorderStyle.None
+        };
         Label lblCommenter = new Label { Text = commenter?.FullName ?? "Người dùng", Font = new Font("Segoe UI", 9F, FontStyle.Bold), AutoSize = true, Location = new Point(10, 10) };
-        Label lblCommentDate = new Label { Text = comment.CreatedAt.ToString("dd/MM/yyyy HH:mm"), Font = new Font("Segoe UI", 8F), ForeColor = Color.Gray, AutoSize = true, Location = new Point(10, 30) };
-        Label lblCommentContent = new Label { Text = comment.Content, Font = new Font("Segoe UI", 9F), AutoSize = true, MaximumSize = new Size(commentPanel.Width - 30, 0), Location = new Point(10, 50) };
+        Label lblCommentDate = new Label { Text = comment.CreatedAt.ToString("dd/MM/yyyy HH:mm"), Font = new Font("Segoe UI", 8F), ForeColor = isDark ? Color.FromArgb(176, 179, 184) : Color.Gray, AutoSize = true, Location = new Point(10, 30) };
+        Label lblCommentContent = new Label { Text = comment.Content, Font = new Font("Segoe UI", 9F), ForeColor = isDark ? Color.FromArgb(242, 243, 245) : Color.FromArgb(33, 33, 33), AutoSize = true, MaximumSize = new Size(commentPanel.Width - 30, 0), Location = new Point(10, 50) };
         commentPanel.Controls.AddRange(new Control[] { lblCommenter, lblCommentDate, lblCommentContent });
         commentPanel.Height = lblCommentContent.Bottom + 15;
+        UIHelper.ApplyRoundedCorners(commentPanel, 12);
         flpComments.Controls.Add(commentPanel);
       }
     }

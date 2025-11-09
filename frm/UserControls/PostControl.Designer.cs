@@ -20,6 +20,7 @@ namespace SocialManager.controls
     private void InitializeComponent()
     {
       gbPostContainer = new GroupBox();
+      picAvatar = new PictureBox();
       lblPostInfo = new Label();
       lblContent = new Label();
       btnLike = new RoundedButton();
@@ -31,6 +32,7 @@ namespace SocialManager.controls
       //
       // gbPostContainer
       //
+      gbPostContainer.Controls.Add(picAvatar);
       gbPostContainer.Controls.Add(btnDelete);
       gbPostContainer.Controls.Add(btnReport);
       gbPostContainer.Controls.Add(btnComment);
@@ -45,12 +47,22 @@ namespace SocialManager.controls
       gbPostContainer.TabIndex = 0;
       gbPostContainer.TabStop = false;
       //
+      // picAvatar
+      //
+      picAvatar.Location = new Point(13, 18);
+      picAvatar.Name = "picAvatar";
+      picAvatar.Size = new Size(36, 36);
+      picAvatar.SizeMode = PictureBoxSizeMode.Zoom;
+      picAvatar.TabIndex = 7;
+      picAvatar.TabStop = false;
+      picAvatar.BackColor = Color.LightGray;
+      //
       // lblPostInfo
       //
       lblPostInfo.AutoSize = true;
       lblPostInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
       lblPostInfo.ForeColor = SystemColors.ControlDarkDark;
-      lblPostInfo.Location = new Point(13, 25);
+      lblPostInfo.Location = new Point(55, 25);
       lblPostInfo.Name = "lblPostInfo";
       lblPostInfo.Size = new Size(181, 20);
       lblPostInfo.TabIndex = 0;
@@ -175,5 +187,6 @@ namespace SocialManager.controls
     private RoundedButton btnComment;
     private RoundedButton btnDelete;
     private RoundedButton btnReport;
+    private System.Windows.Forms.PictureBox picAvatar;
   }
 }

@@ -195,12 +195,11 @@ namespace SocialManager.frm
               }
               else if (AuthSessionService.CurrentUser != null)
               {
-                // Mở Newsfeed thay vì Dashboard
-                frmNewsfeed newsfeedForm = new frmNewsfeed();
+                // Mở Dashboard (chứa ucNewsfeed) thay vì frmNewsfeed riêng lẻ
+                frmDashboard dashboardForm = new frmDashboard();
                 this.Hide();
 
-                // Show newsfeed form as dialog
-                var newsfeedResult = newsfeedForm.ShowDialog();
+                var dashboardResult = dashboardForm.ShowDialog();
               }
               else
               {

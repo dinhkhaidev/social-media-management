@@ -97,14 +97,14 @@ namespace SocialManager.services
         int newID = _reports.Count > 0 ? _reports.Max(r => r.ReportID) + 1 : 1;
 
         var report = new Report(
-            newID,
-            reportType,
-            contentID,
-            DateTime.Now,
-            reporterUserID,
-            reportedUserID,
-            reason,
-            "New"
+          newID,
+          reportType,
+          contentID,
+          DateTime.Now,
+          reporterUserID,
+          reportedUserID,
+          reason,
+          ReportStatus.Pending.ToStatusString()
         );
 
         _reports.Add(report);
@@ -116,7 +116,7 @@ namespace SocialManager.services
         return false;
       }
     }
-    
+
     // Cập nhật trạng thái report
     public bool UpdateReportStatus(int reportID, string status, Guid reviewerID, string? adminNote = null, string? action = null)
     {
@@ -124,13 +124,13 @@ namespace SocialManager.services
       {
         var report = _reports.FirstOrDefault(r => r.ReportID == reportID);
         if (report == null) return false;
-        
+
         report.Status = status;
         report.ReviewerID = reviewerID;
         report.ReviewedAt = DateTime.Now;
         if (adminNote != null) report.AdminNote = adminNote;
         if (action != null) report.Action = action;
-        
+
         return SaveAllReports();
       }
       catch (Exception ex)
@@ -139,7 +139,13 @@ namespace SocialManager.services
         return false;
       }
     }
-    
+
+    // Overload: cập nhật bằng enum ReportStatus
+    public bool UpdateReportStatus(int reportID, ReportStatus status, Guid reviewerID, string? adminNote = null, string? action = null)
+    {
+      return UpdateReportStatus(reportID, status.ToStatusString(), reviewerID, adminNote, action);
+    }
+
     // Thêm ghi chú vào report
     public bool AddNoteToReport(int reportID, string note)
     {
@@ -147,11 +153,11 @@ namespace SocialManager.services
       {
         var report = _reports.FirstOrDefault(r => r.ReportID == reportID);
         if (report == null) return false;
-        
-        report.AdminNote = string.IsNullOrEmpty(report.AdminNote) 
-          ? note 
+
+        report.AdminNote = string.IsNullOrEmpty(report.AdminNote)
+          ? note
           : report.AdminNote + "\n---\n" + note;
-        
+
         return SaveAllReports();
       }
       catch (Exception ex)
@@ -160,13 +166,19 @@ namespace SocialManager.services
         return false;
       }
     }
-    
+
     // Lấy reports theo trạng thái
     public List<Report> GetReportsByStatus(string status)
     {
       return _reports.Where(r => r.Status == status).OrderByDescending(r => r.ReportedAt).ToList();
     }
-    
+
+    // Overload: lấy theo enum ReportStatus
+    public List<Report> GetReportsByStatus(ReportStatus status)
+    {
+      return GetReportsByStatus(status.ToStatusString());
+    }
+
     // Batch update reports
     public bool BatchUpdateReports(List<int> reportIDs, string status, Guid reviewerID, string? action = null)
     {
@@ -191,7 +203,13 @@ namespace SocialManager.services
         return false;
       }
     }
-    
+
+    // Overload: batch update bằng enum ReportStatus
+    public bool BatchUpdateReports(List<int> reportIDs, ReportStatus status, Guid reviewerID, string? action = null)
+    {
+      return BatchUpdateReports(reportIDs, status.ToStatusString(), reviewerID, action);
+    }
+
     // Xóa một report
     public bool DeleteReport(int reportID)
     {

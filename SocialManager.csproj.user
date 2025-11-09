@@ -6,7 +6,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmDashboard.cs">
-      <SubType>Component</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmForgotPass.cs">
       <SubType>Form</SubType>
@@ -15,9 +15,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="frm\frmNewsfeed.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmPost.cs">
@@ -50,10 +47,19 @@
     <Compile Update="frm\UserControls\ucCommentManagement.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="frm\UserControls\ucCommentsHistory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="frm\UserControls\ucDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucDashboard.Extended.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucLikesHistory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucNewsfeed.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucPostDetail.cs">

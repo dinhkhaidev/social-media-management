@@ -20,11 +20,13 @@ namespace SocialManager.controls
     private bool isLiked = false;
     private int likesCount = 0;
     private int commentsCount = 0;
+    private bool isDarkMode = false; // theme flag
 
     public PostControl()
     {
       InitializeComponent();
       SetupControl();
+      ApplyCardStyle();
     }
 
     public PostControl(Post post)
@@ -36,9 +38,43 @@ namespace SocialManager.controls
       this.PostId = post.PostID.ToString();
 
       SetupControl();
+      ApplyCardStyle();
       LoadPostData();
       LoadLikesAndComments();
       AdjustHeight();
+    }
+
+    /// <summary>
+    /// Áp dụng theme cho PostControl (dark/light)
+    /// </summary>
+    public void ApplyTheme(bool isDark)
+    {
+      isDarkMode = isDark;
+
+      if (gbPostContainer != null)
+      {
+        gbPostContainer.BackColor = isDark ? Color.FromArgb(36, 37, 38) : Color.FromArgb(250, 251, 252);
+        gbPostContainer.ForeColor = isDark ? Color.White : Color.FromArgb(64, 64, 64);
+      }
+
+      this.BackColor = Color.Transparent; // Match composer transparent card host
+
+      if (lblPostInfo != null)
+      {
+        lblPostInfo.ForeColor = isDark ? Color.FromArgb(176, 179, 184) : SystemColors.ControlDarkDark;
+      }
+      if (lblContent != null)
+      {
+        lblContent.ForeColor = isDark ? Color.FromArgb(242, 243, 245) : Color.FromArgb(64, 64, 64);
+      }
+      if (picAvatar != null && picAvatar.Image == null)
+      {
+        picAvatar.BackColor = isDark ? Color.FromArgb(58, 59, 60) : Color.LightGray;
+      }
+
+      UpdateLikeButton();
+      UpdateCommentButton();
+      Invalidate(); // redraw custom card border
     }
 
     private void LoadPostData()
@@ -52,6 +88,27 @@ namespace SocialManager.controls
 
         string displayName = postOwner?.FullName ?? "Người dùng không xác định";
         lblPostInfo.Text = $"{displayName} - {postData.CreatedAt:dd/MM/yyyy HH:mm}";
+
+        // Load avatar
+        if (picAvatar != null)
+        {
+          try
+          {
+            if (!string.IsNullOrEmpty(postOwner?.AvatarUrl) && System.IO.File.Exists(postOwner.AvatarUrl))
+            {
+              picAvatar.Image = Image.FromFile(postOwner.AvatarUrl);
+            }
+            else
+            {
+              // Fallback: draw initial
+              picAvatar.Image = GenerateInitialAvatar(postOwner?.FullName ?? "?");
+            }
+            UIHelper.MakeCircular(picAvatar);
+            picAvatar.Cursor = Cursors.Hand;
+            picAvatar.Click += (s, e) => OnPostClicked();
+          }
+          catch { }
+        }
       }
       catch (Exception ex)
       {
@@ -97,18 +154,38 @@ namespace SocialManager.controls
       if (isLiked)
       {
         btnLike.Text = $"♥ {likesCount}"; // Use heart symbol
-        btnLike.BackColor = System.Drawing.Color.FromArgb(255, 245, 245);
-        btnLike.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
-        btnLike.BackgroundColor = System.Drawing.Color.FromArgb(255, 245, 245);
-        btnLike.TextColor = System.Drawing.Color.FromArgb(220, 53, 69);
+        if (isDarkMode)
+        {
+          btnLike.BackColor = Color.FromArgb(64, 20, 24);
+          btnLike.BackgroundColor = Color.FromArgb(64, 20, 24);
+          btnLike.ForeColor = Color.FromArgb(255, 99, 132);
+          btnLike.TextColor = Color.FromArgb(255, 99, 132);
+        }
+        else
+        {
+          btnLike.BackColor = Color.FromArgb(255, 245, 245);
+          btnLike.BackgroundColor = Color.FromArgb(255, 245, 245);
+          btnLike.ForeColor = Color.FromArgb(220, 53, 69);
+          btnLike.TextColor = Color.FromArgb(220, 53, 69);
+        }
       }
       else
       {
         btnLike.Text = $"♡ {likesCount}"; // Use outline heart symbol
-        btnLike.BackColor = System.Drawing.Color.FromArgb(248, 249, 250);
-        btnLike.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
-        btnLike.BackgroundColor = System.Drawing.Color.FromArgb(248, 249, 250);
-        btnLike.TextColor = System.Drawing.Color.FromArgb(108, 117, 125);
+        if (isDarkMode)
+        {
+          btnLike.BackColor = Color.FromArgb(58, 59, 60);
+          btnLike.BackgroundColor = Color.FromArgb(58, 59, 60);
+          btnLike.ForeColor = Color.FromArgb(176, 179, 184);
+          btnLike.TextColor = Color.FromArgb(176, 179, 184);
+        }
+        else
+        {
+          btnLike.BackColor = Color.FromArgb(248, 249, 250);
+          btnLike.BackgroundColor = Color.FromArgb(248, 249, 250);
+          btnLike.ForeColor = Color.FromArgb(108, 117, 125);
+          btnLike.TextColor = Color.FromArgb(108, 117, 125);
+        }
       }
     }
 
@@ -116,10 +193,20 @@ namespace SocialManager.controls
     {
       if (btnComment == null) return;
       btnComment.Text = $"💬 {commentsCount}"; // Use speech bubble symbol
-      btnComment.BackColor = System.Drawing.Color.FromArgb(248, 249, 250);
-      btnComment.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
-      btnComment.BackgroundColor = System.Drawing.Color.FromArgb(248, 249, 250);
-      btnComment.TextColor = System.Drawing.Color.FromArgb(108, 117, 125);
+      if (isDarkMode)
+      {
+        btnComment.BackColor = Color.FromArgb(58, 59, 60);
+        btnComment.BackgroundColor = Color.FromArgb(58, 59, 60);
+        btnComment.ForeColor = Color.FromArgb(176, 179, 184);
+        btnComment.TextColor = Color.FromArgb(176, 179, 184);
+      }
+      else
+      {
+        btnComment.BackColor = Color.FromArgb(248, 249, 250);
+        btnComment.BackgroundColor = Color.FromArgb(248, 249, 250);
+        btnComment.ForeColor = Color.FromArgb(108, 117, 125);
+        btnComment.TextColor = Color.FromArgb(108, 117, 125);
+      }
     }
 
     private void SetupControl()
@@ -135,6 +222,9 @@ namespace SocialManager.controls
 
       if (lblPostInfo != null)
         this.lblPostInfo.Click += (s, e) => OnPostClicked();
+
+      if (picAvatar != null)
+        this.picAvatar.Click += (s, e) => OnPostClicked();
 
       if (btnLike != null)
         this.btnLike.Click += BtnLike_Click;
@@ -155,6 +245,100 @@ namespace SocialManager.controls
         {
           btnReport.Visible = true;
         }
+      }
+    }
+
+    /// <summary>
+    /// Áp dụng style "card" giống phần composer: bo tròn, nền nhạt, viền mỏng.
+    /// </summary>
+    private void ApplyCardStyle()
+    {
+      if (gbPostContainer == null) return;
+      gbPostContainer.Text = string.Empty; // bỏ tiêu đề groupbox
+      gbPostContainer.Padding = new Padding(15, 15, 15, 20);
+      gbPostContainer.BackColor = isDarkMode ? Color.FromArgb(36, 37, 38) : Color.FromArgb(250, 251, 252);
+
+      // Gắn Paint event để tự vẽ viền bo tròn
+      gbPostContainer.Paint -= GbPostContainer_Paint; // tránh đăng ký trùng
+      gbPostContainer.Paint += GbPostContainer_Paint;
+
+      // Chuẩn hóa style các nút hành động
+      StyleActionButton(btnLike);
+      StyleActionButton(btnComment);
+      StyleIconButton(btnDelete, Color.FromArgb(255, 83, 73));
+      StyleIconButton(btnReport, Color.FromArgb(255, 117, 24));
+    }
+
+    private void StyleActionButton(RoundedButton? btn)
+    {
+      if (btn == null) return;
+      btn.BorderRadius = 18;
+      btn.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+      if (isDarkMode)
+      {
+        btn.BackColor = Color.FromArgb(58, 59, 60);
+        btn.BackgroundColor = btn.BackColor;
+        btn.ForeColor = Color.FromArgb(176, 179, 184);
+        btn.TextColor = btn.ForeColor;
+      }
+      else
+      {
+        btn.BackColor = Color.White;
+        btn.BackgroundColor = btn.BackColor;
+        btn.ForeColor = Color.FromArgb(108, 117, 125);
+        btn.TextColor = btn.ForeColor;
+      }
+      btn.FlatStyle = FlatStyle.Flat;
+      btn.FlatAppearance.BorderSize = 0;
+      // Hover
+      btn.MouseEnter += (s, e) =>
+      {
+        if (btn == null) return;
+        btn.BackColor = isDarkMode ? Color.FromArgb(76, 77, 78) : Color.FromArgb(245, 246, 247);
+        btn.BackgroundColor = btn.BackColor;
+      };
+      btn.MouseLeave += (s, e) =>
+      {
+        if (btn == null) return;
+        btn.BackColor = isDarkMode ? Color.FromArgb(58, 59, 60) : Color.White;
+        btn.BackgroundColor = btn.BackColor;
+      };
+    }
+
+    private void StyleIconButton(RoundedButton? btn, Color baseColor)
+    {
+      if (btn == null) return;
+      btn.BorderRadius = 20;
+      btn.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+      btn.Size = new Size(34, 34);
+      btn.FlatStyle = FlatStyle.Flat;
+      btn.FlatAppearance.BorderSize = 0;
+      btn.BackColor = baseColor;
+      btn.BackgroundColor = baseColor;
+      btn.ForeColor = Color.White;
+      btn.TextColor = Color.White;
+    }
+
+    private void GbPostContainer_Paint(object? sender, PaintEventArgs e)
+    {
+      if (gbPostContainer == null) return;
+      e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+      var rect = gbPostContainer.ClientRectangle;
+      rect.Inflate(-2, -2);
+      int radius = 18;
+      using (var path = new System.Drawing.Drawing2D.GraphicsPath())
+      {
+        int d = radius * 2;
+        path.AddArc(rect.X, rect.Y, d, d, 180, 90);
+        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+        using (var fill = new SolidBrush(gbPostContainer.BackColor))
+          e.Graphics.FillPath(fill, path);
+        var borderColor = isDarkMode ? Color.FromArgb(58, 59, 60) : Color.FromArgb(225, 226, 228);
+        using (var pen = new Pen(borderColor, 1))
+          e.Graphics.DrawPath(pen, path);
       }
     }
 
@@ -304,9 +488,16 @@ namespace SocialManager.controls
 
       try
       {
+        // Adjust content max width to container width
+        if (gbPostContainer != null && lblContent != null)
+        {
+          int innerPadding = 30; // left + right inside groupbox
+          lblContent.MaximumSize = new System.Drawing.Size(Math.Max(200, gbPostContainer.Width - innerPadding), 0);
+        }
+
         int padding = 20;
         int infoHeight = lblPostInfo.Bottom;
-        int contentHeight = lblContent.Height;
+        int contentHeight = lblContent!.Height;
         int buttonHeight = 32;
         int spacing = 15;
 
@@ -316,7 +507,7 @@ namespace SocialManager.controls
           totalHeight = 150;
 
         this.Height = totalHeight;
-        gbPostContainer.Height = totalHeight - 10;
+        gbPostContainer!.Height = totalHeight - 10;
 
         int buttonsY = gbPostContainer.Height - buttonHeight - 15;
         btnLike.Top = buttonsY;
@@ -329,9 +520,40 @@ namespace SocialManager.controls
       }
     }
 
+    protected override void OnResize(EventArgs e)
+    {
+      base.OnResize(e);
+      AdjustHeight();
+    }
+
     private void OnPostClicked()
     {
       PostClicked?.Invoke(this, this.PostId);
+    }
+
+    /// <summary>
+    /// Generate a simple circular avatar bitmap with the first letter of the user's name
+    /// </summary>
+    private Bitmap GenerateInitialAvatar(string name)
+    {
+      var bmp = new Bitmap(64, 64);
+      using (var g = Graphics.FromImage(bmp))
+      {
+        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        var bgColor = isDarkMode ? Color.FromArgb(58, 59, 60) : Color.FromArgb(230, 230, 230);
+        using (var brush = new SolidBrush(bgColor))
+        {
+          g.FillEllipse(brush, 0, 0, 64, 64);
+        }
+        string initial = string.IsNullOrWhiteSpace(name) ? "?" : name.Trim()[0].ToString().ToUpper();
+        using (var font = new Font("Segoe UI", 24, FontStyle.Bold, GraphicsUnit.Pixel))
+        using (var textBrush = new SolidBrush(isDarkMode ? Color.White : Color.FromArgb(64, 64, 64)))
+        {
+          var size = g.MeasureString(initial, font);
+          g.DrawString(initial, font, textBrush, (64 - size.Width) / 2, (64 - size.Height) / 2);
+        }
+      }
+      return bmp;
     }
   }
 }

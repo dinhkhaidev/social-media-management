@@ -8,16 +8,17 @@ using System.Windows.Forms;
 using SocialManager.controls;
 using System.ComponentModel;
 using System.Diagnostics;
+using SocialManager.utils;
 
 namespace SocialManager.frm
 {
-  public class DoubleBufferedFlowLayoutPanel : FlowLayoutPanel
-  {
-    public DoubleBufferedFlowLayoutPanel()
-    {
-      this.DoubleBuffered = true;
-    }
-  }
+  //public class DoubleBufferedFlowLayoutPanel : FlowLayoutPanel
+  //{
+  //  public DoubleBufferedFlowLayoutPanel()
+  //  {
+  //    this.DoubleBuffered = true;
+  //  }
+  //}
 
   public partial class frmDashboard : Form
   {
@@ -29,15 +30,22 @@ namespace SocialManager.frm
     private const string DarkModeKey = "isDarkMode"; // Registry key for dark mode
 
     // Navigation bar controls
+    private Panel? pnlHeader;
+    private Panel? pnlNavbar;
     private Panel? pnlSidebar;
     private Button? btnNavHome;
     private Button? btnNavDashboard;
     private Button? btnNavCommented;
     private Button? btnNavLiked;
+    private Button? btnNavMyLikes;
+    private Button? btnNavMyComments;
+    private Button? btnNavProfile;
     private Button? btnNavSettings;
-    private Panel? pnlSettingsDropdown;
-    private bool isSettingsDropdownOpen = false;
+    private Button? btnThemeToggleNav;
+    private Label? lblBranding;
     private string currentView = "Home"; // Track current view
+    private bool isSettingsDropdownOpen = false;
+    private Panel? pnlSettingsDropdown;
 
     // UserControls for different views
     private UserControls.ucNewsfeed? ucNewsfeed;
@@ -154,116 +162,61 @@ namespace SocialManager.frm
 
       int startX = 0; // Relative to panel, not form
 
-      // Create Home button
-      btnNavHome = new Button
+      // Helper local function to create a styled RoundedButton
+      RoundedButton CreateNavButton(string text, Point location, string name, EventHandler onClick)
       {
-        Text = "⌂", // Unicode house symbol
-        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
-        Size = new Size(buttonSize, buttonSize),
-        Location = new Point(startX, 0),
-        FlatStyle = FlatStyle.Flat,
-        BackColor = Color.Transparent,
-        ForeColor = Color.FromArgb(90, 90, 90),
-        Cursor = Cursors.Hand,
-        Name = "btnNavHome"
-      };
-      btnNavHome.FlatAppearance.BorderSize = 0;
-      btnNavHome.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-      btnNavHome.Click += (s, e) =>
+        var rb = new RoundedButton
+        {
+          Text = text,
+          Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
+          Size = new Size(buttonSize, buttonSize),
+          Location = location,
+          Name = name,
+          Cursor = Cursors.Hand,
+          BorderRadius = 30,
+          BackgroundColor = Color.Transparent,
+          BackColor = Color.Transparent,
+          TextColor = Color.FromArgb(90, 90, 90),
+          ForeColor = Color.FromArgb(90, 90, 90)
+        };
+        rb.FlatStyle = FlatStyle.Flat;
+        rb.FlatAppearance.BorderSize = 0;
+        // Hover effect
+        rb.MouseEnter += (s, e) => rb.BackColor = Color.FromArgb(240, 240, 240);
+        rb.MouseLeave += (s, e) => rb.BackColor = Color.Transparent;
+        rb.Click += onClick;
+        return rb;
+      }
+
+      // Create navigation buttons using RoundedButton
+      btnNavHome = CreateNavButton("⌂", new Point(startX, 0), "btnNavHome", (s, e) =>
       {
         if (isSettingsDropdownOpen) ToggleSettingsDropdown();
         ShowHome();
-      };
-      // Add rounded corners
-      AddRoundedCorners(btnNavHome, 15);
+      });
 
-      // Create Dashboard button
-      btnNavDashboard = new Button
-      {
-        Text = "✎", // Unicode pencil symbol
-        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
-        Size = new Size(buttonSize, buttonSize),
-        Location = new Point(startX + buttonSize + spacing, 0),
-        FlatStyle = FlatStyle.Flat,
-        BackColor = Color.Transparent,
-        ForeColor = Color.FromArgb(90, 90, 90),
-        Cursor = Cursors.Hand,
-        Name = "btnNavDashboard"
-      };
-      btnNavDashboard.FlatAppearance.BorderSize = 0;
-      btnNavDashboard.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-      btnNavDashboard.Click += (s, e) =>
+      btnNavDashboard = CreateNavButton("✎", new Point(startX + buttonSize + spacing, 0), "btnNavDashboard", (s, e) =>
       {
         if (isSettingsDropdownOpen) ToggleSettingsDropdown();
         ShowDashboard();
-      };
-      // Add rounded corners
-      AddRoundedCorners(btnNavDashboard, 15);
+      });
 
-      // Create Commented button
-      btnNavCommented = new Button
-      {
-        Text = "✉", // Unicode envelope symbol
-        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
-        Size = new Size(buttonSize, buttonSize),
-        Location = new Point(startX + 2 * (buttonSize + spacing), 0),
-        FlatStyle = FlatStyle.Flat,
-        BackColor = Color.Transparent,
-        ForeColor = Color.FromArgb(90, 90, 90),
-        Cursor = Cursors.Hand,
-        Name = "btnNavCommented"
-      };
-      btnNavCommented.FlatAppearance.BorderSize = 0;
-      btnNavCommented.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-      btnNavCommented.Click += (s, e) =>
+      btnNavCommented = CreateNavButton("✉", new Point(startX + 2 * (buttonSize + spacing), 0), "btnNavCommented", (s, e) =>
       {
         if (isSettingsDropdownOpen) ToggleSettingsDropdown();
         ShowCommentedPosts();
-      };
-      // Add rounded corners
-      AddRoundedCorners(btnNavCommented, 15);
+      });
 
-      // Create Liked button
-      btnNavLiked = new Button
-      {
-        Text = "♥", // Unicode heart symbol
-        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
-        Size = new Size(buttonSize, buttonSize),
-        Location = new Point(startX + 3 * (buttonSize + spacing), 0),
-        FlatStyle = FlatStyle.Flat,
-        BackColor = Color.Transparent,
-        ForeColor = Color.FromArgb(90, 90, 90),
-        Cursor = Cursors.Hand,
-        Name = "btnNavLiked"
-      };
-      btnNavLiked.FlatAppearance.BorderSize = 0;
-      btnNavLiked.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-      btnNavLiked.Click += (s, e) =>
+      btnNavLiked = CreateNavButton("♥", new Point(startX + 3 * (buttonSize + spacing), 0), "btnNavLiked", (s, e) =>
       {
         if (isSettingsDropdownOpen) ToggleSettingsDropdown();
         ShowLikedPosts();
-      };
-      // Add rounded corners
-      AddRoundedCorners(btnNavLiked, 15);
+      });
 
-      // Create Settings button
-      btnNavSettings = new Button
+      btnNavSettings = CreateNavButton("⚙", new Point(startX + 4 * (buttonSize + spacing), 0), "btnNavSettings", (s, e) =>
       {
-        Text = "⚙", // Unicode gear symbol
-        Font = new Font("Segoe UI Symbol", 24F, FontStyle.Regular),
-        Size = new Size(buttonSize, buttonSize),
-        Location = new Point(startX + 4 * (buttonSize + spacing), 0),
-        FlatStyle = FlatStyle.Flat,
-        BackColor = Color.Transparent,
-        ForeColor = Color.FromArgb(90, 90, 90),
-        Cursor = Cursors.Hand,
-        Name = "btnNavSettings"
-      };
-      btnNavSettings.FlatAppearance.BorderSize = 0;
-      btnNavSettings.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-      btnNavSettings.Click += (s, e) => ToggleSettingsDropdown();
-      // Add rounded corners
-      AddRoundedCorners(btnNavSettings, 15);
+        ToggleSettingsDropdown();
+      });
 
       // Add buttons to panel
       pnlSidebar.Controls.Add(btnNavHome);
@@ -287,11 +240,11 @@ namespace SocialManager.frm
     {
       if (pnlSidebar == null) return;
 
-      // Position in center of form, where old buttons were (around profile area)
+      // Position at top center of form
       int centerX = (this.ClientSize.Width - pnlSidebar.Width) / 2;
-      int centerY = 150; // Position near profile area
+      int topMargin = 20; // Small margin from top
 
-      pnlSidebar.Location = new Point(centerX, centerY);
+      pnlSidebar.Location = new Point(centerX, topMargin);
     }
 
     private void UpdateNavigationLayout()
@@ -318,7 +271,7 @@ namespace SocialManager.frm
     {
       pnlSettingsDropdown = new Panel
       {
-        Size = new Size(200, 120),
+        Size = new Size(200, 200), // Increased height for more items
         BackColor = Color.White,
         Visible = false,
         BorderStyle = BorderStyle.FixedSingle,
@@ -346,11 +299,53 @@ namespace SocialManager.frm
         OpenEditProfile();
       };
 
+      // Comments History button
+      var btnCommentsHistoryDropdown = new Button
+      {
+        Text = "Comments History",
+        Location = new Point(0, 40),
+        Size = new Size(198, 40),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.White,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(10, 0, 0, 0),
+        Cursor = Cursors.Hand
+      };
+      btnCommentsHistoryDropdown.FlatAppearance.BorderSize = 0;
+      btnCommentsHistoryDropdown.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnCommentsHistoryDropdown.Click += (s, e) =>
+      {
+        ToggleSettingsDropdown();
+        ShowCommentsHistory();
+      };
+
+      // Likes History button
+      var btnLikesHistoryDropdown = new Button
+      {
+        Text = "Likes History",
+        Location = new Point(0, 80),
+        Size = new Size(198, 40),
+        FlatStyle = FlatStyle.Flat,
+        BackColor = Color.White,
+        ForeColor = Color.FromArgb(90, 90, 90),
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(10, 0, 0, 0),
+        Cursor = Cursors.Hand
+      };
+      btnLikesHistoryDropdown.FlatAppearance.BorderSize = 0;
+      btnLikesHistoryDropdown.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+      btnLikesHistoryDropdown.Click += (s, e) =>
+      {
+        ToggleSettingsDropdown();
+        ShowLikesHistory();
+      };
+
       // Toggle Theme button
       var btnToggleThemeDropdown = new Button
       {
         Text = "Toggle Theme",
-        Location = new Point(0, 40),
+        Location = new Point(0, 120),
         Size = new Size(198, 40),
         FlatStyle = FlatStyle.Flat,
         BackColor = Color.White,
@@ -367,13 +362,16 @@ namespace SocialManager.frm
         isDarkMode = !isDarkMode;
         ApplyTheme(isDarkMode);
         SaveDarkModePreference(isDarkMode);
+
+        // Update GlobalSettings.DarkMode
+        GlobalSettings.DarkMode = isDarkMode;
       };
 
       // Logout button
       var btnLogoutDropdown = new Button
       {
         Text = "Logout",
-        Location = new Point(0, 80),
+        Location = new Point(0, 160),
         Size = new Size(198, 40),
         FlatStyle = FlatStyle.Flat,
         BackColor = Color.White,
@@ -397,6 +395,8 @@ namespace SocialManager.frm
       };
 
       pnlSettingsDropdown.Controls.Add(btnEditProfileDropdown);
+      pnlSettingsDropdown.Controls.Add(btnCommentsHistoryDropdown);
+      pnlSettingsDropdown.Controls.Add(btnLikesHistoryDropdown);
       pnlSettingsDropdown.Controls.Add(btnToggleThemeDropdown);
       pnlSettingsDropdown.Controls.Add(btnLogoutDropdown);
 
@@ -459,8 +459,36 @@ namespace SocialManager.frm
       // Hide user profile info in newsfeed mode
       if (panelProfileHeader != null) panelProfileHeader.Visible = false;
 
-      // Load all posts for newsfeed (not just user's posts)
-      LoadAllPosts();
+      // Ẩn các bảng lọc/compose nội bộ của frmDashboard để tránh trùng với filter của ucNewsfeed
+      if (panelFilter != null) panelFilter.Visible = false;
+      if (gbFilter != null) gbFilter.Visible = false;
+      if (panelComposer != null) panelComposer.Visible = false;
+
+      // Clear existing post controls from flowLayoutPanelPosts
+      flowLayoutPanelPosts.Controls.Clear();
+
+      // Hide flowLayoutPanelPosts as we're using ucNewsfeed instead
+      flowLayoutPanelPosts.Visible = false;
+
+      // Create and load ucNewsfeed if not already created
+      if (ucNewsfeed == null)
+      {
+        ucNewsfeed = new UserControls.ucNewsfeed
+        {
+          Dock = DockStyle.Fill
+        };
+      }
+
+      // Add ucNewsfeed to center column container
+      if (!this.panelCenterCol.Controls.Contains(ucNewsfeed))
+      {
+        this.panelCenterCol.Controls.Clear(); // Clear other UCs
+        this.panelCenterCol.Controls.Add(ucNewsfeed);
+        ucNewsfeed.BringToFront();
+
+        // Apply current theme to ucNewsfeed
+        ucNewsfeed.ApplyTheme(isDarkMode);
+      }
     }
 
     private void ShowDashboard()
@@ -470,6 +498,14 @@ namespace SocialManager.frm
 
       // Show user profile info in user posts view
       if (panelProfileHeader != null) panelProfileHeader.Visible = true;
+
+      // Restore default center layout (remove ucNewsfeed, show composer + posts list)
+      RestoreDefaultCenterLayout();
+
+      // Hiển thị lại bộ lọc/compose nội bộ khi không ở chế độ Newsfeed
+      if (panelFilter != null) panelFilter.Visible = true;
+      if (gbFilter != null) gbFilter.Visible = true;
+      if (panelComposer != null) panelComposer.Visible = true;
 
       // Show user's own posts (already implemented in LoadPosts)
       LoadPosts();
@@ -486,6 +522,14 @@ namespace SocialManager.frm
       // Show user profile info in user-specific views
       if (panelProfileHeader != null) panelProfileHeader.Visible = true;
 
+      // Restore default center layout (remove ucNewsfeed, show composer + posts list)
+      RestoreDefaultCenterLayout();
+
+      // Hiển thị lại bộ lọc/compose nội bộ khi không ở chế độ Newsfeed
+      if (panelFilter != null) panelFilter.Visible = true;
+      if (gbFilter != null) gbFilter.Visible = true;
+      if (panelComposer != null) panelComposer.Visible = true;
+
       // Load posts with comments
       LoadCommentedPosts();
 
@@ -501,22 +545,151 @@ namespace SocialManager.frm
       // Show user profile info in user-specific views
       if (panelProfileHeader != null) panelProfileHeader.Visible = true;
 
+      // Restore default center layout (remove ucNewsfeed, show composer + posts list)
+      RestoreDefaultCenterLayout();
+
+      // Hiển thị lại bộ lọc/compose nội bộ khi không ở chế độ Newsfeed
+      if (panelFilter != null) panelFilter.Visible = true;
+      if (gbFilter != null) gbFilter.Visible = true;
+      if (panelComposer != null) panelComposer.Visible = true;
+
       // Load liked posts
       LoadLikedPosts();
 
       // Ensure navigation bar stays on top
       if (pnlSidebar != null) pnlSidebar.BringToFront();
     }
+
+    private void ShowCommentsHistory()
+    {
+      currentView = "CommentsHistory";
+
+      // Clear active nav button since this is accessed via dropdown
+      SetActiveNavButton(null);
+
+      // Show user profile info
+      if (panelProfileHeader != null) panelProfileHeader.Visible = true;
+
+      // Load Comments History UC into center panel
+      if (panelCenterCol != null && currentUser != null)
+      {
+        panelCenterCol.Controls.Clear();
+        var uc = new UserControls.ucCommentsHistory(currentUser.UserID)
+        {
+          Dock = DockStyle.Fill
+        };
+        uc.OnOpenPostRequested += (s, postId) =>
+        {
+          try
+          {
+            // open detail similar to PostControl_PostClicked
+            int postIdInt = postId;
+            Form detailForm = new Form
+            {
+              Text = "Chi tiết bài viết",
+              Size = new Size(720, 650),
+              StartPosition = FormStartPosition.CenterScreen,
+              FormBorderStyle = FormBorderStyle.FixedDialog,
+              MaximizeBox = false,
+              MinimizeBox = false
+            };
+
+            var postDetailControl = new controls.ucPostDetail(postIdInt)
+            {
+              Dock = DockStyle.Fill
+            };
+
+            postDetailControl.CloseRequested += (cs, ce) => detailForm.Close();
+            detailForm.Controls.Add(postDetailControl);
+            detailForm.ShowDialog();
+          }
+          catch (Exception ex)
+          {
+            MessageBox.Show($"Lỗi khi mở chi tiết bài viết: {ex.Message}", "Lỗi",
+              MessageBoxButtons.OK, MessageBoxIcon.Error);
+          }
+        };
+        panelCenterCol.Controls.Add(uc);
+        uc.BringToFront();
+
+        // Theme sync
+        uc.ApplyTheme(isDarkMode);
+      }
+
+      // Ensure navigation bar stays on top
+      if (pnlSidebar != null) pnlSidebar.BringToFront();
+    }
+
+    private void ShowLikesHistory()
+    {
+      currentView = "LikesHistory";
+
+      // Clear active nav button since this is accessed via dropdown
+      SetActiveNavButton(null);
+
+      // Show user profile info
+      if (panelProfileHeader != null) panelProfileHeader.Visible = true;
+
+      // Load Likes History UC into center panel
+      if (panelCenterCol != null && currentUser != null)
+      {
+        panelCenterCol.Controls.Clear();
+        var uc = new UserControls.ucLikesHistory(currentUser.UserID)
+        {
+          Dock = DockStyle.Fill
+        };
+        uc.OnOpenPostRequested += (s, postId) =>
+        {
+          try
+          {
+            int postIdInt = postId;
+            Form detailForm = new Form
+            {
+              Text = "Chi tiết bài viết",
+              Size = new Size(720, 650),
+              StartPosition = FormStartPosition.CenterScreen,
+              FormBorderStyle = FormBorderStyle.FixedDialog,
+              MaximizeBox = false,
+              MinimizeBox = false
+            };
+
+            var postDetailControl = new controls.ucPostDetail(postIdInt)
+            {
+              Dock = DockStyle.Fill
+            };
+            postDetailControl.CloseRequested += (cs, ce) => detailForm.Close();
+            detailForm.Controls.Add(postDetailControl);
+            detailForm.ShowDialog();
+          }
+          catch (Exception ex)
+          {
+            MessageBox.Show($"Lỗi khi mở chi tiết bài viết: {ex.Message}", "Lỗi",
+              MessageBoxButtons.OK, MessageBoxIcon.Error);
+          }
+        };
+        panelCenterCol.Controls.Add(uc);
+        uc.BringToFront();
+
+        // Theme sync
+        uc.ApplyTheme(isDarkMode);
+      }
+
+      // Ensure navigation bar stays on top
+      if (pnlSidebar != null) pnlSidebar.BringToFront();
+    }
+
     private void LoadCommentedPosts()
     {
       try
       {
         if (postService == null || currentUser == null) return;
+        // Use PostService helper to get posts user commented on
+        var posts = postService.GetPostsCommentedByUser(currentUser.UserID);
 
-        // Get posts that the current user has commented on
-        var commentedPosts = postService.GetPostsCommentedByUser(currentUser.UserID);
-        allUserPosts = commentedPosts;
-        DisplayPosts(commentedPosts);
+        allUserPosts = posts;
+        // Ensure posts list is visible
+        if (flowLayoutPanelPosts != null) flowLayoutPanelPosts.Visible = true;
+        DisplayPosts(posts);
       }
       catch (Exception ex)
       {
@@ -530,16 +703,59 @@ namespace SocialManager.frm
       try
       {
         if (postService == null || currentUser == null) return;
+        // Use PostService helper to get posts user liked
+        var posts = postService.GetPostsLikedByUser(currentUser.UserID);
 
-        // Get posts that the current user has liked
-        var likedPosts = postService.GetPostsLikedByUser(currentUser.UserID);
-        allUserPosts = likedPosts;
-        DisplayPosts(likedPosts);
+        allUserPosts = posts;
+        // Ensure posts list is visible
+        if (flowLayoutPanelPosts != null) flowLayoutPanelPosts.Visible = true;
+        DisplayPosts(posts);
       }
       catch (Exception ex)
       {
         MessageBox.Show($"Error loading liked posts: {ex.Message}", "Error",
           MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    // Restore default center layout (composer + posts list) when leaving Newsfeed view
+    private void RestoreDefaultCenterLayout()
+    {
+      try
+      {
+        if (panelCenterCol == null) return;
+
+        // If ucNewsfeed is currently displayed, remove it
+        if (ucNewsfeed != null && panelCenterCol.Controls.Contains(ucNewsfeed))
+        {
+          panelCenterCol.Controls.Remove(ucNewsfeed);
+        }
+
+        // Ensure composer is present at top
+        if (panelComposer != null && !panelCenterCol.Controls.Contains(panelComposer))
+        {
+          panelCenterCol.Controls.Add(panelComposer);
+          panelComposer.Dock = DockStyle.Top;
+          panelComposer.BringToFront();
+        }
+
+        // Ensure posts flow panel is present and visible
+        if (flowLayoutPanelPosts != null && !panelCenterCol.Controls.Contains(flowLayoutPanelPosts))
+        {
+          // Add after setting composer at top so posts fill remaining space
+          panelCenterCol.Controls.Add(flowLayoutPanelPosts);
+          flowLayoutPanelPosts.Dock = DockStyle.Fill;
+        }
+
+        if (flowLayoutPanelPosts != null)
+        {
+          flowLayoutPanelPosts.Visible = true;
+          flowLayoutPanelPosts.BringToFront();
+        }
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"RestoreDefaultCenterLayout error: {ex.Message}");
       }
     }
 
@@ -892,6 +1108,12 @@ namespace SocialManager.frm
 
       // Update underline color
       panelTabUnderline.BackColor = Color.FromArgb(10, 102, 194);
+
+      // Apply theme to ucNewsfeed if it's currently loaded
+      if (ucNewsfeed != null && panelCenterCol.Controls.Contains(ucNewsfeed))
+      {
+        ucNewsfeed.ApplyTheme(dark);
+      }
     }
 
     // Helper: Add rounded corners to button
