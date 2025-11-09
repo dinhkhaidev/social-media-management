@@ -1,4 +1,6 @@
-﻿namespace SocialManager.controls
+﻿using SocialManager.controls;
+
+namespace SocialManager.controls
 {
   partial class PostControl
   {
@@ -17,149 +19,151 @@
 
     private void InitializeComponent()
     {
-      this.gbPostContainer = new System.Windows.Forms.GroupBox();
-      this.btnDelete = new System.Windows.Forms.Button();
-      this.btnReport = new System.Windows.Forms.Button();
-      this.lblStatus = new System.Windows.Forms.Label();
-      this.btnComment = new System.Windows.Forms.Button();
-      this.btnLike = new System.Windows.Forms.Button();
-      this.lblContent = new System.Windows.Forms.Label();
-      this.lblPostInfo = new System.Windows.Forms.Label();
-      this.gbPostContainer.SuspendLayout();
-      this.SuspendLayout();
+      gbPostContainer = new GroupBox();
+      lblPostInfo = new Label();
+      lblContent = new Label();
+      btnLike = new RoundedButton();
+      btnComment = new RoundedButton();
+      btnDelete = new RoundedButton();
+      btnReport = new RoundedButton();
+      gbPostContainer.SuspendLayout();
+      SuspendLayout();
       //
       // gbPostContainer
       //
-      this.gbPostContainer.Controls.Add(this.btnDelete);
-      this.gbPostContainer.Controls.Add(this.btnReport);
-      this.gbPostContainer.Controls.Add(this.lblStatus);
-      this.gbPostContainer.Controls.Add(this.btnComment);
-      this.gbPostContainer.Controls.Add(this.btnLike);
-      this.gbPostContainer.Controls.Add(this.lblContent);
-      this.gbPostContainer.Controls.Add(this.lblPostInfo);
-      this.gbPostContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.gbPostContainer.Location = new System.Drawing.Point(5, 5);
-      this.gbPostContainer.Name = "gbPostContainer";
-      this.gbPostContainer.Padding = new System.Windows.Forms.Padding(10);
-      this.gbPostContainer.Size = new System.Drawing.Size(690, 160);
-      this.gbPostContainer.TabIndex = 0;
-      this.gbPostContainer.TabStop = false;
-      //
-      // lblStatus
-      //
-      this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.lblStatus.AutoSize = true;
-      this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
-      this.lblStatus.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-      this.lblStatus.Location = new System.Drawing.Point(582, 129);
-      this.lblStatus.Name = "lblStatus";
-      this.lblStatus.Size = new System.Drawing.Size(95, 19);
-      this.lblStatus.TabIndex = 4;
-      this.lblStatus.Text = "Đã chỉnh sửa";
-      this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-      //
-      // btnComment
-      //
-      this.btnComment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnComment.BackColor = System.Drawing.Color.WhiteSmoke;
-      this.btnComment.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-      this.btnComment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnComment.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-      this.btnComment.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-      this.btnComment.Location = new System.Drawing.Point(450, 121);
-      this.btnComment.Name = "btnComment";
-      this.btnComment.Size = new System.Drawing.Size(120, 32);
-      this.btnComment.TabIndex = 3;
-      this.btnComment.Text = "Bình luận";
-      this.btnComment.UseVisualStyleBackColor = false;
-      //
-      // btnDelete
-      //
-      this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
-      this.btnDelete.FlatAppearance.BorderSize = 0;
-      this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.btnDelete.ForeColor = System.Drawing.Color.White;
-      this.btnDelete.Location = new System.Drawing.Point(139, 121);
-      this.btnDelete.Name = "btnDelete";
-      this.btnDelete.Size = new System.Drawing.Size(80, 32);
-      this.btnDelete.TabIndex = 5;
-      this.btnDelete.Text = "✕ Xóa";
-      this.btnDelete.UseVisualStyleBackColor = false;
-      this.btnDelete.Visible = false;
-      //
-      // btnReport
-      //
-      this.btnReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-      this.btnReport.FlatAppearance.BorderSize = 0;
-      this.btnReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnReport.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.btnReport.ForeColor = System.Drawing.Color.White;
-      this.btnReport.Location = new System.Drawing.Point(225, 121);
-      this.btnReport.Name = "btnReport";
-      this.btnReport.Size = new System.Drawing.Size(90, 32);
-      this.btnReport.TabIndex = 6;
-      this.btnReport.Text = "Tố cáo";
-      this.btnReport.UseVisualStyleBackColor = false;
-      this.btnReport.Visible = false;
-      this.btnReport.Click += new System.EventHandler(this.BtnReport_Click);
-      //
-      // btnLike
-      //
-      this.btnLike.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnLike.BackColor = System.Drawing.Color.WhiteSmoke;
-      this.btnLike.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-      this.btnLike.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnLike.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-      this.btnLike.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-      this.btnLike.Location = new System.Drawing.Point(13, 121);
-      this.btnLike.Name = "btnLike";
-      this.btnLike.Size = new System.Drawing.Size(120, 32);
-      this.btnLike.TabIndex = 2;
-      this.btnLike.Text = "Thích";
-      this.btnLike.UseVisualStyleBackColor = false;
-      //
-      // lblContent
-      //
-      this.lblContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-      | System.Windows.Forms.AnchorStyles.Right)));
-      this.lblContent.AutoSize = true;
-      this.lblContent.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.lblContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-      this.lblContent.Location = new System.Drawing.Point(13, 55);
-      this.lblContent.MaximumSize = new System.Drawing.Size(660, 0);
-      this.lblContent.Name = "lblContent";
-      this.lblContent.Size = new System.Drawing.Size(232, 23);
-      this.lblContent.TabIndex = 1;
-      this.lblContent.Text = "Đây là nội dung của bài viết...";
+      gbPostContainer.Controls.Add(btnDelete);
+      gbPostContainer.Controls.Add(btnReport);
+      gbPostContainer.Controls.Add(btnComment);
+      gbPostContainer.Controls.Add(btnLike);
+      gbPostContainer.Controls.Add(lblContent);
+      gbPostContainer.Controls.Add(lblPostInfo);
+      gbPostContainer.Dock = DockStyle.Fill;
+      gbPostContainer.Location = new Point(5, 5);
+      gbPostContainer.Name = "gbPostContainer";
+      gbPostContainer.Padding = new Padding(10);
+      gbPostContainer.Size = new Size(690, 260);
+      gbPostContainer.TabIndex = 0;
+      gbPostContainer.TabStop = false;
       //
       // lblPostInfo
       //
-      this.lblPostInfo.AutoSize = true;
-      this.lblPostInfo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-      this.lblPostInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-      this.lblPostInfo.Location = new System.Drawing.Point(13, 25);
-      this.lblPostInfo.Name = "lblPostInfo";
-      this.lblPostInfo.Size = new System.Drawing.Size(201, 20);
-      this.lblPostInfo.TabIndex = 0;
-      this.lblPostInfo.Text = "ID: 12345 - 20/10/2025";
+      lblPostInfo.AutoSize = true;
+      lblPostInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+      lblPostInfo.ForeColor = SystemColors.ControlDarkDark;
+      lblPostInfo.Location = new Point(13, 25);
+      lblPostInfo.Name = "lblPostInfo";
+      lblPostInfo.Size = new Size(181, 20);
+      lblPostInfo.TabIndex = 0;
+      lblPostInfo.Text = "userName - 20/10/2025";
+      //
+      // lblContent
+      //
+      lblContent.AutoSize = true;
+      lblContent.Font = new Font("Segoe UI", 10F);
+      lblContent.ForeColor = Color.FromArgb(64, 64, 64);
+      lblContent.Location = new Point(13, 55);
+      lblContent.MaximumSize = new Size(660, 0);
+      lblContent.Name = "lblContent";
+      lblContent.Size = new Size(235, 23);
+      lblContent.TabIndex = 1;
+      lblContent.Text = "Đây là nội dung của bài viết...";
+      //
+      // btnLike
+      //
+      btnLike.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+      btnLike.BackColor = Color.WhiteSmoke;
+      btnLike.BackgroundColor = Color.WhiteSmoke;
+      btnLike.BorderColor = Color.PaleVioletRed;
+      btnLike.BorderRadius = 32;
+      btnLike.BorderSize = 0;
+      btnLike.FlatAppearance.BorderSize = 0;
+      btnLike.FlatStyle = FlatStyle.Flat;
+      btnLike.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+      btnLike.ForeColor = Color.FromArgb(64, 64, 64);
+      btnLike.Location = new Point(13, 215);
+      btnLike.Name = "btnLike";
+      btnLike.Size = new Size(120, 32);
+      btnLike.TabIndex = 2;
+      btnLike.Text = "Thích";
+      btnLike.TextColor = Color.FromArgb(64, 64, 64);
+      btnLike.UseVisualStyleBackColor = false;
+      //
+      // btnComment
+      //
+      btnComment.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+      btnComment.BackColor = Color.WhiteSmoke;
+      btnComment.BackgroundColor = Color.WhiteSmoke;
+      btnComment.BorderColor = Color.PaleVioletRed;
+      btnComment.BorderRadius = 32;
+      btnComment.BorderSize = 0;
+      btnComment.FlatAppearance.BorderSize = 0;
+      btnComment.FlatStyle = FlatStyle.Flat;
+      btnComment.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+      btnComment.ForeColor = Color.FromArgb(64, 64, 64);
+      btnComment.Location = new Point(139, 215);
+      btnComment.Name = "btnComment";
+      btnComment.Size = new Size(120, 32);
+      btnComment.TabIndex = 3;
+      btnComment.Text = "Bình luận";
+      btnComment.TextColor = Color.FromArgb(64, 64, 64);
+      btnComment.UseVisualStyleBackColor = false;
+      //
+      // btnDelete
+      //
+      btnDelete.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+      btnDelete.BackColor = Color.FromArgb(255, 83, 73);
+      btnDelete.BackgroundColor = Color.FromArgb(255, 83, 73);
+      btnDelete.BorderColor = Color.PaleVioletRed;
+      btnDelete.BorderRadius = 27;
+      btnDelete.BorderSize = 0;
+      btnDelete.FlatAppearance.BorderSize = 0;
+      btnDelete.FlatStyle = FlatStyle.Flat;
+      btnDelete.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+      btnDelete.ForeColor = Color.White;
+      btnDelete.Location = new Point(644, 18);
+      btnDelete.Name = "btnDelete";
+      btnDelete.Size = new Size(33, 33);
+      btnDelete.TabIndex = 5;
+      btnDelete.Text = "X";
+      btnDelete.TextColor = Color.White;
+      btnDelete.UseVisualStyleBackColor = false;
+      btnDelete.Visible = false;
+      //
+      // btnReport
+      //
+      btnReport.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+      btnReport.BackColor = Color.FromArgb(255, 117, 24);
+      btnReport.BackgroundColor = Color.FromArgb(255, 117, 24);
+      btnReport.BorderColor = Color.PaleVioletRed;
+      btnReport.BorderRadius = 33;
+      btnReport.BorderSize = 0;
+      btnReport.FlatAppearance.BorderSize = 0;
+      btnReport.FlatStyle = FlatStyle.Flat;
+      btnReport.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+      btnReport.ForeColor = Color.White;
+      btnReport.Location = new Point(605, 18);
+      btnReport.Name = "btnReport";
+      btnReport.Size = new Size(33, 33);
+      btnReport.TabIndex = 6;
+      btnReport.Text = "!";
+      btnReport.TextColor = Color.White;
+      btnReport.UseVisualStyleBackColor = false;
+      btnReport.Visible = false;
+      btnReport.Click += BtnReport_Click;
       //
       // PostControl
       //
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.BackColor = System.Drawing.Color.White;
-      this.Controls.Add(this.gbPostContainer);
-      this.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
-      this.Name = "PostControl";
-      this.Padding = new System.Windows.Forms.Padding(5);
-      this.Size = new System.Drawing.Size(700, 170);
-      this.gbPostContainer.ResumeLayout(false);
-      this.gbPostContainer.PerformLayout();
-      this.ResumeLayout(false);
-
+      AutoScaleDimensions = new SizeF(8F, 20F);
+      AutoScaleMode = AutoScaleMode.Font;
+      BackColor = Color.White;
+      Controls.Add(gbPostContainer);
+      Margin = new Padding(3, 3, 3, 10);
+      Name = "PostControl";
+      Padding = new Padding(5);
+      Size = new Size(700, 270);
+      gbPostContainer.ResumeLayout(false);
+      gbPostContainer.PerformLayout();
+      ResumeLayout(false);
     }
 
     #endregion
@@ -167,10 +171,9 @@
     private System.Windows.Forms.GroupBox gbPostContainer;
     private System.Windows.Forms.Label lblPostInfo;
     private System.Windows.Forms.Label lblContent;
-    private System.Windows.Forms.Button btnLike;
-    private System.Windows.Forms.Button btnComment;
-    private System.Windows.Forms.Label lblStatus;
-    private System.Windows.Forms.Button btnDelete;
-    private System.Windows.Forms.Button btnReport;
+    private RoundedButton btnLike;
+    private RoundedButton btnComment;
+    private RoundedButton btnDelete;
+    private RoundedButton btnReport;
   }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using SocialManager.services;
 using SocialManager.utils;
+using SocialManager.controls;
 
 namespace SocialManager.controls
 {
@@ -11,9 +12,11 @@ namespace SocialManager.controls
   {
     public string PostId { get; private set; } = "";
     public event EventHandler<string>? PostClicked;
+    public event EventHandler? PostReported; // Event khi bài viết bị tố cáo
 
     private Post? postData;
     private User? currentUser;
+    private User? postOwner;
     private bool isLiked = false;
     private int likesCount = 0;
     private int commentsCount = 0;
@@ -27,12 +30,12 @@ namespace SocialManager.controls
     public PostControl(Post post)
     {
       InitializeComponent();
-      SetupControl();
 
       this.postData = post;
       this.currentUser = AuthSessionService.CurrentUser;
       this.PostId = post.PostID.ToString();
 
+      SetupControl();
       LoadPostData();
       LoadLikesAndComments();
       AdjustHeight();
@@ -42,9 +45,23 @@ namespace SocialManager.controls
     {
       if (postData == null) return;
 
-      lblPostInfo.Text = $"ID: {postData.PostID} - {postData.CreatedAt:dd/MM/yyyy HH:mm}";
+      try
+      {
+        var userService = new UserService();
+        postOwner = userService.GetUserById(postData.UserID);
+
+        string displayName = postOwner?.FullName ?? "Người dùng không xác định";
+        lblPostInfo.Text = $"{displayName} - {postData.CreatedAt:dd/MM/yyyy HH:mm}";
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Lỗi tải thông tin người đăng: {ex.Message}");
+        lblPostInfo.Text = $"Người dùng - {postData.CreatedAt:dd/MM/yyyy HH:mm}";
+      }
+
       lblContent.Text = postData.Content;
-      lblStatus.Visible = postData.UpdatedAt.HasValue;
+      lblContent.MaximumSize = new System.Drawing.Size(660, 0);
+      lblContent.AutoSize = true;
     }
 
     private void LoadLikesAndComments()
@@ -57,62 +74,73 @@ namespace SocialManager.controls
         var likes = Like.GetLikesByPostId(GlobalSetting.LikesFilePath, postData.PostID);
         likesCount = likes.Count;
 
-        // Kiểm tra user đã like chưa
         if (currentUser != null)
         {
           isLiked = likes.Any(l => l.UserID == currentUser.UserID);
         }
-
-        // Load comments
         var comments = Comment.GetCommentsByPostId(GlobalSetting.CommentsFilePath, postData.PostID);
         commentsCount = comments.Count;
 
-        // Cập nhật UI
         UpdateLikeButton();
         UpdateCommentButton();
       }
       catch (Exception ex)
       {
-        Console.WriteLine($"Error loading likes/comments: {ex.Message}");
+        Console.WriteLine($"Lỗi tải lượt thích/bình luận: {ex.Message}");
       }
     }
 
     private void UpdateLikeButton()
     {
+      if (btnLike == null) return;
+
       if (isLiked)
       {
-        btnLike.Text = $"Đã thích ({likesCount})";
-        btnLike.BackColor = System.Drawing.Color.FromArgb(255, 224, 230);
+        btnLike.Text = $"♥ {likesCount}"; // Use heart symbol
+        btnLike.BackColor = System.Drawing.Color.FromArgb(255, 245, 245);
         btnLike.ForeColor = System.Drawing.Color.FromArgb(220, 53, 69);
+        btnLike.BackgroundColor = System.Drawing.Color.FromArgb(255, 245, 245);
+        btnLike.TextColor = System.Drawing.Color.FromArgb(220, 53, 69);
       }
       else
       {
-        btnLike.Text = $"Thích ({likesCount})";
-        btnLike.BackColor = System.Drawing.Color.WhiteSmoke;
-        btnLike.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+        btnLike.Text = $"♡ {likesCount}"; // Use outline heart symbol
+        btnLike.BackColor = System.Drawing.Color.FromArgb(248, 249, 250);
+        btnLike.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+        btnLike.BackgroundColor = System.Drawing.Color.FromArgb(248, 249, 250);
+        btnLike.TextColor = System.Drawing.Color.FromArgb(108, 117, 125);
       }
     }
 
     private void UpdateCommentButton()
     {
-      btnComment.Text = $"Bình luận ({commentsCount})";
+      if (btnComment == null) return;
+      btnComment.Text = $"💬 {commentsCount}"; // Use speech bubble symbol
+      btnComment.BackColor = System.Drawing.Color.FromArgb(248, 249, 250);
+      btnComment.ForeColor = System.Drawing.Color.FromArgb(108, 117, 125);
+      btnComment.BackgroundColor = System.Drawing.Color.FromArgb(248, 249, 250);
+      btnComment.TextColor = System.Drawing.Color.FromArgb(108, 117, 125);
     }
 
     private void SetupControl()
     {
       this.DoubleBuffered = true;
       this.Click += (s, e) => OnPostClicked();
-      this.gbPostContainer.Click += (s, e) => OnPostClicked();
-      this.lblContent.Click += (s, e) => OnPostClicked();
-      this.lblPostInfo.Click += (s, e) => OnPostClicked();
 
-      this.btnLike.Click += BtnLike_Click;
-      this.btnComment.Click += BtnComment_Click;
+      if (gbPostContainer != null)
+        this.gbPostContainer.Click += (s, e) => OnPostClicked();
 
-      // Apply rounded corners
-      UIHelper.ApplyRoundedCorners(gbPostContainer, 15);
-      UIHelper.ApplyRoundedCorners(btnLike, 8);
-      UIHelper.ApplyRoundedCorners(btnComment, 8);
+      if (lblContent != null)
+        this.lblContent.Click += (s, e) => OnPostClicked();
+
+      if (lblPostInfo != null)
+        this.lblPostInfo.Click += (s, e) => OnPostClicked();
+
+      if (btnLike != null)
+        this.btnLike.Click += BtnLike_Click;
+
+      if (btnComment != null)
+        this.btnComment.Click += BtnComment_Click;
 
       if (postData != null && currentUser != null)
       {
@@ -121,14 +149,11 @@ namespace SocialManager.controls
         {
           btnDelete.Visible = true;
           btnDelete.Click += BtnDelete_Click;
-          UIHelper.ApplyRoundedCorners(btnDelete, 8);
         }
 
-        // Show report button if not own post
         if (postData.UserID != currentUser.UserID && btnReport != null)
         {
           btnReport.Visible = true;
-          UIHelper.ApplyRoundedCorners(btnReport, 8);
         }
       }
     }
@@ -173,8 +198,7 @@ namespace SocialManager.controls
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Lỗi khi thích/bỏ thích: {ex.Message}", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show($"Lỗi khi thích/bỏ thích: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -182,12 +206,7 @@ namespace SocialManager.controls
     {
       if (postData == null || currentUser == null) return;
 
-      // Hiển thị dialog để nhập comment
-      string commentContent = Microsoft.VisualBasic.Interaction.InputBox(
-          "Nhập bình luận của bạn:",
-          "Thêm bình luận",
-          "",
-          -1, -1);
+      string commentContent = Microsoft.VisualBasic.Interaction.InputBox("Nhập bình luận của bạn:", "Thêm bình luận", "", -1, -1);
 
       if (string.IsNullOrWhiteSpace(commentContent))
         return;
@@ -208,14 +227,12 @@ namespace SocialManager.controls
         {
           commentsCount++;
           UpdateCommentButton();
-          MessageBox.Show("Đã thêm bình luận!", "Thành công",
-              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          MessageBox.Show("Đã bình luận!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Lỗi khi thêm bình luận: {ex.Message}", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show($"Lỗi khi bình luận: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -224,10 +241,7 @@ namespace SocialManager.controls
       if (postData == null || currentUser == null) return;
 
       var result = MessageBox.Show(
-          "Bạn có chắc muốn xóa bài viết này?\n(Bài viết sẽ bị ẩn, không hiển thị với người dùng khác)",
-          "Xác nhận xóa",
-          MessageBoxButtons.YesNo,
-          MessageBoxIcon.Warning);
+          "Bạn có chắc muốn xóa bài viết này?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
       if (result != DialogResult.Yes)
         return;
@@ -237,20 +251,17 @@ namespace SocialManager.controls
         var postService = new PostService();
         if (postService.SoftDeletePost(postData.PostID))
         {
-          MessageBox.Show("Đã xóa bài viết!", "Thành công",
-              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          MessageBox.Show("Đã xóa bài viết!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
           this.Visible = false;
         }
         else
         {
-          MessageBox.Show("Không thể xóa bài viết!", "Lỗi",
-              MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show("Không thể xóa bài viết!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Lỗi khi xóa bài viết: {ex.Message}", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show($"Lỗi khi xóa bài viết: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -259,10 +270,7 @@ namespace SocialManager.controls
       if (postData == null || currentUser == null) return;
 
       var result = MessageBox.Show(
-          "Bạn có chắc muốn tố cáo bài viết này?\n(Bài viết sẽ bị ẩn và tài khoản bị báo cáo sẽ được ghi nhận)",
-          "Xác nhận tố cáo",
-          MessageBoxButtons.YesNo,
-          MessageBoxIcon.Warning);
+          "Bạn có chắc muốn tố cáo bài viết này?", "Xác nhận tố cáo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
       if (result != DialogResult.Yes)
         return;
@@ -274,26 +282,51 @@ namespace SocialManager.controls
 
         if (success)
         {
-          MessageBox.Show("Đã tố cáo bài viết thành công!\nBài viết đã bị ẩn.", "Thành công",
-              MessageBoxButtons.OK, MessageBoxIcon.Information);
+          MessageBox.Show("Đã tố cáo bài viết thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+          // Ẩn bài viết
           this.Visible = false;
+
+          // Fire event để parent refresh lại danh sách
+          PostReported?.Invoke(this, EventArgs.Empty);
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show($"Lỗi khi tố cáo bài viết: {ex.Message}", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show($"Lỗi khi tố cáo bài viết: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
     private void AdjustHeight()
     {
-      int topPadding = gbPostContainer.Padding.Top;
-      int bottomPadding = gbPostContainer.Padding.Bottom;
-      int contentBottom = lblContent.Top + lblContent.Height;
-      int buttonsTop = btnLike.Top;
+      if (lblContent == null || btnLike == null || gbPostContainer == null)
+        return;
 
-      this.Height = contentBottom + (buttonsTop - contentBottom) + btnLike.Height + topPadding + bottomPadding;
+      try
+      {
+        int padding = 20;
+        int infoHeight = lblPostInfo.Bottom;
+        int contentHeight = lblContent.Height;
+        int buttonHeight = 32;
+        int spacing = 15;
+
+        int totalHeight = infoHeight + spacing + contentHeight + spacing + buttonHeight + padding + 30;
+
+        if (totalHeight < 150)
+          totalHeight = 150;
+
+        this.Height = totalHeight;
+        gbPostContainer.Height = totalHeight - 10;
+
+        int buttonsY = gbPostContainer.Height - buttonHeight - 15;
+        btnLike.Top = buttonsY;
+        btnComment.Top = buttonsY;
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine(ex.Message);
+        this.Height = 270;
+      }
     }
 
     private void OnPostClicked()

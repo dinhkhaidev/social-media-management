@@ -10,468 +10,779 @@ namespace SocialManager.frm
       base.Dispose(disposing);
     }
 
-    #region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-    private void InitializeComponent()
-    {
-      this.components = new System.ComponentModel.Container();
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+            panelHeader = new Panel();
+            panelHeaderRight = new Panel();
+            panelHeaderActions = new FlowLayoutPanel();
+            btnLogout = new Button();
+            btnSettings = new Button();
+            btnNewsfeed = new Button();
+            txtSearch = new SocialManager.controls.RoundedTextBox();
+            btnNewPost = new Button();
+            btnThemeToggle = new Button();
+            panelProfileHeader = new Panel();
+            panelTabs = new Panel();
+            btnTabBaiViet = new Button();
+            panelTabUnderline = new Panel();
+            panelProfileInfo = new Panel();
+            picProfileLarge = new PictureBox();
+            lblProfileName = new Label();
+            lblFollowerStats = new Label();
+            btnEditProfile = new Button();
+            menuAvatar = new ContextMenuStrip(components);
+            miDangXuat = new ToolStripMenuItem();
+            panelContent = new Panel();
+            tableLayout = new TableLayoutPanel();
+            panelLeftCol = new Panel();
+            panelUserInfo = new Panel();
+            gbUserInfo = new GroupBox();
+            lblDOBTitle = new Label();
+            lblDOBValue = new Label();
+            lblEmailTitle = new Label();
+            lblEmailValue = new Label();
+            lblPhoneTitle = new Label();
+            lblPhoneValue = new Label();
+            lblCityTitle = new Label();
+            lblCityValue = new Label();
+            panelCenterCol = new Panel();
+            flowLayoutPanelPosts = new FlowLayoutPanel();
+            panelComposer = new Panel();
+            picComposerAvatar = new PictureBox();
+            lblComposerPlaceholder = new Label();
+            panelRightCol = new Panel();
+            panelFilter = new Panel();
+            gbFilter = new GroupBox();
+            lblType = new Label();
+            cboType = new ComboBox();
+            lblFromDate = new Label();
+            dtpFrom = new DateTimePicker();
+            lblToDate = new Label();
+            dtpTo = new DateTimePicker();
+            lblPostId = new Label();
+            txtPostId = new SocialManager.controls.RoundedTextBox();
+            lblSearch = new Label();
+            btnClearFilter = new SocialManager.controls.RoundedButton();
+            btnApplyFilter = new SocialManager.controls.RoundedButton();
+            panelHeader.SuspendLayout();
+            panelHeaderRight.SuspendLayout();
+            panelHeaderActions.SuspendLayout();
+            panelProfileHeader.SuspendLayout();
+            panelTabs.SuspendLayout();
+            panelProfileInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picProfileLarge).BeginInit();
+            menuAvatar.SuspendLayout();
+            panelContent.SuspendLayout();
+            tableLayout.SuspendLayout();
+            panelLeftCol.SuspendLayout();
+            panelUserInfo.SuspendLayout();
+            gbUserInfo.SuspendLayout();
+            panelCenterCol.SuspendLayout();
+            panelComposer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picComposerAvatar).BeginInit();
+            panelRightCol.SuspendLayout();
+            panelFilter.SuspendLayout();
+            gbFilter.SuspendLayout();
+            SuspendLayout();
+            //
+            // panelHeader
+            //
+            panelHeader.BackColor = Color.White;
+            panelHeader.Controls.Add(panelHeaderRight);
+            panelHeader.Dock = DockStyle.Top;
+            panelHeader.Location = new Point(0, 0);
+            panelHeader.Name = "panelHeader";
+            panelHeader.Size = new Size(1262, 60);
+            panelHeader.TabIndex = 5;
+            //
+            // panelHeaderRight
+            //
+            panelHeaderRight.Controls.Add(panelHeaderActions);
+            panelHeaderRight.Dock = DockStyle.Fill;
+            panelHeaderRight.Location = new Point(0, 0);
+            panelHeaderRight.Name = "panelHeaderRight";
+            panelHeaderRight.Padding = new Padding(8, 10, 12, 10);
+            panelHeaderRight.Size = new Size(1262, 60);
+            panelHeaderRight.TabIndex = 0;
+            //
+            // panelHeaderActions
+            //
+            panelHeaderActions.BackColor = Color.Transparent;
+            panelHeaderActions.Controls.Add(btnLogout);
+            panelHeaderActions.Controls.Add(btnSettings);
+            panelHeaderActions.Controls.Add(btnNewsfeed);
+            panelHeaderActions.Dock = DockStyle.Fill;
+            panelHeaderActions.FlowDirection = FlowDirection.RightToLeft;
+            panelHeaderActions.Location = new Point(8, 10);
+            panelHeaderActions.Name = "panelHeaderActions";
+            panelHeaderActions.Size = new Size(1242, 40);
+            panelHeaderActions.TabIndex = 0;
+            panelHeaderActions.WrapContents = false;
+            //
+            // btnLogout
+            //
+            btnLogout.Anchor = AnchorStyles.Right;
+            btnLogout.BackColor = Color.FromArgb(228, 230, 235);
+            btnLogout.Cursor = Cursors.Hand;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("Segoe UI", 9F);
+            btnLogout.ForeColor = Color.FromArgb(33, 33, 33);
+            btnLogout.Location = new Point(1152, 0);
+            btnLogout.Margin = new Padding(8, 0, 0, 0);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(90, 36);
+            btnLogout.TabIndex = 0;
+            btnLogout.Text = "Đăng xuất";
+            btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click;
+            //
+            // btnSettings
+            //
+            btnSettings.AutoSize = true;
+            btnSettings.BackColor = Color.FromArgb(228, 230, 235);
+            btnSettings.Cursor = Cursors.Hand;
+            btnSettings.FlatAppearance.BorderSize = 0;
+            btnSettings.FlatStyle = FlatStyle.Flat;
+            btnSettings.ForeColor = Color.FromArgb(33, 33, 33);
+            btnSettings.Location = new Point(942, 0);
+            btnSettings.Margin = new Padding(8, 0, 0, 0);
+            btnSettings.Name = "btnSettings";
+            btnSettings.Size = new Size(202, 36);
+            btnSettings.TabIndex = 1;
+            btnSettings.Text = "Chỉnh sửa thông tin cá nhân";
+            btnSettings.UseVisualStyleBackColor = false;
+            btnSettings.Click += btnSettings_Click;
+            //
+            // btnNewsfeed
+            //
+            btnNewsfeed.AutoSize = true;
+            btnNewsfeed.BackColor = Color.FromArgb(24, 119, 242);
+            btnNewsfeed.Cursor = Cursors.Hand;
+            btnNewsfeed.FlatAppearance.BorderSize = 0;
+            btnNewsfeed.FlatStyle = FlatStyle.Flat;
+            btnNewsfeed.ForeColor = Color.White;
+            btnNewsfeed.Location = new Point(814, 0);
+            btnNewsfeed.Margin = new Padding(8, 0, 0, 0);
+            btnNewsfeed.Name = "btnNewsfeed";
+            btnNewsfeed.Size = new Size(120, 36);
+            btnNewsfeed.TabIndex = 2;
+            btnNewsfeed.Text = "Newsfeed";
+            btnNewsfeed.UseVisualStyleBackColor = false;
+            btnNewsfeed.Click += btnNewsfeed_Click;
+            //
+            // txtSearch
+            //
+            txtSearch.BackColor = Color.White;
+            txtSearch.BorderColor = Color.MediumSlateBlue;
+            txtSearch.BorderFocusColor = Color.HotPink;
+            txtSearch.BorderRadius = 10;
+            txtSearch.BorderSize = 2;
+            txtSearch.Font = new Font("Segoe UI", 10F);
+            txtSearch.ForeColor = Color.FromArgb(64, 64, 64);
+            txtSearch.Location = new Point(20, 385);
+            txtSearch.Multiline = false;
+            txtSearch.Name = "txtSearch";
+            txtSearch.Padding = new Padding(10, 7, 10, 7);
+            txtSearch.PasswordChar = false;
+            txtSearch.PlaceholderColor = Color.DarkGray;
+            txtSearch.PlaceholderText = "Tìm kiếm bài viết...";
+            txtSearch.Size = new Size(300, 38);
+            txtSearch.TabIndex = 9;
+            txtSearch.UnderlinedStyle = false;
+            //
+            // btnNewPost
+            //
+            btnNewPost.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnNewPost.BackColor = Color.FromArgb(10, 102, 194);
+            btnNewPost.Cursor = Cursors.Hand;
+            btnNewPost.FlatAppearance.BorderSize = 0;
+            btnNewPost.FlatStyle = FlatStyle.Flat;
+            btnNewPost.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            btnNewPost.ForeColor = Color.White;
+            btnNewPost.Location = new Point(20, 20);
+            btnNewPost.Name = "btnNewPost";
+            btnNewPost.Size = new Size(48, 48);
+            btnNewPost.TabIndex = 2;
+            btnNewPost.Text = "+";
+            btnNewPost.UseVisualStyleBackColor = false;
+            btnNewPost.Click += btnNewPost_Click;
+            //
+            // btnThemeToggle
+            //
+            btnThemeToggle.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnThemeToggle.BackColor = Color.FromArgb(228, 230, 235);
+            btnThemeToggle.Cursor = Cursors.Hand;
+            btnThemeToggle.FlatAppearance.BorderSize = 0;
+            btnThemeToggle.FlatStyle = FlatStyle.Flat;
+            btnThemeToggle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            btnThemeToggle.ForeColor = Color.FromArgb(33, 33, 33);
+            btnThemeToggle.Location = new Point(20, 20);
+            btnThemeToggle.Name = "btnThemeToggle";
+            btnThemeToggle.Size = new Size(56, 56);
+            btnThemeToggle.TabIndex = 1;
+            btnThemeToggle.Text = "◐";
+            btnThemeToggle.UseVisualStyleBackColor = false;
+            btnThemeToggle.Click += btnThemeToggle_Click;
+            //
+            // panelProfileHeader
+            //
+            panelProfileHeader.BackColor = Color.White;
+            panelProfileHeader.Controls.Add(panelTabs);
+            panelProfileHeader.Controls.Add(panelProfileInfo);
+            panelProfileHeader.Dock = DockStyle.Top;
+            panelProfileHeader.Location = new Point(0, 60);
+            panelProfileHeader.Name = "panelProfileHeader";
+            panelProfileHeader.Size = new Size(1262, 150);
+            panelProfileHeader.TabIndex = 4;
+            //
+            // panelTabs
+            //
+            panelTabs.BackColor = Color.White;
+            panelTabs.Controls.Add(btnTabBaiViet);
+            panelTabs.Controls.Add(panelTabUnderline);
+            panelTabs.Dock = DockStyle.Top;
+            panelTabs.Location = new Point(0, 106);
+            panelTabs.Name = "panelTabs";
+            panelTabs.Padding = new Padding(0, 0, 0, 6);
+            panelTabs.Size = new Size(1262, 44);
+            panelTabs.TabIndex = 0;
+            //
+            // btnTabBaiViet
+            //
+            btnTabBaiViet.Location = new Point(0, 0);
+            btnTabBaiViet.Name = "btnTabBaiViet";
+            btnTabBaiViet.Size = new Size(75, 23);
+            btnTabBaiViet.TabIndex = 0;
+            btnTabBaiViet.Click += TabButton_Click;
+            //
+            // panelTabUnderline
+            //
+            panelTabUnderline.BackColor = Color.FromArgb(10, 102, 194);
+            panelTabUnderline.Location = new Point(20, 42);
+            panelTabUnderline.Name = "panelTabUnderline";
+            panelTabUnderline.Size = new Size(90, 2);
+            panelTabUnderline.TabIndex = 1;
+            //
+            // panelProfileInfo
+            //
+            panelProfileInfo.BackColor = Color.White;
+            panelProfileInfo.Controls.Add(picProfileLarge);
+            panelProfileInfo.Controls.Add(lblProfileName);
+            panelProfileInfo.Controls.Add(lblFollowerStats);
+            panelProfileInfo.Controls.Add(btnEditProfile);
+            panelProfileInfo.Dock = DockStyle.Top;
+            panelProfileInfo.Location = new Point(0, 0);
+            panelProfileInfo.Name = "panelProfileInfo";
+            panelProfileInfo.Padding = new Padding(24, 8, 24, 8);
+            panelProfileInfo.Size = new Size(1262, 106);
+            panelProfileInfo.TabIndex = 1;
+            //
+            // picProfileLarge
+            //
+            picProfileLarge.BackColor = Color.LightGray;
+            picProfileLarge.Location = new Point(24, 8);
+            picProfileLarge.Name = "picProfileLarge";
+            picProfileLarge.Size = new Size(90, 90);
+            picProfileLarge.SizeMode = PictureBoxSizeMode.Zoom;
+            picProfileLarge.TabIndex = 0;
+            picProfileLarge.TabStop = false;
+            //
+            // lblProfileName
+            //
+            lblProfileName.AutoSize = true;
+            lblProfileName.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblProfileName.Location = new Point(130, 15);
+            lblProfileName.Name = "lblProfileName";
+            lblProfileName.Size = new Size(156, 37);
+            lblProfileName.TabIndex = 1;
+            lblProfileName.Text = "Tên đầy đủ";
+            //
+            // lblFollowerStats
+            //
+            lblFollowerStats.AutoSize = true;
+            lblFollowerStats.Font = new Font("Segoe UI", 9F);
+            lblFollowerStats.ForeColor = Color.FromArgb(102, 102, 102);
+            lblFollowerStats.Location = new Point(130, 52);
+            lblFollowerStats.Name = "lblFollowerStats";
+            lblFollowerStats.Size = new Size(87, 20);
+            lblFollowerStats.TabIndex = 2;
+            lblFollowerStats.Text = "@username";
+            //
+            // btnEditProfile
+            //
+            btnEditProfile.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnEditProfile.BackColor = Color.FromArgb(228, 230, 235);
+            btnEditProfile.Cursor = Cursors.Hand;
+            btnEditProfile.FlatAppearance.BorderSize = 0;
+            btnEditProfile.FlatStyle = FlatStyle.Flat;
+            btnEditProfile.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnEditProfile.ForeColor = Color.FromArgb(33, 33, 33);
+            btnEditProfile.Location = new Point(2162, 32);
+            btnEditProfile.Name = "btnEditProfile";
+            btnEditProfile.Size = new Size(140, 36);
+            btnEditProfile.TabIndex = 3;
+            btnEditProfile.Text = "Chỉnh sửa hồ sơ";
+            btnEditProfile.UseVisualStyleBackColor = false;
+            btnEditProfile.Click += btnSettings_Click;
+            //
+            // menuAvatar
+            //
+            menuAvatar.ImageScalingSize = new Size(20, 20);
+            menuAvatar.Items.AddRange(new ToolStripItem[] { miDangXuat });
+            menuAvatar.Name = "menuAvatar";
+            menuAvatar.Size = new Size(147, 28);
+            //
+            // miDangXuat
+            //
+            miDangXuat.Name = "miDangXuat";
+            miDangXuat.Size = new Size(146, 24);
+            miDangXuat.Text = "Đăng xuất";
+            miDangXuat.Click += btnLogout_Click;
+            //
+            // panelContent
+            //
+            panelContent.Controls.Add(tableLayout);
+            panelContent.Dock = DockStyle.Fill;
+            panelContent.Location = new Point(0, 210);
+            panelContent.Name = "panelContent";
+            panelContent.Padding = new Padding(16, 8, 16, 16);
+            panelContent.Size = new Size(1262, 563);
+            panelContent.TabIndex = 3;
+            //
+            // tableLayout
+            //
+            tableLayout.ColumnCount = 3;
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 360F));
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 450F));
+            tableLayout.Controls.Add(panelLeftCol, 0, 0);
+            tableLayout.Controls.Add(panelCenterCol, 1, 0);
+            tableLayout.Controls.Add(panelRightCol, 2, 0);
+            tableLayout.Dock = DockStyle.Fill;
+            tableLayout.Location = new Point(16, 8);
+            tableLayout.Name = "tableLayout";
+            tableLayout.Padding = new Padding(0, 8, 0, 0);
+            tableLayout.RowCount = 1;
+            tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayout.Size = new Size(1230, 539);
+            tableLayout.TabIndex = 0;
+            //
+            // panelLeftCol
+            //
+            panelLeftCol.Controls.Add(panelUserInfo);
+            panelLeftCol.Dock = DockStyle.Fill;
+            panelLeftCol.Location = new Point(3, 11);
+            panelLeftCol.Name = "panelLeftCol";
+            panelLeftCol.Padding = new Padding(16);
+            panelLeftCol.Size = new Size(354, 525);
+            panelLeftCol.TabIndex = 0;
+            //
+            // panelUserInfo
+            //
+            panelUserInfo.Controls.Add(gbUserInfo);
+            panelUserInfo.Dock = DockStyle.Top;
+            panelUserInfo.Location = new Point(16, 16);
+            panelUserInfo.Name = "panelUserInfo";
+            panelUserInfo.Padding = new Padding(10);
+            panelUserInfo.Size = new Size(322, 520);
+            panelUserInfo.TabIndex = 0;
+            panelUserInfo.Paint += PanelCard_Paint;
+            //
+            // gbUserInfo
+            //
+            gbUserInfo.Controls.Add(lblDOBTitle);
+            gbUserInfo.Controls.Add(lblDOBValue);
+            gbUserInfo.Controls.Add(lblEmailTitle);
+            gbUserInfo.Controls.Add(lblEmailValue);
+            gbUserInfo.Controls.Add(lblPhoneTitle);
+            gbUserInfo.Controls.Add(lblPhoneValue);
+            gbUserInfo.Controls.Add(lblCityTitle);
+            gbUserInfo.Controls.Add(lblCityValue);
+            gbUserInfo.Dock = DockStyle.Fill;
+            gbUserInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            gbUserInfo.Location = new Point(10, 10);
+            gbUserInfo.Name = "gbUserInfo";
+            gbUserInfo.Padding = new Padding(20, 30, 20, 20);
+            gbUserInfo.Size = new Size(302, 500);
+            gbUserInfo.TabIndex = 0;
+            gbUserInfo.TabStop = false;
+            gbUserInfo.Text = "Thông tin cá nhân";
+            //
+            // lblDOBTitle
+            //
+            lblDOBTitle.AutoSize = true;
+            lblDOBTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblDOBTitle.Location = new Point(25, 45);
+            lblDOBTitle.Name = "lblDOBTitle";
+            lblDOBTitle.Size = new Size(123, 23);
+            lblDOBTitle.TabIndex = 0;
+            lblDOBTitle.Text = "📅 Ngày sinh:";
+            //
+            // lblDOBValue
+            //
+            lblDOBValue.AutoSize = true;
+            lblDOBValue.Font = new Font("Segoe UI", 10F);
+            lblDOBValue.ForeColor = Color.FromArgb(66, 66, 66);
+            lblDOBValue.Location = new Point(25, 72);
+            lblDOBValue.Name = "lblDOBValue";
+            lblDOBValue.Size = new Size(96, 23);
+            lblDOBValue.TabIndex = 1;
+            lblDOBValue.Text = "01/01/2000";
+            //
+            // lblEmailTitle
+            //
+            lblEmailTitle.AutoSize = true;
+            lblEmailTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblEmailTitle.Location = new Point(25, 115);
+            lblEmailTitle.Name = "lblEmailTitle";
+            lblEmailTitle.Size = new Size(88, 23);
+            lblEmailTitle.TabIndex = 2;
+            lblEmailTitle.Text = "✉ Email:";
+            //
+            // lblEmailValue
+            //
+            lblEmailValue.AutoSize = true;
+            lblEmailValue.Font = new Font("Segoe UI", 10F);
+            lblEmailValue.ForeColor = Color.FromArgb(66, 66, 66);
+            lblEmailValue.Location = new Point(25, 142);
+            lblEmailValue.Name = "lblEmailValue";
+            lblEmailValue.Size = new Size(159, 23);
+            lblEmailValue.TabIndex = 3;
+            lblEmailValue.Text = "user@example.com";
+            //
+            // lblPhoneTitle
+            //
+            lblPhoneTitle.AutoSize = true;
+            lblPhoneTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblPhoneTitle.Location = new Point(25, 185);
+            lblPhoneTitle.Name = "lblPhoneTitle";
+            lblPhoneTitle.Size = new Size(121, 23);
+            lblPhoneTitle.TabIndex = 4;
+            lblPhoneTitle.Text = "Số điện thoại:";
+            //
+            // lblPhoneValue
+            //
+            lblPhoneValue.AutoSize = true;
+            lblPhoneValue.Font = new Font("Segoe UI", 10F);
+            lblPhoneValue.ForeColor = Color.FromArgb(66, 66, 66);
+            lblPhoneValue.Location = new Point(25, 212);
+            lblPhoneValue.Name = "lblPhoneValue";
+            lblPhoneValue.Size = new Size(100, 23);
+            lblPhoneValue.TabIndex = 5;
+            lblPhoneValue.Text = "0123456789";
+            //
+            // lblCityTitle
+            //
+            lblCityTitle.AutoSize = true;
+            lblCityTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblCityTitle.Location = new Point(25, 255);
+            lblCityTitle.Name = "lblCityTitle";
+            lblCityTitle.Size = new Size(82, 23);
+            lblCityTitle.TabIndex = 6;
+            lblCityTitle.Text = "Sống tại:";
+            //
+            // lblCityValue
+            //
+            lblCityValue.AutoSize = true;
+            lblCityValue.Font = new Font("Segoe UI", 10F);
+            lblCityValue.ForeColor = Color.FromArgb(66, 66, 66);
+            lblCityValue.Location = new Point(25, 282);
+            lblCityValue.Name = "lblCityValue";
+            lblCityValue.Size = new Size(63, 23);
+            lblCityValue.TabIndex = 7;
+            lblCityValue.Text = "Hà Nội";
+            //
+            // panelCenterCol
+            //
+            panelCenterCol.Controls.Add(flowLayoutPanelPosts);
+            panelCenterCol.Controls.Add(panelComposer);
+            panelCenterCol.Dock = DockStyle.Fill;
+            panelCenterCol.Location = new Point(363, 11);
+            panelCenterCol.Name = "panelCenterCol";
+            panelCenterCol.Padding = new Padding(10, 0, 10, 10);
+            panelCenterCol.Size = new Size(414, 525);
+            panelCenterCol.TabIndex = 1;
+            //
+            // flowLayoutPanelPosts
+            //
+            flowLayoutPanelPosts.AutoScroll = true;
+            flowLayoutPanelPosts.Dock = DockStyle.Fill;
+            flowLayoutPanelPosts.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanelPosts.Location = new Point(10, 80);
+            flowLayoutPanelPosts.Name = "flowLayoutPanelPosts";
+            flowLayoutPanelPosts.Size = new Size(394, 435);
+            flowLayoutPanelPosts.TabIndex = 0;
+            flowLayoutPanelPosts.WrapContents = false;
+            //
+            // panelComposer
+            //
+            panelComposer.BackColor = Color.White;
+            panelComposer.Controls.Add(picComposerAvatar);
+            panelComposer.Controls.Add(lblComposerPlaceholder);
+            panelComposer.Cursor = Cursors.Hand;
+            panelComposer.Dock = DockStyle.Top;
+            panelComposer.Location = new Point(10, 0);
+            panelComposer.Margin = new Padding(0, 8, 0, 8);
+            panelComposer.Name = "panelComposer";
+            panelComposer.Padding = new Padding(16);
+            panelComposer.Size = new Size(394, 80);
+            panelComposer.TabIndex = 1;
+            panelComposer.Click += panelComposer_Click;
+            panelComposer.Paint += PanelCard_Paint;
+            //
+            // picComposerAvatar
+            //
+            picComposerAvatar.BackColor = Color.LightGray;
+            picComposerAvatar.Location = new Point(20, 20);
+            picComposerAvatar.Name = "picComposerAvatar";
+            picComposerAvatar.Size = new Size(40, 40);
+            picComposerAvatar.SizeMode = PictureBoxSizeMode.Zoom;
+            picComposerAvatar.TabIndex = 0;
+            picComposerAvatar.TabStop = false;
+            picComposerAvatar.Click += panelComposer_Click;
+            //
+            // lblComposerPlaceholder
+            //
+            lblComposerPlaceholder.AutoSize = true;
+            lblComposerPlaceholder.Font = new Font("Segoe UI", 10F);
+            lblComposerPlaceholder.ForeColor = Color.FromArgb(102, 102, 102);
+            lblComposerPlaceholder.Location = new Point(76, 28);
+            lblComposerPlaceholder.Name = "lblComposerPlaceholder";
+            lblComposerPlaceholder.Size = new Size(149, 23);
+            lblComposerPlaceholder.TabIndex = 1;
+            lblComposerPlaceholder.Text = "Bạn đang nghĩ gì?";
+            lblComposerPlaceholder.Click += panelComposer_Click;
+            //
+            // panelRightCol
+            //
+            panelRightCol.Controls.Add(panelFilter);
+            panelRightCol.Dock = DockStyle.Fill;
+            panelRightCol.Location = new Point(783, 11);
+            panelRightCol.Name = "panelRightCol";
+            panelRightCol.Padding = new Padding(10, 0, 16, 10);
+            panelRightCol.Size = new Size(444, 525);
+            panelRightCol.TabIndex = 2;
+            //
+            // panelFilter
+            //
+            panelFilter.Controls.Add(gbFilter);
+            panelFilter.Dock = DockStyle.Top;
+            panelFilter.Location = new Point(10, 0);
+            panelFilter.Name = "panelFilter";
+            panelFilter.Padding = new Padding(10);
+            panelFilter.Size = new Size(418, 540);
+            panelFilter.TabIndex = 0;
+            panelFilter.Paint += PanelCard_Paint;
+            //
+            // gbFilter
+            //
+            gbFilter.Controls.Add(lblType);
+            gbFilter.Controls.Add(cboType);
+            gbFilter.Controls.Add(lblFromDate);
+            gbFilter.Controls.Add(dtpFrom);
+            gbFilter.Controls.Add(lblToDate);
+            gbFilter.Controls.Add(dtpTo);
+            gbFilter.Controls.Add(lblPostId);
+            gbFilter.Controls.Add(txtPostId);
+            gbFilter.Controls.Add(lblSearch);
+            gbFilter.Controls.Add(txtSearch);
+            gbFilter.Controls.Add(btnClearFilter);
+            gbFilter.Controls.Add(btnApplyFilter);
+            gbFilter.Dock = DockStyle.Fill;
+            gbFilter.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            gbFilter.Location = new Point(10, 10);
+            gbFilter.Name = "gbFilter";
+            gbFilter.Size = new Size(398, 520);
+            gbFilter.TabIndex = 0;
+            gbFilter.TabStop = false;
+            gbFilter.Text = "Bộ lọc";
+            //
+            // lblType
+            //
+            lblType.AutoSize = true;
+            lblType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblType.Location = new Point(20, 45);
+            lblType.Name = "lblType";
+            lblType.Size = new Size(108, 23);
+            lblType.TabIndex = 0;
+            lblType.Text = "Loại bài viết";
+            //
+            // cboType
+            //
+            cboType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboType.Font = new Font("Segoe UI", 10F);
+            cboType.Items.AddRange(new object[] { "Tất cả", "Status", "Image", "Video" });
+            cboType.Location = new Point(20, 72);
+            cboType.Name = "cboType";
+            cboType.Size = new Size(300, 31);
+            cboType.TabIndex = 1;
+            //
+            // lblFromDate
+            //
+            lblFromDate.AutoSize = true;
+            lblFromDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblFromDate.Location = new Point(20, 125);
+            lblFromDate.Name = "lblFromDate";
+            lblFromDate.Size = new Size(75, 23);
+            lblFromDate.TabIndex = 2;
+            lblFromDate.Text = "Từ ngày";
+            //
+            // dtpFrom
+            //
+            dtpFrom.Font = new Font("Segoe UI", 10F);
+            dtpFrom.Location = new Point(20, 152);
+            dtpFrom.MaxDate = new DateTime(2026, 11, 9, 10, 44, 7, 812);
+            dtpFrom.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
+            dtpFrom.Name = "dtpFrom";
+            dtpFrom.Size = new Size(300, 30);
+            dtpFrom.TabIndex = 3;
+            dtpFrom.Value = new DateTime(2025, 10, 9, 10, 44, 7, 813);
+            //
+            // lblToDate
+            //
+            lblToDate.AutoSize = true;
+            lblToDate.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblToDate.Location = new Point(20, 200);
+            lblToDate.Name = "lblToDate";
+            lblToDate.Size = new Size(86, 23);
+            lblToDate.TabIndex = 4;
+            lblToDate.Text = "Đến ngày";
+            //
+            // dtpTo
+            //
+            dtpTo.Font = new Font("Segoe UI", 10F);
+            dtpTo.Location = new Point(20, 227);
+            dtpTo.MaxDate = new DateTime(2026, 11, 9, 10, 44, 7, 814);
+            dtpTo.MinDate = new DateTime(2000, 1, 1, 0, 0, 0, 0);
+            dtpTo.Name = "dtpTo";
+            dtpTo.Size = new Size(300, 30);
+            dtpTo.TabIndex = 5;
+            dtpTo.Value = new DateTime(2025, 11, 9, 10, 44, 7, 814);
+            //
+            // lblPostId
+            //
+            lblPostId.AutoSize = true;
+            lblPostId.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblPostId.Location = new Point(20, 275);
+            lblPostId.Name = "lblPostId";
+            lblPostId.Size = new Size(93, 23);
+            lblPostId.TabIndex = 6;
+            lblPostId.Text = "ID Bài viết";
+            //
+            // txtPostId
+            //
+            txtPostId.BackColor = Color.White;
+            txtPostId.BorderColor = Color.MediumSlateBlue;
+            txtPostId.BorderFocusColor = Color.HotPink;
+            txtPostId.BorderRadius = 0;
+            txtPostId.BorderSize = 2;
+            txtPostId.Font = new Font("Segoe UI", 10F);
+            txtPostId.ForeColor = Color.FromArgb(64, 64, 64);
+            txtPostId.Location = new Point(20, 302);
+            txtPostId.Multiline = false;
+            txtPostId.Name = "txtPostId";
+            txtPostId.Padding = new Padding(10, 7, 10, 7);
+            txtPostId.PasswordChar = false;
+            txtPostId.PlaceholderColor = Color.DarkGray;
+            txtPostId.PlaceholderText = "";
+            txtPostId.Size = new Size(300, 38);
+            txtPostId.TabIndex = 7;
+            txtPostId.UnderlinedStyle = false;
+            //
+            // lblSearch
+            //
+            lblSearch.AutoSize = true;
+            lblSearch.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblSearch.Location = new Point(20, 358);
+            lblSearch.Name = "lblSearch";
+            lblSearch.Size = new Size(86, 23);
+            lblSearch.TabIndex = 8;
+            lblSearch.Text = "Tìm kiếm";
+            //
+            // btnClearFilter
+            //
+            btnClearFilter.BackColor = Color.MediumSlateBlue;
+            btnClearFilter.BackgroundColor = Color.MediumSlateBlue;
+            btnClearFilter.BorderColor = Color.PaleVioletRed;
+            btnClearFilter.BorderRadius = 40;
+            btnClearFilter.BorderSize = 0;
+            btnClearFilter.FlatStyle = FlatStyle.Flat;
+            btnClearFilter.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnClearFilter.ForeColor = Color.White;
+            btnClearFilter.Location = new Point(20, 445);
+            btnClearFilter.Name = "btnClearFilter";
+            btnClearFilter.Size = new Size(100, 42);
+            btnClearFilter.TabIndex = 10;
+            btnClearFilter.Text = "Xóa";
+            btnClearFilter.TextColor = Color.White;
+            btnClearFilter.UseVisualStyleBackColor = false;
+            //
+            // btnApplyFilter
+            //
+            btnApplyFilter.BackColor = Color.MediumSlateBlue;
+            btnApplyFilter.BackgroundColor = Color.MediumSlateBlue;
+            btnApplyFilter.BorderColor = Color.PaleVioletRed;
+            btnApplyFilter.BorderRadius = 40;
+            btnApplyFilter.BorderSize = 0;
+            btnApplyFilter.FlatStyle = FlatStyle.Flat;
+            btnApplyFilter.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnApplyFilter.ForeColor = Color.White;
+            btnApplyFilter.Location = new Point(220, 445);
+            btnApplyFilter.Name = "btnApplyFilter";
+            btnApplyFilter.Size = new Size(100, 42);
+            btnApplyFilter.TabIndex = 11;
+            btnApplyFilter.Text = "Lọc";
+            btnApplyFilter.TextColor = Color.White;
+            btnApplyFilter.UseVisualStyleBackColor = false;
+            //
+            // frmDashboard
+            //
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(240, 242, 245);
+            ClientSize = new Size(1262, 773);
+            Controls.Add(btnThemeToggle);
+            Controls.Add(btnNewPost);
+            Controls.Add(panelContent);
+            Controls.Add(panelProfileHeader);
+            Controls.Add(panelHeader);
+            Name = "frmDashboard";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Trang cá nhân";
+            WindowState = FormWindowState.Maximized;
+            Load += frmDashboard_Load;
+            panelHeader.ResumeLayout(false);
+            panelHeaderRight.ResumeLayout(false);
+            panelHeaderActions.ResumeLayout(false);
+            panelHeaderActions.PerformLayout();
+            panelProfileHeader.ResumeLayout(false);
+            panelTabs.ResumeLayout(false);
+            panelProfileInfo.ResumeLayout(false);
+            panelProfileInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picProfileLarge).EndInit();
+            menuAvatar.ResumeLayout(false);
+            panelContent.ResumeLayout(false);
+            tableLayout.ResumeLayout(false);
+            panelLeftCol.ResumeLayout(false);
+            panelUserInfo.ResumeLayout(false);
+            gbUserInfo.ResumeLayout(false);
+            gbUserInfo.PerformLayout();
+            panelCenterCol.ResumeLayout(false);
+            panelComposer.ResumeLayout(false);
+            panelComposer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picComposerAvatar).EndInit();
+            panelRightCol.ResumeLayout(false);
+            panelFilter.ResumeLayout(false);
+            gbFilter.ResumeLayout(false);
+            gbFilter.PerformLayout();
+            ResumeLayout(false);
+        }
 
-      // Top bar - CHỈ GIỮ LẠI HEADER VÀ CÁC NÚT
-      this.panelHeader = new System.Windows.Forms.Panel();
-      this.panelHeaderRight = new System.Windows.Forms.Panel();
-      this.txtSearch = new SocialManager.controls.RoundedTextBox(); // Sẽ được thêm vào filter
-      this.btnNewPost = new System.Windows.Forms.Button();
-      this.btnNewsfeed = new System.Windows.Forms.Button();
-      this.btnLogout = new System.Windows.Forms.Button();
-      this.panelHeaderActions = new System.Windows.Forms.FlowLayoutPanel();
-      this.btnThemeToggle = new System.Windows.Forms.Button();
-      this.btnSettings = new System.Windows.Forms.Button();
-
-      // Profile header (no cover - direct profile info)
-      this.panelProfileHeader = new System.Windows.Forms.Panel();
-      this.panelProfileInfo = new System.Windows.Forms.Panel();
-      this.picProfileLarge = new System.Windows.Forms.PictureBox();
-      this.lblProfileName = new System.Windows.Forms.Label();
-      this.lblFollowerStats = new System.Windows.Forms.Label(); // Hiển thị @username
-      this.btnEditProfile = new System.Windows.Forms.Button();
-
-      // Tabs row
-      this.panelTabs = new System.Windows.Forms.Panel();
-      this.btnTabBaiViet = new System.Windows.Forms.Button();
-
-      this.menuAvatar = new System.Windows.Forms.ContextMenuStrip(this.components);
-      this.miDangXuat = new System.Windows.Forms.ToolStripMenuItem();
-
-      // Content area
-      this.panelContent = new System.Windows.Forms.Panel();
-      this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
-      this.panelLeftCol = new System.Windows.Forms.Panel();
-      this.panelUserInfo = new System.Windows.Forms.Panel(); // Thông tin cá nhân
-      this.gbUserInfo = new System.Windows.Forms.GroupBox();
-      this.lblDOBTitle = new System.Windows.Forms.Label();
-      this.lblDOBValue = new System.Windows.Forms.Label();
-      this.lblEmailTitle = new System.Windows.Forms.Label();
-      this.lblEmailValue = new System.Windows.Forms.Label();
-      this.lblPhoneTitle = new System.Windows.Forms.Label();
-      this.lblPhoneValue = new System.Windows.Forms.Label();
-      this.lblCityTitle = new System.Windows.Forms.Label();
-      this.lblCityValue = new System.Windows.Forms.Label();
-      this.panelCenterCol = new System.Windows.Forms.Panel(); // Cột giữa - Posts
-      this.panelRightCol = new System.Windows.Forms.Panel(); // Cột phải - Filter
-      this.panelFilter = new System.Windows.Forms.Panel();
-      this.gbFilter = new System.Windows.Forms.GroupBox();
-      this.lblSearch = new System.Windows.Forms.Label(); // Label cho ô tìm kiếm
-      this.lblType = new System.Windows.Forms.Label();
-      this.cboType = new System.Windows.Forms.ComboBox();
-      this.lblFromDate = new System.Windows.Forms.Label();
-      this.dtpFrom = new System.Windows.Forms.DateTimePicker();
-      this.lblToDate = new System.Windows.Forms.Label();
-      this.dtpTo = new System.Windows.Forms.DateTimePicker();
-      this.lblPostId = new System.Windows.Forms.Label();
-      this.txtPostId = new SocialManager.controls.RoundedTextBox();
-      this.btnClearFilter = new SocialManager.controls.RoundedButton();
-      this.btnApplyFilter = new SocialManager.controls.RoundedButton();
-      this.panelCenterCol = new System.Windows.Forms.Panel();
-      this.panelComposer = new System.Windows.Forms.Panel();
-      this.picComposerAvatar = new System.Windows.Forms.PictureBox();
-      this.lblComposerPlaceholder = new System.Windows.Forms.Label();
-      this.flowLayoutPanelPosts = new SocialManager.frm.DoubleBufferedFlowLayoutPanel();
-
-      // panelHeader - CHỈ CÒN NÚT BÊN PHẢI
-      this.panelHeader.BackColor = System.Drawing.Color.White;
-      this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelHeader.Height = 60;
-      this.panelHeader.Padding = new System.Windows.Forms.Padding(0);
-
-      // header sub panels - XÓA panelHeaderLeft và panelHeaderCenter
-      this.panelHeaderRight.Dock = System.Windows.Forms.DockStyle.Fill; // Chiếm toàn bộ
-      this.panelHeaderRight.Width = 360;
-      this.panelHeaderRight.Padding = new System.Windows.Forms.Padding(8, 10, 12, 10);
-
-      // btnNewPost - NÚT HÌNH TRÒN Ở GÓC DƯỚI PHẢI (đối diện btnThemeToggle)
-      this.btnNewPost.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-      this.btnNewPost.BackColor = System.Drawing.Color.FromArgb(10, 102, 194);
-      this.btnNewPost.FlatAppearance.BorderSize = 0;
-      this.btnNewPost.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnNewPost.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-      this.btnNewPost.ForeColor = System.Drawing.Color.White;
-      this.btnNewPost.Location = new System.Drawing.Point(20, 20);
-      this.btnNewPost.Size = new System.Drawing.Size(48, 48);
-      this.btnNewPost.Text = "+";
-      this.btnNewPost.Name = "btnNewPost";
-      this.btnNewPost.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.btnNewPost.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-      this.btnNewPost.Click += new System.EventHandler(this.btnNewPost_Click);
-
-      // btnLogout
-      this.btnLogout.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.btnLogout.BackColor = System.Drawing.Color.FromArgb(228, 230, 235);
-      this.btnLogout.FlatAppearance.BorderSize = 0;
-      this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 9F);
-      this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(33, 33, 33);
-      this.btnLogout.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
-      this.btnLogout.Location = new System.Drawing.Point(0, 8);
-      this.btnLogout.Size = new System.Drawing.Size(90, 36);
-      this.btnLogout.Text = "Đăng xuất";
-      this.btnLogout.Name = "btnLogout";
-      this.btnLogout.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-
-      // header actions container
-      this.panelHeaderActions.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelHeaderActions.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-      this.panelHeaderActions.WrapContents = false;
-      this.panelHeaderActions.Padding = new System.Windows.Forms.Padding(0);
-      this.panelHeaderActions.BackColor = System.Drawing.Color.Transparent;
-
-      // btnThemeToggle - NÚT HÌNH TRÒN Ở GÓC DƯỚI TRÁI
-      this.btnThemeToggle.Text = "◐";
-      this.btnThemeToggle.BackColor = System.Drawing.Color.FromArgb(228, 230, 235);
-      this.btnThemeToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnThemeToggle.FlatAppearance.BorderSize = 0;
-      this.btnThemeToggle.ForeColor = System.Drawing.Color.FromArgb(33, 33, 33);
-      this.btnThemeToggle.Size = new System.Drawing.Size(56, 56); // Hình tròn
-      this.btnThemeToggle.Location = new System.Drawing.Point(20, 20); // Sẽ được điều chỉnh trong Load event
-      this.btnThemeToggle.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-      this.btnThemeToggle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-      this.btnThemeToggle.Name = "btnThemeToggle";
-      this.btnThemeToggle.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.btnThemeToggle.Click += new System.EventHandler(this.btnThemeToggle_Click);
-
-      this.btnSettings.Text = "Chỉnh sửa thông tin cá nhân";
-      this.btnSettings.AutoSize = true;
-      this.btnSettings.BackColor = System.Drawing.Color.FromArgb(228, 230, 235);
-      this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnSettings.FlatAppearance.BorderSize = 0;
-      this.btnSettings.ForeColor = System.Drawing.Color.FromArgb(33, 33, 33);
-      this.btnSettings.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
-      this.btnSettings.Size = new System.Drawing.Size(200, 36);
-      this.btnSettings.Name = "btnSettings";
-      this.btnSettings.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-
-      this.btnNewsfeed = new System.Windows.Forms.Button();
-      this.btnNewsfeed.Text = "Newsfeed";
-      this.btnNewsfeed.AutoSize = true;
-      this.btnNewsfeed.BackColor = System.Drawing.Color.FromArgb(24, 119, 242);
-      this.btnNewsfeed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnNewsfeed.FlatAppearance.BorderSize = 0;
-      this.btnNewsfeed.ForeColor = System.Drawing.Color.White;
-      this.btnNewsfeed.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
-      this.btnNewsfeed.Size = new System.Drawing.Size(120, 36);
-      this.btnNewsfeed.Name = "btnNewsfeed";
-      this.btnNewsfeed.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.btnNewsfeed.Click += new System.EventHandler(this.btnNewsfeed_Click);
-
-      // add buttons into actions container (right-to-left) - KHÔNG CÓ btnThemeToggle, btnNewPost
-      this.panelHeaderActions.Controls.Add(this.btnLogout);
-      this.panelHeaderActions.Controls.Add(this.btnSettings); // Settings gần Logout
-      this.panelHeaderActions.Controls.Add(this.btnNewsfeed); // Newsfeed button
-
-      // assemble header - CHỈ CÒN panelHeaderRight
-      this.panelHeaderRight.Controls.Add(this.panelHeaderActions);
-      this.panelHeader.Controls.Add(this.panelHeaderRight);
-
-      // panelProfileHeader - ĐẨY LÊN CAO HƠN
-      this.panelProfileHeader.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelProfileHeader.Height = 150; // Giảm từ 180
-      this.panelProfileHeader.BackColor = System.Drawing.Color.White;
-
-      // profile info (no cover) - GIẢM PADDING
-      this.panelProfileInfo.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelProfileInfo.Height = 106; // Giảm từ 136
-      this.panelProfileInfo.BackColor = System.Drawing.Color.White;
-      this.panelProfileInfo.Padding = new System.Windows.Forms.Padding(24, 8, 24, 8); // Giảm padding top từ 20 → 8
-
-      this.picProfileLarge.BackColor = System.Drawing.Color.LightGray;
-      this.picProfileLarge.Size = new System.Drawing.Size(90, 90); // Giảm từ 96x96
-      this.picProfileLarge.Location = new System.Drawing.Point(24, 8); // Đẩy lên
-      this.picProfileLarge.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-      this.picProfileLarge.Name = "picProfileLarge";
-
-      this.lblProfileName.AutoSize = true;
-      this.lblProfileName.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold); // Tên đầy đủ
-      this.lblProfileName.Location = new System.Drawing.Point(130, 15);
-      this.lblProfileName.Text = "Tên đầy đủ"; // Sẽ được cập nhật từ FullName
-
-      this.lblFollowerStats.AutoSize = true;
-      this.lblFollowerStats.Font = new System.Drawing.Font("Segoe UI", 9F); // Username
-      this.lblFollowerStats.ForeColor = System.Drawing.Color.FromArgb(102, 102, 102);
-      this.lblFollowerStats.Location = new System.Drawing.Point(130, 45);
-      this.lblFollowerStats.Text = "@username";
-
-      this.btnEditProfile.Text = "Chỉnh sửa hồ sơ";
-      this.btnEditProfile.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-      this.btnEditProfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnEditProfile.FlatAppearance.BorderSize = 0;
-      this.btnEditProfile.BackColor = System.Drawing.Color.FromArgb(228, 230, 235);
-      this.btnEditProfile.ForeColor = System.Drawing.Color.FromArgb(33, 33, 33);
-      this.btnEditProfile.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-      this.btnEditProfile.Location = new System.Drawing.Point(1100, 32);
-      this.btnEditProfile.Size = new System.Drawing.Size(140, 36);
-      this.btnEditProfile.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.btnEditProfile.Click += new System.EventHandler(this.btnSettings_Click);
-
-      this.panelProfileInfo.Controls.Add(this.picProfileLarge);
-      this.panelProfileInfo.Controls.Add(this.lblProfileName);
-      this.panelProfileInfo.Controls.Add(this.lblFollowerStats); // Hiển thị @username
-      this.panelProfileInfo.Controls.Add(this.btnEditProfile);
-
-      // tabs - CHỈ GIỮ LẠI TAB "BÀI VIẾT" vì các tab khác không có chức năng
-      this.panelTabs.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelTabs.Height = 44;
-      this.panelTabs.BackColor = System.Drawing.Color.White;
-      this.panelTabs.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
-      this.btnTabBaiViet = CreateTabButton("Bài viết", 20, 6, 90, 32, true);
-
-      this.panelTabs.Controls.Add(this.btnTabBaiViet);
-
-      // Tab click handler
-      this.btnTabBaiViet.Click += new System.EventHandler(this.TabButton_Click);
-
-      // underline under active tab
-      this.panelTabUnderline = new System.Windows.Forms.Panel();
-      this.panelTabUnderline.BackColor = System.Drawing.Color.FromArgb(10, 102, 194);
-      this.panelTabUnderline.Height = 2;
-      this.panelTabUnderline.Width = 90;
-      this.panelTabUnderline.Location = new System.Drawing.Point(20, 42);
-      this.panelTabs.Controls.Add(this.panelTabUnderline);
-
-      // menuTabsMore - REMOVED (không có chức năng)
-      // menuAvatar
-      this.menuAvatar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-        this.miDangXuat
-      });
-      this.menuAvatar.Name = "menuAvatar";
-      this.miDangXuat.Name = "miDangXuat"; this.miDangXuat.Text = "Đăng xuất";
-      this.miDangXuat.Click += new System.EventHandler(this.btnLogout_Click);
-
-      // panelProfileHeader composition (no cover)
-      this.panelProfileHeader.Controls.Add(this.panelTabs);
-      this.panelProfileHeader.Controls.Add(this.panelProfileInfo);
-
-      // Content area - 3 CỘT: Info (trái) | Posts (giữa) | Filter (phải)
-      this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelContent.Padding = new System.Windows.Forms.Padding(16, 8, 16, 16);
-      this.tableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.tableLayout.ColumnCount = 3; // 3 cột
-      this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 360F)); // Info
-      this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F)); // Posts - fill
-      this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 450F)); // Filter - rộng hơn
-      this.tableLayout.RowCount = 1;
-      this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayout.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
-
-      // Left column - THÔNG TIN CÁ NHÂN
-      this.panelLeftCol.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelLeftCol.Padding = new System.Windows.Forms.Padding(16);
-
-      this.panelUserInfo.Dock = System.Windows.Forms.DockStyle.Top; // Top thay vì Fill
-      this.panelUserInfo.Height = 520; // Tăng chiều cao lên
-      this.panelUserInfo.Padding = new System.Windows.Forms.Padding(10);
-
-      this.gbUserInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.gbUserInfo.Text = "Thông tin cá nhân";
-      this.gbUserInfo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.gbUserInfo.Padding = new System.Windows.Forms.Padding(20, 30, 20, 20);
-
-      // User info labels - VỪA PHẢI HƠN
-      this.lblDOBTitle.AutoSize = true; this.lblDOBTitle.Text = "📅 Ngày sinh:";
-      this.lblDOBTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblDOBTitle.Location = new System.Drawing.Point(25, 45);
-
-      this.lblDOBValue.AutoSize = true; this.lblDOBValue.Text = "01/01/2000";
-      this.lblDOBValue.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.lblDOBValue.ForeColor = System.Drawing.Color.FromArgb(66, 66, 66);
-      this.lblDOBValue.Location = new System.Drawing.Point(25, 72);
-
-      this.lblEmailTitle.AutoSize = true; this.lblEmailTitle.Text = "✉ Email:";
-      this.lblEmailTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblEmailTitle.Location = new System.Drawing.Point(25, 115);
-
-      this.lblEmailValue.AutoSize = true; this.lblEmailValue.Text = "user@example.com";
-      this.lblEmailValue.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.lblEmailValue.ForeColor = System.Drawing.Color.FromArgb(66, 66, 66);
-      this.lblEmailValue.Location = new System.Drawing.Point(25, 142);
-
-      this.lblPhoneTitle.AutoSize = true;
-      this.lblPhoneTitle.Text = "Số điện thoại:";
-      this.lblPhoneTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblPhoneTitle.Location = new System.Drawing.Point(25, 185);
-
-      this.lblPhoneValue.AutoSize = true;
-      this.lblPhoneValue.Text = "0123456789";
-      this.lblPhoneValue.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.lblPhoneValue.ForeColor = System.Drawing.Color.FromArgb(66, 66, 66);
-      this.lblPhoneValue.Location = new System.Drawing.Point(25, 212);
-
-      this.lblCityTitle.AutoSize = true;
-      this.lblCityTitle.Text = "Sống tại:";
-      this.lblCityTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblCityTitle.Location = new System.Drawing.Point(25, 255);
-
-      this.lblCityValue.AutoSize = true;
-      this.lblCityValue.Text = "Hà Nội";
-      this.lblCityValue.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.lblCityValue.ForeColor = System.Drawing.Color.FromArgb(66, 66, 66);
-      this.lblCityValue.Location = new System.Drawing.Point(25, 282);
-
-      this.gbUserInfo.Controls.Add(this.lblDOBTitle);
-      this.gbUserInfo.Controls.Add(this.lblDOBValue);
-      this.gbUserInfo.Controls.Add(this.lblEmailTitle);
-      this.gbUserInfo.Controls.Add(this.lblEmailValue);
-      this.gbUserInfo.Controls.Add(this.lblPhoneTitle);
-      this.gbUserInfo.Controls.Add(this.lblPhoneValue);
-      this.gbUserInfo.Controls.Add(this.lblCityTitle);
-      this.gbUserInfo.Controls.Add(this.lblCityValue);
-
-      this.panelUserInfo.Controls.Add(this.gbUserInfo);
-      this.panelUserInfo.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelCard_Paint);
-      this.panelLeftCol.Controls.Add(this.panelUserInfo);
-
-      // Panel filter - BỘ LỌC (cân đối với Info panel)
-      this.panelFilter.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelFilter.Height = 540; // Tăng lên để hiển thị đủ các nút
-      this.panelFilter.Padding = new System.Windows.Forms.Padding(10);
-
-      this.gbFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.gbFilter.Text = "Bộ lọc";
-      this.gbFilter.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-
-      // Filter controls layout - VỪA PHẢI HƠN
-      this.lblType.AutoSize = true; this.lblType.Text = "Loại bài viết";
-      this.lblType.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblType.Location = new System.Drawing.Point(20, 45);
-      this.cboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-      this.cboType.Items.AddRange(new object[] { "Tất cả", "Status", "Image", "Video" });
-      this.cboType.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.cboType.Location = new System.Drawing.Point(20, 72); this.cboType.Size = new System.Drawing.Size(300, 30);
-
-      this.lblFromDate.AutoSize = true; this.lblFromDate.Text = "Từ ngày";
-      this.lblFromDate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblFromDate.Location = new System.Drawing.Point(20, 125);
-      this.dtpFrom.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.dtpFrom.Location = new System.Drawing.Point(20, 152); this.dtpFrom.Size = new System.Drawing.Size(300, 30);
-      this.dtpFrom.MinDate = new System.DateTime(2000, 1, 1);
-      this.dtpFrom.MaxDate = System.DateTime.Now.AddYears(1);
-      this.dtpFrom.Value = System.DateTime.Now.AddMonths(-1);
-
-      this.lblToDate.AutoSize = true; this.lblToDate.Text = "Đến ngày";
-      this.lblToDate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblToDate.Location = new System.Drawing.Point(20, 200);
-      this.dtpTo.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.dtpTo.Location = new System.Drawing.Point(20, 227); this.dtpTo.Size = new System.Drawing.Size(300, 30);
-      this.dtpTo.MinDate = new System.DateTime(2000, 1, 1);
-      this.dtpTo.MaxDate = System.DateTime.Now.AddYears(1);
-      this.dtpTo.Value = System.DateTime.Now;
-
-      this.lblPostId.AutoSize = true; this.lblPostId.Text = "ID Bài viết";
-      this.lblPostId.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblPostId.Location = new System.Drawing.Point(20, 275);
-      this.txtPostId.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.txtPostId.Location = new System.Drawing.Point(20, 302); this.txtPostId.Size = new System.Drawing.Size(300, 38);
-
-      this.lblSearch.AutoSize = true; this.lblSearch.Text = "Tìm kiếm";
-      this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.lblSearch.Location = new System.Drawing.Point(20, 358);
-      this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.txtSearch.Location = new System.Drawing.Point(20, 385); this.txtSearch.Size = new System.Drawing.Size(300, 40);
-      this.txtSearch.PlaceholderText = "Tìm kiếm bài viết...";
-      this.txtSearch.Dock = System.Windows.Forms.DockStyle.None;
-      this.txtSearch.BorderRadius = 10;
-
-      this.btnClearFilter.Text = "Xóa";
-      this.btnClearFilter.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.btnClearFilter.Location = new System.Drawing.Point(20, 445); this.btnClearFilter.Size = new System.Drawing.Size(100, 42);
-      this.btnApplyFilter.Text = "Lọc";
-      this.btnApplyFilter.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-      this.btnApplyFilter.Location = new System.Drawing.Point(220, 445); this.btnApplyFilter.Size = new System.Drawing.Size(100, 42);
-
-      this.gbFilter.Controls.Add(this.lblType);
-      this.gbFilter.Controls.Add(this.cboType);
-      this.gbFilter.Controls.Add(this.lblFromDate);
-      this.gbFilter.Controls.Add(this.dtpFrom);
-      this.gbFilter.Controls.Add(this.lblToDate);
-      this.gbFilter.Controls.Add(this.dtpTo);
-      this.gbFilter.Controls.Add(this.lblPostId);
-      this.gbFilter.Controls.Add(this.txtPostId);
-      this.gbFilter.Controls.Add(this.lblSearch);
-      this.gbFilter.Controls.Add(this.txtSearch);
-      this.gbFilter.Controls.Add(this.btnClearFilter);
-      this.gbFilter.Controls.Add(this.btnApplyFilter);
-
-      this.panelFilter.Controls.Add(this.gbFilter);
-      this.panelFilter.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelCard_Paint);
-
-      // Right column - BỘ LỌC (cột phải)
-      this.panelRightCol.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelRightCol.Padding = new System.Windows.Forms.Padding(10, 0, 16, 10);
-      this.panelRightCol.Controls.Add(this.panelFilter);
-
-      // Center column - CHỈ BÀI VIẾT (cột giữa)
-      this.panelCenterCol.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panelCenterCol.Padding = new System.Windows.Forms.Padding(10, 0, 10, 10);
-
-      // Posts area
-      this.flowLayoutPanelPosts.AutoScroll = true;
-      this.flowLayoutPanelPosts.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.flowLayoutPanelPosts.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.flowLayoutPanelPosts.WrapContents = false;
-
-      // Composer panel (start a post)
-      this.panelComposer.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panelComposer.Height = 80;
-      this.panelComposer.BackColor = System.Drawing.Color.White;
-      this.panelComposer.Padding = new System.Windows.Forms.Padding(16);
-      this.panelComposer.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.panelComposer.Margin = new System.Windows.Forms.Padding(0, 8, 0, 8);
-
-      this.picComposerAvatar.BackColor = System.Drawing.Color.LightGray;
-      this.picComposerAvatar.Size = new System.Drawing.Size(40, 40);
-      this.picComposerAvatar.Location = new System.Drawing.Point(20, 20);
-      this.picComposerAvatar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-
-      this.lblComposerPlaceholder.AutoSize = true;
-      this.lblComposerPlaceholder.Text = "Bạn đang nghĩ gì?";
-      this.lblComposerPlaceholder.ForeColor = System.Drawing.Color.FromArgb(102, 102, 102);
-      this.lblComposerPlaceholder.Font = new System.Drawing.Font("Segoe UI", 10F);
-      this.lblComposerPlaceholder.Location = new System.Drawing.Point(76, 28);
-
-      this.panelComposer.Controls.Add(this.picComposerAvatar);
-      this.panelComposer.Controls.Add(this.lblComposerPlaceholder);
-      // add composer first then posts to avoid overlap
-      this.panelCenterCol.Controls.Add(this.flowLayoutPanelPosts);
-      this.panelCenterCol.Controls.Add(this.panelComposer);
-      this.panelComposer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelCard_Paint);
-      this.panelComposer.Click += new System.EventHandler(this.panelComposer_Click);
-      this.picComposerAvatar.Click += new System.EventHandler(this.panelComposer_Click);
-      this.lblComposerPlaceholder.Click += new System.EventHandler(this.panelComposer_Click);
-
-      // Add columns to table - 3 CỘT: Info | Posts | Filter
-      this.tableLayout.Controls.Add(this.panelLeftCol, 0, 0); // Cột trái - Info
-      this.tableLayout.Controls.Add(this.panelCenterCol, 1, 0); // Cột giữa - Posts
-      this.tableLayout.Controls.Add(this.panelRightCol, 2, 0); // Cột phải - Filter
-      this.panelContent.Controls.Add(this.tableLayout);
-
-      // Form
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.BackColor = System.Drawing.Color.FromArgb(240, 242, 245);
-      this.ClientSize = new System.Drawing.Size(1262, 773);
-      this.Controls.Add(this.btnThemeToggle); // Nút theme ở góc dưới trái
-      this.Controls.Add(this.btnNewPost); // Nút tạo bài viết ở góc dưới trái
-      this.Controls.Add(this.panelContent);
-      this.Controls.Add(this.panelProfileHeader);
-      this.Controls.Add(this.panelHeader);
-      this.Name = "frmDashboard";
-      this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-      this.Text = "Trang cá nhân";
-      this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-      this.Load += new System.EventHandler(this.frmDashboard_Load);
-    }
-
-    private System.Windows.Forms.Button CreateTabButton(string text, int x, int y, int w, int h, bool active)
+        private System.Windows.Forms.Button CreateTabButton(string text, int x, int y, int w, int h, bool active)
     {
       var btn = new System.Windows.Forms.Button();
       btn.Text = text;
@@ -539,12 +850,13 @@ namespace SocialManager.frm
     private SocialManager.controls.RoundedTextBox txtPostId;
     private SocialManager.controls.RoundedButton btnApplyFilter;
     private SocialManager.controls.RoundedButton btnClearFilter;
-    private SocialManager.frm.DoubleBufferedFlowLayoutPanel flowLayoutPanelPosts;
+    private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelPosts;
+    //private SocialManager.frm.DoubleBufferedFlowLayoutPanel flowLayoutPanelPosts;
     private System.Windows.Forms.Panel panelComposer;
     private System.Windows.Forms.PictureBox picComposerAvatar;
     private System.Windows.Forms.Label lblComposerPlaceholder;
   }
 }
 
-
+// dòng 79 và dòng gần cuối
 

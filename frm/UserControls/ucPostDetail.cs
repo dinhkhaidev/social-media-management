@@ -24,15 +24,15 @@ namespace SocialManager.controls
     private Panel? pnlContent;
     private Label? lblContent;
     private Panel? pnlStats;
-    private Button? btnLike;
+    private RoundedButton? btnLike;
     private Label? lblLikeCount;
     private Label? lblCommentCount;
     private FlowLayoutPanel? flpComments;
     private Panel? pnlAddComment;
     private TextBox? txtComment;
-    private Button? btnAddComment;
-    private Button? btnClose;
-    private Button? btnReportPost;
+    private RoundedButton? btnAddComment;
+    private RoundedButton? btnClose;
+    private RoundedButton? btnReportPost;
 
 
     public ucPostDetail(int postId)
@@ -56,12 +56,11 @@ namespace SocialManager.controls
       pnlHeader = new Panel { Dock = DockStyle.Top, Height = 70, BackColor = Color.FromArgb(245, 245, 245), Padding = new Padding(15) };
       lblAuthor = new Label { Location = new Point(15, 15), Font = new Font("Segoe UI", 12F, FontStyle.Bold), AutoSize = true, Text = "Đang tải..." };
       lblDate = new Label { Location = new Point(15, 40), Font = new Font("Segoe UI", 9F), ForeColor = Color.Gray, AutoSize = true };
-      btnClose = new Button { Location = new Point(600, 15), Size = new Size(80, 35), Text = "Đóng", BackColor = Color.Gray, ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F, FontStyle.Bold) };
-      btnClose.FlatAppearance.BorderSize = 0;
-      btnClose.Click += (s, e) => CloseRequested?.Invoke(this, EventArgs.Empty);
 
-      // Report Post button
-      btnReportPost = new Button { Location = new Point(480, 15), Size = new Size(110, 35), Text = "Tố cáo", BackColor = Color.FromArgb(255, 152, 0), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F, FontStyle.Bold) };
+      btnClose = new RoundedButton { Location = new Point(600, 15), Size = new Size(80, 35), Text = "Đóng", BackColor = Color.Gray, ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F, FontStyle.Bold) };
+      btnClose.FlatAppearance.BorderSize = 0;
+
+      btnReportPost = new RoundedButton { Location = new Point(625, 15), Size = new Size(33, 33), Text = "!", BackColor = Color.FromArgb(255, 117, 24), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F, FontStyle.Bold) };
       btnReportPost.FlatAppearance.BorderSize = 0;
       btnReportPost.Click += BtnReportPost_Click;
       btnReportPost.Visible = false;
@@ -73,8 +72,8 @@ namespace SocialManager.controls
       pnlContent.Controls.Add(lblContent);
 
       pnlStats = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = Color.White, Padding = new Padding(15, 5, 15, 5) };
-      btnLike = new Button { Location = new Point(15, 10), Size = new Size(90, 30), Text = " Thích", FlatStyle = FlatStyle.Flat, BackColor = Color.White, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F) };
-      btnLike.FlatAppearance.BorderSize = 1;
+      btnLike = new RoundedButton { Location = new Point(15, 10), Size = new Size(90, 30), Text = " Thích", FlatStyle = FlatStyle.Flat, BackColor = Color.White, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9F) };
+      btnLike.FlatAppearance.BorderSize = 0;
       btnLike.Click += BtnLike_Click;
       lblLikeCount = new Label { Location = new Point(110, 15), Font = new Font("Segoe UI", 9F), AutoSize = true };
       lblCommentCount = new Label { Location = new Point(220, 15), Font = new Font("Segoe UI", 9F), AutoSize = true };
@@ -85,7 +84,7 @@ namespace SocialManager.controls
 
       pnlAddComment = new Panel { Dock = DockStyle.Bottom, Height = 80, BackColor = Color.White, Padding = new Padding(15, 10, 15, 10) };
       txtComment = new TextBox { Location = new Point(15, 15), Size = new Size(540, 50), Multiline = true, Font = new Font("Segoe UI", 9F) };
-      btnAddComment = new Button { Location = new Point(565, 15), Size = new Size(110, 50), Text = "Gửi", BackColor = Color.FromArgb(0, 123, 255), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 10F, FontStyle.Bold) };
+      btnAddComment = new RoundedButton { Location = new Point(565, 15), Size = new Size(110, 50), Text = "Gửi", BackColor = Color.FromArgb(0, 123, 255), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand, Font = new Font("Segoe UI", 10F, FontStyle.Bold) };
       btnAddComment.FlatAppearance.BorderSize = 0;
       btnAddComment.Click += BtnAddComment_Click;
       pnlAddComment.Controls.AddRange(new Control[] { txtComment, btnAddComment });
@@ -117,7 +116,6 @@ namespace SocialManager.controls
         if (lblDate != null) lblDate.Text = post.CreatedAt.ToString("dd/MM/yyyy HH:mm");
         if (lblContent != null) lblContent.Text = post.Content;
 
-        // Show report button if not own post
         if (currentUser != null && post.UserID != currentUser.UserID && btnReportPost != null)
         {
           btnReportPost.Visible = true;
@@ -150,12 +148,22 @@ namespace SocialManager.controls
         {
           btnLike.Text = " Đã thích";
           btnLike.BackColor = Color.FromArgb(255, 220, 220);
+          btnLike.BackgroundColor = Color.FromArgb(255, 220, 220);
+          btnLike.ForeColor = Color.FromArgb(220, 53, 69);
+          btnLike.TextColor = Color.FromArgb(220, 53, 69);
         }
         else
         {
           btnLike.Text = " Thích";
           btnLike.BackColor = Color.White;
+          btnLike.BackgroundColor = Color.White;
+          btnLike.ForeColor = Color.FromArgb(64, 64, 64);
+          btnLike.TextColor = Color.FromArgb(64, 64, 64);
         }
+
+        // btnLike.Visible = true;
+        // btnLike.Invalidate();
+        // btnLike.Refresh();
       }
       DisplayComments();
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -331,16 +332,13 @@ namespace SocialManager.frm
     {
       try
       {
-        using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\SocialManager"))
+        if (currentUser == null) return false;
+
+        string settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datas", $"settings_{currentUser.UserID}.txt");
+        if (File.Exists(settingsFile))
         {
-          if (key != null)
-          {
-            object? value = key.GetValue(DarkModeKey);
-            if (value != null)
-            {
-              return (int)value == 1;
-            }
-          }
+          string content = File.ReadAllText(settingsFile);
+          return content.Contains("dark=true");
         }
       }
       catch (Exception ex)

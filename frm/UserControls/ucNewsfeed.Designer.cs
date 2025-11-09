@@ -1,6 +1,6 @@
-namespace SocialManager.frm
+namespace SocialManager.frm.UserControls
 {
-  partial class frmNewsfeed
+  partial class ucNewsfeed
   {
     /// <summary>
     /// Required designer variable.
@@ -20,7 +20,7 @@ namespace SocialManager.frm
       base.Dispose(disposing);
     }
 
-    #region Windows Form Designer generated code
+    #region Component Designer generated code
 
     /// <summary>
     /// Required method for Designer support - do not modify
@@ -28,16 +28,14 @@ namespace SocialManager.frm
     /// </summary>
     private void InitializeComponent()
     {
-      SuspendLayout();
+      this.SuspendLayout();
       //
-      // frmNewsfeed
+      // ucNewsfeed
       //
-      AutoScaleDimensions = new SizeF(7F, 15F);
-      AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(800, 450);
-      Name = "frmNewsfeed";
-      Text = "frmNewsfeed";
-      ResumeLayout(false);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.Name = "ucNewsfeed";
+      this.ResumeLayout(false);
     }
 
     #endregion

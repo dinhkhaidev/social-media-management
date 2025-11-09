@@ -496,5 +496,84 @@ namespace SocialManager.services
         return false;
       }
     }
+
+    /// <summary>
+    /// Get posts that a user has commented on
+    /// </summary>
+    public List<Post> GetPostsCommentedByUser(Guid userId)
+    {
+      try
+      {
+        var commentService = new CommentService();
+        var allComments = commentService.GetAllComments();
+
+        // Get unique post IDs that user has commented on
+        var postIds = allComments
+          .Where(c => c.UserID == userId && !c.IsDeleted)
+          .Select(c => c.PostID)
+          .Distinct()
+          .ToList();
+
+        // Get posts for those IDs
+        var allPosts = GetAllPosts(includeDeleted: false);
+        return allPosts
+          .Where(p => postIds.Contains(p.PostID))
+          .OrderByDescending(p => p.CreatedAt)
+          .ToList();
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error getting commented posts: {ex.Message}");
+        return new List<Post>();
+      }
+    }
+
+    /// <summary>
+    /// Get posts that a user has liked
+    /// </summary>
+    public List<Post> GetPostsLikedByUser(Guid userId)
+    {
+      try
+      {
+        const string LIKES_FILE_PATH = "datas\\Likes.csv";
+
+        if (!File.Exists(LIKES_FILE_PATH))
+          return new List<Post>();
+
+        var likedPostIds = new List<int>();
+        var lines = File.ReadAllLines(LIKES_FILE_PATH).Skip(1); // Skip header
+
+        foreach (string line in lines)
+        {
+          if (string.IsNullOrWhiteSpace(line))
+            continue;
+
+          var parts = line.Split(',');
+          if (parts.Length >= 3)
+          {
+            // Format: LikeID,PostID,UserID,CreatedAt
+            if (Guid.TryParse(parts[2], out Guid likeUserId) && likeUserId == userId)
+            {
+              if (int.TryParse(parts[1], out int postId))
+              {
+                likedPostIds.Add(postId);
+              }
+            }
+          }
+        }
+
+        // Get posts for those IDs
+        var allPosts = GetAllPosts(includeDeleted: false);
+        return allPosts
+          .Where(p => likedPostIds.Contains(p.PostID))
+          .OrderByDescending(p => p.CreatedAt)
+          .ToList();
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error getting liked posts: {ex.Message}");
+        return new List<Post>();
+      }
+    }
   }
 }
