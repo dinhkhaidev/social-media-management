@@ -34,6 +34,8 @@ namespace SocialManager.frm
             btnSocialAccounts = new Button();
             btnSettings = new Button();
             btnAnalytics = new Button();
+            btnReports = new Button();
+            btnComments = new Button();
             btnPosts = new Button();
             btnDashboard = new Button();
             pnlSidebarHeader = new Panel();
@@ -72,6 +74,8 @@ namespace SocialManager.frm
             pnlNavigation.Controls.Add(btnSocialAccounts);
             pnlNavigation.Controls.Add(btnSettings);
             pnlNavigation.Controls.Add(btnAnalytics);
+            pnlNavigation.Controls.Add(btnReports);
+            pnlNavigation.Controls.Add(btnComments);
             pnlNavigation.Controls.Add(btnPosts);
             pnlNavigation.Controls.Add(btnDashboard);
             pnlNavigation.Dock = DockStyle.Fill;
@@ -96,7 +100,7 @@ namespace SocialManager.frm
             btnLogout.Padding = new Padding(50, 0, 0, 0);
             btnLogout.Size = new Size(240, 50);
             btnLogout.TabIndex = 5;
-            btnLogout.Text = "��ng xu?t";
+            btnLogout.Text = "Đăng xuất";
             btnLogout.TextAlign = ContentAlignment.MiddleLeft;
             btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += btnLogout_Click;
@@ -117,7 +121,7 @@ namespace SocialManager.frm
             btnSocialAccounts.Padding = new Padding(55, 0, 0, 0);
             btnSocialAccounts.Size = new Size(240, 55);
             btnSocialAccounts.TabIndex = 4;
-            btnSocialAccounts.Text = "T�i kho?n MXH";
+            btnSocialAccounts.Text = "Tài khoản MXH";
             btnSocialAccounts.TextAlign = ContentAlignment.MiddleLeft;
             btnSocialAccounts.UseVisualStyleBackColor = false;
             btnSocialAccounts.Click += btnSocialAccounts_Click;
@@ -138,7 +142,7 @@ namespace SocialManager.frm
             btnSettings.Padding = new Padding(55, 0, 0, 0);
             btnSettings.Size = new Size(240, 55);
             btnSettings.TabIndex = 3;
-            btnSettings.Text = "C�i �?t";
+            btnSettings.Text = "Cài đặt";
             btnSettings.TextAlign = ContentAlignment.MiddleLeft;
             btnSettings.UseVisualStyleBackColor = false;
             btnSettings.Click += btnSettings_Click;
@@ -153,17 +157,59 @@ namespace SocialManager.frm
             btnAnalytics.FlatStyle = FlatStyle.Flat;
             btnAnalytics.Font = new Font("Segoe UI", 11F);
             btnAnalytics.ForeColor = Color.FromArgb(189, 195, 199);
-            btnAnalytics.Location = new Point(20, 160);
+            btnAnalytics.Location = new Point(20, 225);
             btnAnalytics.Margin = new Padding(0, 5, 0, 5);
             btnAnalytics.Name = "btnAnalytics";
             btnAnalytics.Padding = new Padding(55, 0, 0, 0);
             btnAnalytics.Size = new Size(240, 55);
             btnAnalytics.TabIndex = 2;
-            btnAnalytics.Text = "Ph�n t�ch";
+            btnAnalytics.Text = "Phân tích";
             btnAnalytics.TextAlign = ContentAlignment.MiddleLeft;
             btnAnalytics.UseVisualStyleBackColor = false;
             btnAnalytics.Click += btnAnalytics_Click;
             btnAnalytics.Paint += btnAnalytics_Paint;
+            // 
+            // btnReports
+            // 
+            btnReports.BackColor = Color.Transparent;
+            btnReports.FlatAppearance.BorderSize = 0;
+            btnReports.FlatAppearance.MouseDownBackColor = Color.FromArgb(52, 73, 94);
+            btnReports.FlatAppearance.MouseOverBackColor = Color.FromArgb(52, 73, 94);
+            btnReports.FlatStyle = FlatStyle.Flat;
+            btnReports.Font = new Font("Segoe UI", 11F);
+            btnReports.ForeColor = Color.FromArgb(189, 195, 199);
+            btnReports.Location = new Point(20, 160);
+            btnReports.Margin = new Padding(0, 5, 0, 5);
+            btnReports.Name = "btnReports";
+            btnReports.Padding = new Padding(55, 0, 0, 0);
+            btnReports.Size = new Size(240, 55);
+            btnReports.TabIndex = 7;
+            btnReports.Text = "Báo cáo";
+            btnReports.TextAlign = ContentAlignment.MiddleLeft;
+            btnReports.UseVisualStyleBackColor = false;
+            btnReports.Click += btnReports_Click;
+            btnReports.Paint += btnReports_Paint;
+            // 
+            // btnComments
+            // 
+            btnComments.BackColor = Color.Transparent;
+            btnComments.FlatAppearance.BorderSize = 0;
+            btnComments.FlatAppearance.MouseDownBackColor = Color.FromArgb(52, 73, 94);
+            btnComments.FlatAppearance.MouseOverBackColor = Color.FromArgb(52, 73, 94);
+            btnComments.FlatStyle = FlatStyle.Flat;
+            btnComments.Font = new Font("Segoe UI", 11F);
+            btnComments.ForeColor = Color.FromArgb(189, 195, 199);
+            btnComments.Location = new Point(20, 130);
+            btnComments.Margin = new Padding(0, 5, 0, 5);
+            btnComments.Name = "btnComments";
+            btnComments.Padding = new Padding(55, 0, 0, 0);
+            btnComments.Size = new Size(240, 55);
+            btnComments.TabIndex = 6;
+            btnComments.Text = "Bình luận";
+            btnComments.TextAlign = ContentAlignment.MiddleLeft;
+            btnComments.UseVisualStyleBackColor = false;
+            btnComments.Click += btnComments_Click;
+            btnComments.Paint += btnComments_Paint;
             // 
             // btnPosts
             // 
@@ -180,7 +226,7 @@ namespace SocialManager.frm
             btnPosts.Padding = new Padding(55, 0, 0, 0);
             btnPosts.Size = new Size(240, 55);
             btnPosts.TabIndex = 1;
-            btnPosts.Text = "B�i vi?t";
+            btnPosts.Text = "Bài viết";
             btnPosts.TextAlign = ContentAlignment.MiddleLeft;
             btnPosts.UseVisualStyleBackColor = false;
             btnPosts.Click += btnPosts_Click;
@@ -201,7 +247,7 @@ namespace SocialManager.frm
             btnDashboard.Padding = new Padding(55, 0, 0, 0);
             btnDashboard.Size = new Size(240, 55);
             btnDashboard.TabIndex = 0;
-            btnDashboard.Text = "B?ng �i?u khi?n";
+            btnDashboard.Text = "Bảng điều khiển";
             btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
             btnDashboard.UseVisualStyleBackColor = false;
             btnDashboard.Click += btnDashboard_Click;
@@ -225,11 +271,11 @@ namespace SocialManager.frm
             lblSubtitle.AutoSize = true;
             lblSubtitle.Font = new Font("Segoe UI", 10F);
             lblSubtitle.ForeColor = Color.FromArgb(189, 195, 199);
-            lblSubtitle.Location = new Point(80, 52);
+            lblSubtitle.Location = new Point(96, 57);
             lblSubtitle.Name = "lblSubtitle";
-            lblSubtitle.Size = new Size(116, 23);
+            lblSubtitle.Size = new Size(114, 23);
             lblSubtitle.TabIndex = 2;
-            lblSubtitle.Text = "B?ng qu?n tr?";
+            lblSubtitle.Text = "Bảng quản trị";
             // 
             // lblTitle
             // 
@@ -238,9 +284,9 @@ namespace SocialManager.frm
             lblTitle.ForeColor = Color.White;
             lblTitle.Location = new Point(80, 25);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(155, 32);
+            lblTitle.Size = new Size(163, 32);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "M?ng X? H?i";
+            lblTitle.Text = "Mạng Xã Hội";
             lblTitle.Click += lblTitle_Click;
             // 
             // picLogo
@@ -279,9 +325,9 @@ namespace SocialManager.frm
             // 
             pnlBreadcrumb.Controls.Add(lblBreadcrumb);
             pnlBreadcrumb.Dock = DockStyle.Right;
-            pnlBreadcrumb.Location = new Point(676, 20);
+            pnlBreadcrumb.Location = new Point(642, 20);
             pnlBreadcrumb.Name = "pnlBreadcrumb";
-            pnlBreadcrumb.Size = new Size(196, 40);
+            pnlBreadcrumb.Size = new Size(230, 40);
             pnlBreadcrumb.TabIndex = 2;
             // 
             // lblBreadcrumb
@@ -290,12 +336,13 @@ namespace SocialManager.frm
             lblBreadcrumb.Dock = DockStyle.Right;
             lblBreadcrumb.Font = new Font("Segoe UI", 10F);
             lblBreadcrumb.ForeColor = Color.FromArgb(127, 140, 141);
-            lblBreadcrumb.Location = new Point(-30, 0);
+            lblBreadcrumb.Location = new Point(-1, 0);
             lblBreadcrumb.Name = "lblBreadcrumb";
             lblBreadcrumb.Padding = new Padding(0, 10, 0, 0);
-            lblBreadcrumb.Size = new Size(226, 33);
+            lblBreadcrumb.Size = new Size(231, 33);
             lblBreadcrumb.TabIndex = 0;
-            lblBreadcrumb.Text = "Trang ch? > B?ng �i?u khi?n";
+            lblBreadcrumb.Text = "Trang chủ > Bảng điều khiển";
+            lblBreadcrumb.Click += lblBreadcrumb_Click;
             // 
             // lblCurrentView
             // 
@@ -304,9 +351,9 @@ namespace SocialManager.frm
             lblCurrentView.ForeColor = Color.FromArgb(44, 62, 80);
             lblCurrentView.Location = new Point(80, 20);
             lblCurrentView.Name = "lblCurrentView";
-            lblCurrentView.Size = new Size(236, 41);
+            lblCurrentView.Size = new Size(246, 41);
             lblCurrentView.TabIndex = 1;
-            lblCurrentView.Text = "B?ng �i?u khi?n";
+            lblCurrentView.Text = "Bảng điều khiển";
             // 
             // btnToggleSidebar
             // 
@@ -364,6 +411,8 @@ namespace SocialManager.frm
         private Panel pnlNavigation;
         private Button btnDashboard;
         private Button btnPosts;
+        private Button btnComments;
+        private Button btnReports;
         private Button btnAnalytics;
         private Button btnSettings;
         private Button btnSocialAccounts;

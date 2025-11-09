@@ -10,7 +10,7 @@ namespace SocialManager.services
   public class ReportService
   {
     private const string REPORT_FILE_PATH = "datas\\Report.csv";
-    private const string HEADER = "ReportID,ReportType,ContentID,ReportedAt,ReporterUserID,ReportedUserID";
+    private const string HEADER = "ReportID,ReportType,ContentID,ReportedAt,ReporterUserID,ReportedUserID,Reason,Status,ReviewerID,ReviewedAt,AdminNote,Action";
     private List<Report> _reports;
 
     public ReportService()
@@ -71,7 +71,7 @@ namespace SocialManager.services
     }
 
     // Tạo report mới
-    public bool CreateReport(string reportType, int contentID, Guid reporterUserID, Guid reportedUserID)
+    public bool CreateReport(string reportType, int contentID, Guid reporterUserID, Guid reportedUserID, string reason = "")
     {
       try
       {
@@ -102,7 +102,9 @@ namespace SocialManager.services
             contentID,
             DateTime.Now,
             reporterUserID,
-            reportedUserID
+            reportedUserID,
+            reason,
+            "New"
         );
 
         _reports.Add(report);
@@ -111,6 +113,96 @@ namespace SocialManager.services
       catch (Exception ex)
       {
         Console.WriteLine($"Error creating report: {ex.Message}");
+        return false;
+      }
+    }
+    
+    // Cập nhật trạng thái report
+    public bool UpdateReportStatus(int reportID, string status, Guid reviewerID, string? adminNote = null, string? action = null)
+    {
+      try
+      {
+        var report = _reports.FirstOrDefault(r => r.ReportID == reportID);
+        if (report == null) return false;
+        
+        report.Status = status;
+        report.ReviewerID = reviewerID;
+        report.ReviewedAt = DateTime.Now;
+        if (adminNote != null) report.AdminNote = adminNote;
+        if (action != null) report.Action = action;
+        
+        return SaveAllReports();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Error updating report status: {ex.Message}");
+        return false;
+      }
+    }
+    
+    // Thêm ghi chú vào report
+    public bool AddNoteToReport(int reportID, string note)
+    {
+      try
+      {
+        var report = _reports.FirstOrDefault(r => r.ReportID == reportID);
+        if (report == null) return false;
+        
+        report.AdminNote = string.IsNullOrEmpty(report.AdminNote) 
+          ? note 
+          : report.AdminNote + "\n---\n" + note;
+        
+        return SaveAllReports();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Error adding note: {ex.Message}");
+        return false;
+      }
+    }
+    
+    // Lấy reports theo trạng thái
+    public List<Report> GetReportsByStatus(string status)
+    {
+      return _reports.Where(r => r.Status == status).OrderByDescending(r => r.ReportedAt).ToList();
+    }
+    
+    // Batch update reports
+    public bool BatchUpdateReports(List<int> reportIDs, string status, Guid reviewerID, string? action = null)
+    {
+      try
+      {
+        foreach (var reportID in reportIDs)
+        {
+          var report = _reports.FirstOrDefault(r => r.ReportID == reportID);
+          if (report != null)
+          {
+            report.Status = status;
+            report.ReviewerID = reviewerID;
+            report.ReviewedAt = DateTime.Now;
+            if (action != null) report.Action = action;
+          }
+        }
+        return SaveAllReports();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Error batch updating reports: {ex.Message}");
+        return false;
+      }
+    }
+    
+    // Xóa một report
+    public bool DeleteReport(int reportID)
+    {
+      try
+      {
+        _reports.RemoveAll(r => r.ReportID == reportID);
+        return SaveAllReports();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Error deleting report: {ex.Message}");
         return false;
       }
     }

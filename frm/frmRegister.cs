@@ -23,473 +23,578 @@ namespace SocialManager.frm;
 
 public partial class frmRegister : Form
 {
-  private readonly UserService? _userService;
-  private readonly frmLogin? _parentLoginForm; // Reference to parent login form
+    private readonly UserService? _userService;
+    private readonly frmLogin? _parentLoginForm; // Reference to parent login form
 
-  // Constructor c? (�? backward compatibility)
-  public frmRegister() : this(null)
-  {
-  }
-
-  // Constructor m?i nh?n login form reference
-  public frmRegister(frmLogin? parentLoginForm)
-  {
-    InitializeComponent();
-
-    // Skip initialization in design mode
-    if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+    // Constructor c? (�? backward compatibility)
+    public frmRegister() : this(null)
     {
-      return;
     }
 
-    InitializeForm();
-    _userService = new UserService();
-    _parentLoginForm = parentLoginForm;
-  }
-
-  private void InitializeForm()
-  {
-    // Setup form properties
-    this.SetStyle(ControlStyles.AllPaintingInWmPaint |
-                 ControlStyles.UserPaint |
-                 ControlStyles.DoubleBuffer |
-                 ControlStyles.ResizeRedraw, true);
-
-    // Setup validation
-    SetupValidation();
-
-    // Set default gender
-    cmbGender.SelectedIndex = 0;
-
-    // Setup Enter key handling
-    this.AcceptButton = btnRegister;
-
-    // Apply rounded corners
-    UIHelper.ApplyRoundedCorners(pnlRegisterForm, 20);
-    UIHelper.ApplyRoundedCorners(pnlUsername, 12);
-    UIHelper.ApplyRoundedCorners(pnlFullName, 12);
-    UIHelper.ApplyRoundedCorners(pnlEmail, 12);
-    UIHelper.ApplyRoundedCorners(pnlPhone, 12);
-    UIHelper.ApplyRoundedCorners(pnlPassword, 12);
-    UIHelper.ApplyRoundedCorners(pnlConfirmPassword, 12);
-    UIHelper.ApplyRoundedCorners(btnRegister, 10);
-    UIHelper.ApplyRoundedCorners(btnBack, 10);
-  }
-
-  private void SetupValidation()
-  {
-    // FIX: S? d?ng static methods
-    txtUsername.TextChanged += inputValidateEvent.ValidateUsername;
-    txtEmail.TextChanged += inputValidateEvent.ValidateEmail;
-    txtPassword.TextChanged += inputValidateEvent.ValidatePassword;
-    txtConfirmPassword.TextChanged += inputValidateEvent.ValidateConfirmPassword;
-  }
-
-  private void btnRegister_Click(object sender, EventArgs e)
-  {
-    if (!ValidateForm())
-      return;
-
-    btnRegister.Text = "CREATING ACCOUNT...";
-    btnRegister.Enabled = false;
-    this.Cursor = Cursors.WaitCursor;
-
-    try
+    // Constructor m?i nh?n login form reference
+    public frmRegister(frmLogin? parentLoginForm)
     {
-      // Check if service is initialized
-      if (_userService == null)
-      {
-        MessageBox.Show("Lỗi khởi tạo dịch vụ. Vui lòng khởi động lại ứng dụng.", "Lỗi",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
-      }
+        InitializeComponent();
 
-      if (_userService.CreateUser(
-          txtUsername.Text.Trim(),
-          txtPassword.Text,
-          txtFullName.Text.Trim(),
-          txtEmail.Text.Trim(),
-          txtPhone.Text?.Trim() ?? "",
-          cmbGender.SelectedIndex,
-          dtpDateOfBirth.Value,
-          "",
-          "",
-          ""
-      ))
-      {
-        string username = txtUsername.Text.Trim();
-
-        // Force refresh user service to ensure latest data is available for login
-        _userService.RefreshUser();
-
-        MessageBox.Show("Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay bây giờ.",
-            "Đăng ký thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        // FIX: S? d?ng parent login form n?u c�, kh�ng t?o m?i
-        if (_parentLoginForm != null)
+        // Skip initialization in design mode
+        if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
         {
-          // Refresh parent login form's user data
-          _parentLoginForm.RefreshUserData();
-
-          // Set username trong parent login form
-          _parentLoginForm.SetUsername(username);
-
-          // Close register form v� parent login s? hi?n l?i t? �?ng
-          this.Close();
+            return;
         }
-        else
+
+        InitializeForm();
+        _userService = new UserService();
+        _parentLoginForm = parentLoginForm;
+    }
+
+    private void InitializeForm()
+    {
+        // Setup form properties
+        this.SetStyle(ControlStyles.AllPaintingInWmPaint |
+                     ControlStyles.UserPaint |
+                     ControlStyles.DoubleBuffer |
+                     ControlStyles.ResizeRedraw, true);
+
+        // Setup validation
+        SetupValidation();
+
+        // Set default gender
+        cmbGender.SelectedIndex = 0;
+
+        // Setup Enter key handling
+        this.AcceptButton = btnRegister;
+
+        // Apply rounded corners
+        UIHelper.ApplyRoundedCorners(pnlRegisterForm, 20);
+        UIHelper.ApplyRoundedCorners(pnlUsername, 12);
+        UIHelper.ApplyRoundedCorners(pnlFullName, 12);
+        UIHelper.ApplyRoundedCorners(pnlEmail, 12);
+        UIHelper.ApplyRoundedCorners(pnlPhone, 12);
+        UIHelper.ApplyRoundedCorners(pnlPassword, 12);
+        UIHelper.ApplyRoundedCorners(pnlConfirmPassword, 12);
+        UIHelper.ApplyRoundedCorners(btnAutoFill, 10);
+        UIHelper.ApplyRoundedCorners(btnRegister, 10);
+        UIHelper.ApplyRoundedCorners(btnBack, 10);
+        
+        // Apply global settings
+        ApplyGlobalSettings();
+    }
+
+    private void SetupValidation()
+    {
+        // FIX: S? d?ng static methods
+        txtUsername.TextChanged += inputValidateEvent.ValidateUsername;
+        txtEmail.TextChanged += inputValidateEvent.ValidateEmail;
+        txtPassword.TextChanged += inputValidateEvent.ValidatePassword;
+        txtConfirmPassword.TextChanged += inputValidateEvent.ValidateConfirmPassword;
+        txtPhone.TextChanged += ValidatePhone;
+    }
+
+    private void ValidatePhone(object sender, EventArgs e)
+    {
+        TextBox textBox = sender as TextBox;
+        if (textBox == null) return;
+
+        string phone = textBox.Text.Trim();
+        
+        // Reset background color
+        textBox.Parent.BackColor = Color.FromArgb(248, 249, 250);
+        
+        if (!string.IsNullOrEmpty(phone))
         {
-          // Fallback: t?o login form m?i n?u kh�ng c� parent
-          frmLogin loginForm = new frmLogin();
-          this.Hide();
-          loginForm.SetUsername(username);
-          loginForm.ShowDialog();
-          this.Close();
+            if (IsValidPhoneNumber(phone))
+            {
+                textBox.Parent.BackColor = Color.FromArgb(240, 248, 255); // Light blue for valid
+            }
+            else
+            {
+                textBox.Parent.BackColor = Color.FromArgb(255, 240, 240); // Light red for invalid
+            }
         }
-      }
-      else
-      {
-        MessageBox.Show("Không thể tạo tài khoản. Vui lòng thử lại.",
-            "Đăng ký thất bại", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-      }
     }
-    catch (Exception ex)
+
+    private bool IsValidPhoneNumber(string phone)
     {
-      MessageBox.Show($"Đã xảy ra lỗi khi đăng ký: {ex.Message}",
-          "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        // Remove all non-digit characters
+        string cleanPhone = Regex.Replace(phone, @"\D", "");
+        
+        // Check Vietnamese phone number patterns
+        // Mobile: 09x, 08x, 07x, 05x, 03x (10 digits)
+        // Landline: 02x (10-11 digits)
+        if (cleanPhone.Length >= 10 && cleanPhone.Length <= 11)
+        {
+            // Mobile numbers
+            if (cleanPhone.Length == 10 && 
+                (cleanPhone.StartsWith("09") || cleanPhone.StartsWith("08") || 
+                 cleanPhone.StartsWith("07") || cleanPhone.StartsWith("05") || 
+                 cleanPhone.StartsWith("03")))
+            {
+                return true;
+            }
+            
+            // Landline numbers
+            if ((cleanPhone.Length == 10 || cleanPhone.Length == 11) && 
+                cleanPhone.StartsWith("02"))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
-    finally
+
+    private void btnRegister_Click(object sender, EventArgs e)
     {
-      // Reset button state
-      btnRegister.Text = "CREATE ACCOUNT";
-      btnRegister.Enabled = true;
-      this.Cursor = Cursors.Default;
-    }
-  }
+        if (!ValidateForm())
+            return;
 
-  private bool ValidateForm()
-  {
-    // Username validation
-    if (string.IsNullOrWhiteSpace(txtUsername.Text))
+        btnRegister.Text = "CREATING ACCOUNT...";
+        btnRegister.Enabled = false;
+        this.Cursor = Cursors.WaitCursor;
+
+        try
+        {
+            // Check if service is initialized
+            if (_userService == null)
+            {
+                MessageBox.Show("Lỗi khởi tạo dịch vụ. Vui lòng khởi động lại ứng dụng.", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (_userService.CreateUser(
+                txtUsername.Text.Trim(),
+                txtPassword.Text,
+                txtFullName.Text.Trim(),
+                txtEmail.Text.Trim(),
+                txtPhone.Text?.Trim() ?? "",
+                cmbGender.SelectedIndex,
+                dtpDateOfBirth.Value,
+                "",
+                "",
+                ""
+            ))
+            {
+                string username = txtUsername.Text.Trim();
+
+                // Force refresh user service to ensure latest data is available for login
+                _userService.RefreshUser();
+
+                MessageBox.Show("Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay bây giờ.",
+                    "Đăng ký thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // FIX: S? d?ng parent login form n?u c�, kh�ng t?o m?i
+                if (_parentLoginForm != null)
+                {
+                    // Refresh parent login form's user data
+                    _parentLoginForm.RefreshUserData();
+
+                    // Set username trong parent login form
+                    _parentLoginForm.SetUsername(username);
+
+                    // Close register form v� parent login s? hi?n l?i t? �?ng
+                    this.Close();
+                }
+                else
+                {
+                    // Fallback: t?o login form m?i n?u kh�ng c� parent
+                    frmLogin loginForm = new frmLogin();
+                    this.Hide();
+                    loginForm.SetUsername(username);
+                    loginForm.ShowDialog();
+                    this.Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Không thể tạo tài khoản. Vui lòng thử lại.",
+                    "Đăng ký thất bại", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Đã xảy ra lỗi khi đăng ký: {ex.Message}",
+                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            // Reset button state
+            btnRegister.Text = "CREATE ACCOUNT";
+            btnRegister.Enabled = true;
+            this.Cursor = Cursors.Default;
+        }
+    }
+
+    private bool ValidateForm()
     {
-      ShowValidationError("Please enter a username.", txtUsername);
-      return false;
+        // Username validation
+        if (string.IsNullOrWhiteSpace(txtUsername.Text))
+        {
+            ShowValidationError("Please enter a username.", txtUsername);
+            return false;
+        }
+
+        if (txtUsername.Text.Length < 3)
+        {
+            ShowValidationError("Username must be at least 3 characters long.", txtUsername);
+            return false;
+        }
+
+        // Email validation
+        if (string.IsNullOrWhiteSpace(txtEmail.Text))
+        {
+            ShowValidationError("Please enter an email address.", txtEmail);
+            return false;
+        }
+
+        if (!inputValidateEvent.IsValidEmail(txtEmail.Text))
+        {
+            ShowValidationError("Please enter a valid email address.", txtEmail);
+            return false;
+        }
+
+        // Full name validation
+        if (string.IsNullOrWhiteSpace(txtFullName.Text))
+        {
+            ShowValidationError("Please enter your full name.", txtFullName);
+            return false;
+        }
+
+        // Password validation
+        if (string.IsNullOrWhiteSpace(txtPassword.Text))
+        {
+            ShowValidationError("Please enter a password.", txtPassword);
+            return false;
+        }
+
+        if (txtPassword.Text.Length < 6)
+        {
+            ShowValidationError("Password must be at least 6 characters long.", txtPassword);
+            return false;
+        }
+
+        // Confirm password validation
+        if (txtConfirmPassword.Text != txtPassword.Text)
+        {
+            ShowValidationError("Passwords do not match.", txtConfirmPassword);
+            return false;
+        }
+
+        // Phone validation (optional but if provided must be valid)
+        if (!string.IsNullOrWhiteSpace(txtPhone.Text))
+        {
+            if (!IsValidPhoneNumber(txtPhone.Text))
+            {
+                ShowValidationError("Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam.", txtPhone);
+                return false;
+            }
+        }
+
+        // Terms validation
+        if (!chkTerms.Checked)
+        {
+            MessageBox.Show("Vui lòng chấp nhận Điều khoản dịch vụ và Chính sách bảo mật.",
+                "Lỗi xác thực", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+        // Check if service is initialized and username or email already exists
+        if (_userService != null && _userService.UserExists(txtUsername.Text, txtEmail.Text))
+        {
+            MessageBox.Show("Tên đăng nhập hoặc email đã tồn tại. Vui lòng chọn tên khác.",
+                "Lỗi đăng ký", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+        return true;
     }
 
-    if (txtUsername.Text.Length < 3)
+
+    private void ShowValidationError(string message, TextBox textBox)
     {
-      ShowValidationError("Username must be at least 3 characters long.", txtUsername);
-      return false;
+        MessageBox.Show(message, "Lỗi xác thực", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        textBox.Focus();
     }
 
-    // Email validation
-    if (string.IsNullOrWhiteSpace(txtEmail.Text))
+
+    private void llblLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-      ShowValidationError("Please enter an email address.", txtEmail);
-      return false;
+        // FIX: Kh�ng t?o form Login m?i, ch? ��ng register form
+        // Parent login form s? hi?n l?i t? �?ng
+        this.Close();
     }
 
-    if (!inputValidateEvent.IsValidEmail(txtEmail.Text))
+    private void button1_Click(object sender, EventArgs e)
     {
-      ShowValidationError("Please enter a valid email address.", txtEmail);
-      return false;
+        // FIX: Same logic nh� llblLogin_LinkClicked
+        this.Close();
     }
 
-    // Full name validation
-    if (string.IsNullOrWhiteSpace(txtFullName.Text))
+
+    // Custom paint events for modern UI - using GraphicsExtensions from Admin form
+    private void pnlRegisterCard_Paint(object sender, PaintEventArgs e)
     {
-      ShowValidationError("Please enter your full name.", txtFullName);
-      return false;
+        Panel? panel = sender as Panel;
+        if (panel != null)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // Draw subtle shadow
+            using (var shadowBrush = new SolidBrush(Color.FromArgb(15, 0, 0, 0)))
+            {
+                GraphicsExtensions.FillRoundedRectangle(e.Graphics, shadowBrush, new Rectangle(5, 5, panel.Width - 5, panel.Height - 5), 15);
+            }
+
+            // Draw main card
+            using (var cardBrush = new SolidBrush(Color.White))
+            {
+                GraphicsExtensions.FillRoundedRectangle(e.Graphics, cardBrush, new Rectangle(0, 0, panel.Width - 5, panel.Height - 5), 15);
+            }
+        }
     }
 
-    // Password validation
-    if (string.IsNullOrWhiteSpace(txtPassword.Text))
+    private void pnlInput_Paint(object sender, PaintEventArgs e)
     {
-      ShowValidationError("Please enter a password.", txtPassword);
-      return false;
+        Panel? panel = sender as Panel;
+        if (panel != null)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            using (var brush = new SolidBrush(panel.BackColor))
+            {
+                GraphicsExtensions.FillRoundedRectangle(e.Graphics, brush, new Rectangle(0, 0, panel.Width, panel.Height), 8);
+            }
+
+            // Draw border
+            Color borderColor = panel.BackColor == Color.FromArgb(240, 248, 255) ?
+                Color.FromArgb(52, 152, 219) : Color.FromArgb(220, 221, 222);
+            using (var pen = new Pen(borderColor, 1))
+            {
+                GraphicsExtensions.DrawRoundedRectangle(e.Graphics, pen, new Rectangle(0, 0, panel.Width - 1, panel.Height - 1), 8);
+            }
+        }
     }
 
-    if (txtPassword.Text.Length < 6)
+
+    // Icon paint events
+    private void picLogo_Paint(object sender, PaintEventArgs e)
     {
-      ShowValidationError("Password must be at least 6 characters long.", txtPassword);
-      return false;
+        DrawLogo(e.Graphics, new Rectangle(5, 5, 40, 40), Color.FromArgb(46, 204, 113));
     }
 
-    // Confirm password validation
-    if (txtConfirmPassword.Text != txtPassword.Text)
+    private void picAppLogo_Paint(object sender, PaintEventArgs e)
     {
-      ShowValidationError("Passwords do not match.", txtConfirmPassword);
-      return false;
+        DrawLogo(e.Graphics, new Rectangle(10, 10, 60, 60), Color.White);
     }
 
-    // Terms validation
-    if (!chkTerms.Checked)
+    private void picUsernameIcon_Paint(object sender, PaintEventArgs e)
     {
-      MessageBox.Show("Vui lòng chấp nhận Điều khoản dịch vụ và Chính sách bảo mật.",
-          "Lỗi xác thực", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-      return false;
+        DrawUserIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
 
-    // Check if service is initialized and username or email already exists
-    if (_userService != null && _userService.UserExists(txtUsername.Text, txtEmail.Text))
+    private void picEmailIcon_Paint(object sender, PaintEventArgs e)
     {
-      MessageBox.Show("Tên đăng nhập hoặc email đã tồn tại. Vui lòng chọn tên khác.",
-          "Lỗi đăng ký", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-      return false;
+        DrawEmailIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
 
-    return true;
-  }
-
-
-  private void ShowValidationError(string message, TextBox textBox)
-  {
-    MessageBox.Show(message, "Lỗi xác thực", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-    textBox.Focus();
-  }
-
-
-  private void llblLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-  {
-    // FIX: Kh�ng t?o form Login m?i, ch? ��ng register form
-    // Parent login form s? hi?n l?i t? �?ng
-    this.Close();
-  }
-
-  private void button1_Click(object sender, EventArgs e)
-  {
-    // FIX: Same logic nh� llblLogin_LinkClicked
-    this.Close();
-  }
-
-
-  // Custom paint events for modern UI - using GraphicsExtensions from Admin form
-  private void pnlRegisterCard_Paint(object sender, PaintEventArgs e)
-  {
-    Panel? panel = sender as Panel;
-    if (panel != null)
+    private void picFullNameIcon_Paint(object sender, PaintEventArgs e)
     {
-      e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-      // Draw subtle shadow
-      using (var shadowBrush = new SolidBrush(Color.FromArgb(15, 0, 0, 0)))
-      {
-        GraphicsExtensions.FillRoundedRectangle(e.Graphics, shadowBrush, new Rectangle(5, 5, panel.Width - 5, panel.Height - 5), 15);
-      }
-
-      // Draw main card
-      using (var cardBrush = new SolidBrush(Color.White))
-      {
-        GraphicsExtensions.FillRoundedRectangle(e.Graphics, cardBrush, new Rectangle(0, 0, panel.Width - 5, panel.Height - 5), 15);
-      }
+        DrawPersonIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
-  }
 
-  private void pnlInput_Paint(object sender, PaintEventArgs e)
-  {
-    Panel? panel = sender as Panel;
-    if (panel != null)
+    private void picPhoneIcon_Paint(object sender, PaintEventArgs e)
     {
-      e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-      using (var brush = new SolidBrush(panel.BackColor))
-      {
-        GraphicsExtensions.FillRoundedRectangle(e.Graphics, brush, new Rectangle(0, 0, panel.Width, panel.Height), 8);
-      }
-
-      // Draw border
-      Color borderColor = panel.BackColor == Color.FromArgb(240, 248, 255) ?
-          Color.FromArgb(52, 152, 219) : Color.FromArgb(220, 221, 222);
-      using (var pen = new Pen(borderColor, 1))
-      {
-        GraphicsExtensions.DrawRoundedRectangle(e.Graphics, pen, new Rectangle(0, 0, panel.Width - 1, panel.Height - 1), 8);
-      }
+        DrawPhoneIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
-  }
 
-
-  // Icon paint events
-  private void picLogo_Paint(object sender, PaintEventArgs e)
-  {
-    DrawLogo(e.Graphics, new Rectangle(5, 5, 40, 40), Color.FromArgb(46, 204, 113));
-  }
-
-  private void picAppLogo_Paint(object sender, PaintEventArgs e)
-  {
-    DrawLogo(e.Graphics, new Rectangle(10, 10, 60, 60), Color.White);
-  }
-
-  private void picUsernameIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawUserIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picEmailIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawEmailIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picFullNameIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawPersonIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picPhoneIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawPhoneIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picPasswordIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawLockIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picConfirmPasswordIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawLockIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picGenderIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawGenderIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picDateIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawCalendarIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  private void picAddressIcon_Paint(object sender, PaintEventArgs e)
-  {
-    DrawLocationIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
-  }
-
-  // Icon drawing methods
-  private void DrawLogo(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var brush = new SolidBrush(color))
-    using (var pen = new Pen(Color.White, 2))
+    private void picPasswordIcon_Paint(object sender, PaintEventArgs e)
     {
-      g.FillEllipse(brush, rect);
-      g.DrawEllipse(pen, rect.X + 8, rect.Y + 8, 12, 12);
-      g.DrawEllipse(pen, rect.X + 25, rect.Y + 8, 12, 12);
-      g.DrawEllipse(pen, rect.X + 16, rect.Y + 25, 12, 12);
-      g.DrawLine(pen, rect.X + 20, rect.Y + 14, rect.X + 25, rect.Y + 14);
-      g.DrawLine(pen, rect.X + 22, rect.Y + 20, rect.X + 22, rect.Y + 25);
+        DrawLockIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
-  }
 
-  private void DrawUserIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    private void picConfirmPasswordIcon_Paint(object sender, PaintEventArgs e)
     {
-      g.DrawEllipse(pen, rect.X + 4, rect.Y + 2, 8, 8);
-      g.DrawArc(pen, rect.X + 2, rect.Y + 8, 12, 8, 0, 180);
+        DrawLockIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
-  }
 
-  private void DrawEmailIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    private void picGenderIcon_Paint(object sender, PaintEventArgs e)
     {
-      g.DrawRectangle(pen, rect.X + 1, rect.Y + 4, 14, 10);
-      g.DrawLine(pen, rect.X + 1, rect.Y + 4, rect.X + 8, rect.Y + 10);
-      g.DrawLine(pen, rect.X + 8, rect.Y + 10, rect.X + 15, rect.Y + 4);
+        DrawGenderIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
-  }
 
-  private void DrawPersonIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    private void picDateIcon_Paint(object sender, PaintEventArgs e)
     {
-      g.DrawEllipse(pen, rect.X + 5, rect.Y + 1, 6, 6);
-      g.DrawEllipse(pen, rect.X + 3, rect.Y + 8, 10, 7);
+        DrawCalendarIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
-  }
 
-  private void DrawPhoneIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    private void picAddressIcon_Paint(object sender, PaintEventArgs e)
     {
-      DrawRoundRectangle(g, pen, rect.X + 4, rect.Y + 1, 8, 14, 2);
-      g.DrawLine(pen, rect.X + 6, rect.Y + 3, rect.X + 10, rect.Y + 3);
-      g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 12, 2, 2);
+        DrawLocationIcon(e.Graphics, new Rectangle(2, 2, 16, 16), Color.FromArgb(127, 140, 141));
     }
-  }
 
-  private void DrawLockIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    // Icon drawing methods
+    private void DrawLogo(Graphics g, Rectangle rect, Color color)
     {
-      g.DrawRectangle(pen, rect.X + 3, rect.Y + 8, 10, 6);
-      g.DrawArc(pen, rect.X + 5, rect.Y + 3, 6, 8, 180, 180);
-      g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 10, 2, 2);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var brush = new SolidBrush(color))
+        using (var pen = new Pen(Color.White, 2))
+        {
+            g.FillEllipse(brush, rect);
+            g.DrawEllipse(pen, rect.X + 8, rect.Y + 8, 12, 12);
+            g.DrawEllipse(pen, rect.X + 25, rect.Y + 8, 12, 12);
+            g.DrawEllipse(pen, rect.X + 16, rect.Y + 25, 12, 12);
+            g.DrawLine(pen, rect.X + 20, rect.Y + 14, rect.X + 25, rect.Y + 14);
+            g.DrawLine(pen, rect.X + 22, rect.Y + 20, rect.X + 22, rect.Y + 25);
+        }
     }
-  }
 
-  private void DrawGenderIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    private void DrawUserIcon(Graphics g, Rectangle rect, Color color)
     {
-      // Combined male/female symbol
-      g.DrawEllipse(pen, rect.X + 3, rect.Y + 5, 6, 6);
-      g.DrawLine(pen, rect.X + 9, rect.Y + 3, rect.X + 12, rect.Y + 1);
-      g.DrawLine(pen, rect.X + 6, rect.Y + 11, rect.X + 6, rect.Y + 14);
-      g.DrawLine(pen, rect.X + 4, rect.Y + 13, rect.X + 8, rect.Y + 13);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            g.DrawEllipse(pen, rect.X + 4, rect.Y + 2, 8, 8);
+            g.DrawArc(pen, rect.X + 2, rect.Y + 8, 12, 8, 0, 180);
+        }
     }
-  }
 
-  private void DrawCalendarIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    private void DrawEmailIcon(Graphics g, Rectangle rect, Color color)
     {
-      g.DrawRectangle(pen, rect.X + 2, rect.Y + 3, 12, 11);
-      g.DrawLine(pen, rect.X + 2, rect.Y + 6, rect.X + 14, rect.Y + 6);
-      g.DrawLine(pen, rect.X + 5, rect.Y + 1, rect.X + 5, rect.Y + 5);
-      g.DrawLine(pen, rect.X + 11, rect.Y + 1, rect.X + 11, rect.Y + 5);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            g.DrawRectangle(pen, rect.X + 1, rect.Y + 4, 14, 10);
+            g.DrawLine(pen, rect.X + 1, rect.Y + 4, rect.X + 8, rect.Y + 10);
+            g.DrawLine(pen, rect.X + 8, rect.Y + 10, rect.X + 15, rect.Y + 4);
+        }
     }
-  }
 
-  private void DrawLocationIcon(Graphics g, Rectangle rect, Color color)
-  {
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    using (var pen = new Pen(color, 1.5f))
+    private void DrawPersonIcon(Graphics g, Rectangle rect, Color color)
     {
-      g.DrawEllipse(pen, rect.X + 4, rect.Y + 2, 8, 8);
-      g.DrawLine(pen, rect.X + 8, rect.Y + 10, rect.X + 8, rect.Y + 14);
-      g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 5, 2, 2);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            g.DrawEllipse(pen, rect.X + 5, rect.Y + 1, 6, 6);
+            g.DrawEllipse(pen, rect.X + 3, rect.Y + 8, 10, 7);
+        }
     }
-  }
 
-  private void DrawRoundRectangle(Graphics graphics, Pen pen, int x, int y, int width, int height, int radius)
-  {
-    using (GraphicsPath path = new GraphicsPath())
+    private void DrawPhoneIcon(Graphics g, Rectangle rect, Color color)
     {
-      path.AddArc(x, y, radius * 2, radius * 2, 180, 90);
-      path.AddArc(x + width - radius * 2, y, radius * 2, radius * 2, 270, 90);
-      path.AddArc(x + width - radius * 2, y + height - radius * 2, radius * 2, radius * 2, 0, 90);
-      path.AddArc(x, y + height - radius * 2, radius * 2, radius * 2, 90, 90);
-      path.CloseFigure();
-      graphics.DrawPath(pen, path);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            DrawRoundRectangle(g, pen, rect.X + 4, rect.Y + 1, 8, 14, 2);
+            g.DrawLine(pen, rect.X + 6, rect.Y + 3, rect.X + 10, rect.Y + 3);
+            g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 12, 2, 2);
+        }
     }
-  }
 
-  private void txtAddress_TextChanged(object sender, EventArgs e)
-  {
+    private void DrawLockIcon(Graphics g, Rectangle rect, Color color)
+    {
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            g.DrawRectangle(pen, rect.X + 3, rect.Y + 8, 10, 6);
+            g.DrawArc(pen, rect.X + 5, rect.Y + 3, 6, 8, 180, 180);
+            g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 10, 2, 2);
+        }
+    }
 
-  }
+    private void DrawGenderIcon(Graphics g, Rectangle rect, Color color)
+    {
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            // Combined male/female symbol
+            g.DrawEllipse(pen, rect.X + 3, rect.Y + 5, 6, 6);
+            g.DrawLine(pen, rect.X + 9, rect.Y + 3, rect.X + 12, rect.Y + 1);
+            g.DrawLine(pen, rect.X + 6, rect.Y + 11, rect.X + 6, rect.Y + 14);
+            g.DrawLine(pen, rect.X + 4, rect.Y + 13, rect.X + 8, rect.Y + 13);
+        }
+    }
 
-  private void picAppLogo_Click(object sender, EventArgs e)
-  {
+    private void DrawCalendarIcon(Graphics g, Rectangle rect, Color color)
+    {
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            g.DrawRectangle(pen, rect.X + 2, rect.Y + 3, 12, 11);
+            g.DrawLine(pen, rect.X + 2, rect.Y + 6, rect.X + 14, rect.Y + 6);
+            g.DrawLine(pen, rect.X + 5, rect.Y + 1, rect.X + 5, rect.Y + 5);
+            g.DrawLine(pen, rect.X + 11, rect.Y + 1, rect.X + 11, rect.Y + 5);
+        }
+    }
 
-  }
+    private void DrawLocationIcon(Graphics g, Rectangle rect, Color color)
+    {
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using (var pen = new Pen(color, 1.5f))
+        {
+            g.DrawEllipse(pen, rect.X + 4, rect.Y + 2, 8, 8);
+            g.DrawLine(pen, rect.X + 8, rect.Y + 10, rect.X + 8, rect.Y + 14);
+            g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 5, 2, 2);
+        }
+    }
+
+    private void DrawRoundRectangle(Graphics graphics, Pen pen, int x, int y, int width, int height, int radius)
+    {
+        using (GraphicsPath path = new GraphicsPath())
+        {
+            path.AddArc(x, y, radius * 2, radius * 2, 180, 90);
+            path.AddArc(x + width - radius * 2, y, radius * 2, radius * 2, 270, 90);
+            path.AddArc(x + width - radius * 2, y + height - radius * 2, radius * 2, radius * 2, 0, 90);
+            path.AddArc(x, y + height - radius * 2, radius * 2, radius * 2, 90, 90);
+            path.CloseFigure();
+            graphics.DrawPath(pen, path);
+        }
+    }
+
+    private void txtAddress_TextChanged(object sender, EventArgs e)
+    {
+
+    }
+
+    private void btnAutoFill_Click(object sender, EventArgs e)
+    {
+        // Auto fill sample data
+        txtUsername.Text = "user" + DateTime.Now.Ticks.ToString().Substring(10);
+        txtEmail.Text = "test@example.com";
+        txtFullName.Text = "Nguyễn Văn A";
+        txtPhone.Text = "0901234567";
+        txtPassword.Text = "123456";
+        txtConfirmPassword.Text = "123456";
+        cmbGender.SelectedIndex = 0;
+        dtpDateOfBirth.Value = new DateTime(1995, 1, 1);
+        chkTerms.Checked = true;
+    }
+
+    private void picAppLogo_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void lblAppDescription_Click(object sender, EventArgs e)
+    {
+
+    }
+    
+    /// <summary>
+    /// Áp dụng cấu hình global khi khởi động form (không áp dụng theme)
+    /// </summary>
+    private void ApplyGlobalSettings()
+    {
+        try
+        {
+            // Only update system name, don't apply theme to keep original design
+            this.Text = "SolidVerse - Đăng ký";
+            
+            System.Diagnostics.Debug.WriteLine($"Applied global settings to Register form - System: {GlobalSettings.SystemName}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error applying global settings to Register form: {ex.Message}");
+        }
+    }
 }
 

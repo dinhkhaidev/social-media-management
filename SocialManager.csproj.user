@@ -41,13 +41,31 @@
     <Compile Update="frm\UserControls\ucAnalytics.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="frm\UserControls\ucAnalyticsInsights.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucAnalyticsSimple.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucCommentManagement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="frm\UserControls\ucDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucDashboard.Extended.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucPostDetail.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="frm\UserControls\ucPostManagement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="frm\UserControls\ucPosts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucReportManagement.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucSettings.cs">
@@ -57,6 +75,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucSocialAccounts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucUserManagement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucUserManagementNew.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="middlewares\protectedAuth.middleware.cs">

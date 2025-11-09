@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -304,14 +304,41 @@ namespace SocialManager.services
         var user = _users.FirstOrDefault(u =>
           (u.UserName.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase) ||
            u.Email.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase)) &&
-          u.Password.Trim() == password.Trim() &&  // ← THÊM .Trim()
-          u.StatusId == 1);
+          u.Password.Trim() == password.Trim());
 
-        return user != null;
+        return user != null && user.StatusId == 1;
       }
       catch
       {
         return false;
+      }
+    }
+
+    public string GetAuthenticationError(string username, string password)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        
+        var user = _users.FirstOrDefault(u =>
+          (u.UserName.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase) ||
+           u.Email.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase)) &&
+          u.Password.Trim() == password.Trim());
+
+        if (user == null)
+          return "Tên đăng nhập hoặc mật khẩu không đúng.";
+        
+        if (user.StatusId == -1)
+          return "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.";
+        
+        if (user.StatusId == 0)
+          return "Tài khoản chưa được kích hoạt.";
+        
+        return ""; // No error
+      }
+      catch
+      {
+        return "Có lỗi xảy ra khi đăng nhập.";
       }
     }
 

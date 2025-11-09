@@ -78,6 +78,29 @@ namespace SocialManager.services
     }
 
     /// <summary>
+    /// Lấy tất cả comment (mặc định ẩn comment đã xóa)
+    /// </summary>
+    public List<Comment> GetAllComments(bool includeDeleted = false)
+    {
+      try
+      {
+        var allComments = Comment.GetList(COMMENT_FILE_PATH);
+
+        if (!includeDeleted)
+        {
+          allComments = allComments.Where(c => !c.IsDeleted).ToList();
+        }
+
+        return allComments.OrderByDescending(c => c.CreatedAt).ToList();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi tải comment: {ex.Message}");
+        return new List<Comment>();
+      }
+    }
+
+    /// <summary>
     /// Lấy tất cả comment của một bài viết (mặc định ẩn comment đã xóa)
     /// </summary>
     public List<Comment> GetCommentsByPostId(int postId, bool includeDeleted = false)
@@ -99,6 +122,14 @@ namespace SocialManager.services
         Console.WriteLine($"Lỗi khi tải comment: {ex.Message}");
         return new List<Comment>();
       }
+    }
+
+    /// <summary>
+    /// Xóa comment (soft delete: đánh dấu IsDeleted = true)
+    /// </summary>
+    public bool DeleteComment(int commentId)
+    {
+      return SoftDeleteComment(commentId);
     }
 
     /// <summary>

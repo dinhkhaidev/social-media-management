@@ -56,13 +56,45 @@ namespace SocialManager
         int.TryParse(values[6], out int commentsCount);
         this.CommentsCount = commentsCount;
 
-        DateTime.TryParse(values[7], out DateTime createdAt);
-        this.CreatedAt = createdAt;
+        // Parse CreatedAt with specific format
+        string createdAtStr = values[7]?.Trim();
+        System.Diagnostics.Debug.WriteLine($"📆 Parsing CreatedAt: '{createdAtStr}'");
+        
+        if (DateTime.TryParseExact(createdAtStr, "yyyy-MM-dd HH:mm:ss", 
+            System.Globalization.CultureInfo.InvariantCulture, 
+            System.Globalization.DateTimeStyles.None, out DateTime createdAt))
+        {
+          this.CreatedAt = createdAt;
+          System.Diagnostics.Debug.WriteLine($"✅ Parsed with format: {createdAt:yyyy-MM-dd HH:mm:ss}");
+        }
+        else if (DateTime.TryParse(createdAtStr, out createdAt))
+        {
+          this.CreatedAt = createdAt;
+          System.Diagnostics.Debug.WriteLine($"✅ Parsed with TryParse: {createdAt:yyyy-MM-dd HH:mm:ss}");
+        }
+        else
+        {
+          this.CreatedAt = DateTime.Now; // Fallback
+          System.Diagnostics.Debug.WriteLine($"❌ Failed to parse, using Now: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        }
 
         // Handle UpdatedAt which might be empty
-        if (values.Length > 8 && DateTime.TryParse(values[8], out DateTime updatedAt))
+        if (values.Length > 8 && !string.IsNullOrWhiteSpace(values[8]))
         {
-          this.UpdatedAt = updatedAt;
+          if (DateTime.TryParseExact(values[8], "yyyy-MM-dd HH:mm:ss",
+              System.Globalization.CultureInfo.InvariantCulture,
+              System.Globalization.DateTimeStyles.None, out DateTime updatedAt))
+          {
+            this.UpdatedAt = updatedAt;
+          }
+          else if (DateTime.TryParse(values[8], out updatedAt))
+          {
+            this.UpdatedAt = updatedAt;
+          }
+          else
+          {
+            this.UpdatedAt = null;
+          }
         }
         else
         {

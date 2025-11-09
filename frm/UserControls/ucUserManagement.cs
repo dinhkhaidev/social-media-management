@@ -18,6 +18,10 @@ namespace SocialManager.frm.UserControls
         private UserService userService;
         private List<User> allUsers;
         
+        // Sorting state
+        private string? lastSortedColumn;
+        private bool isAscending = true;
+        
         // Controls
         private DataGridView dgvUsers;
         private TextBox txtSearch;
@@ -359,6 +363,8 @@ namespace SocialManager.frm.UserControls
             dgvUsers.RowTemplate.Height = 45;
             dgvUsers.EnableHeadersVisualStyles = false;
             dgvUsers.GridColor = Color.FromArgb(234, 236, 238);
+            
+            dgvUsers.ColumnHeaderMouseClick += DgvUsers_ColumnHeaderMouseClick;
         }
 
         private Panel CreateUserFormPanel()
@@ -495,7 +501,7 @@ namespace SocialManager.frm.UserControls
         {
             dgvUsers.Rows.Clear();
             
-            foreach (var user in users.OrderByDescending(u => u.CreatedAt))
+            foreach (var user in users)
             {
                 var row = dgvUsers.Rows.Add(
                     user.UserID.ToString(),
@@ -506,6 +512,9 @@ namespace SocialManager.frm.UserControls
                     UserConstant.GetStatusText(user.StatusId),
                     user.CreatedAt.ToString("dd/MM/yyyy")
                 );
+                
+                // Store DateTime for sorting
+                dgvUsers.Rows[row].Cells["CreatedAt"].Tag = user.CreatedAt;
                 
                 // Color coding based on status
                 if (user.StatusId == 1) // Active
@@ -932,6 +941,77 @@ namespace SocialManager.frm.UserControls
         }
 
         #endregion
+
+        private void DgvUsers_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex < 0) return;
+
+            var column = dgvUsers.Columns[e.ColumnIndex];
+            var columnName = column.Name;
+
+            if (lastSortedColumn == columnName)
+            {
+                isAscending = !isAscending;
+            }
+            else
+            {
+                isAscending = true;
+                lastSortedColumn = columnName;
+            }
+
+            var currentUsers = new List<User>();
+            foreach (DataGridViewRow row in dgvUsers.Rows)
+            {
+                var userId = Guid.Parse(row.Cells["UserID"].Value.ToString());
+                var user = allUsers.FirstOrDefault(u => u.UserID == userId);
+                if (user != null)
+                    currentUsers.Add(user);
+            }
+
+            switch (columnName)
+            {
+                case "CreatedAt":
+                    currentUsers = isAscending 
+                        ? currentUsers.OrderBy(u => u.CreatedAt).ToList()
+                        : currentUsers.OrderByDescending(u => u.CreatedAt).ToList();
+                    break;
+                case "UserName":
+                    currentUsers = isAscending 
+                        ? currentUsers.OrderBy(u => u.UserName).ToList()
+                        : currentUsers.OrderByDescending(u => u.UserName).ToList();
+                    break;
+                case "FullName":
+                    currentUsers = isAscending 
+                        ? currentUsers.OrderBy(u => u.FullName).ToList()
+                        : currentUsers.OrderByDescending(u => u.FullName).ToList();
+                    break;
+                case "Email":
+                    currentUsers = isAscending 
+                        ? currentUsers.OrderBy(u => u.Email).ToList()
+                        : currentUsers.OrderByDescending(u => u.Email).ToList();
+                    break;
+                case "Role":
+                    currentUsers = isAscending 
+                        ? currentUsers.OrderBy(u => u.Role).ToList()
+                        : currentUsers.OrderByDescending(u => u.Role).ToList();
+                    break;
+                case "Status":
+                    currentUsers = isAscending 
+                        ? currentUsers.OrderBy(u => u.StatusId).ToList()
+                        : currentUsers.OrderByDescending(u => u.StatusId).ToList();
+                    break;
+                default:
+                    return;
+            }
+
+            foreach (DataGridViewColumn col in dgvUsers.Columns)
+            {
+                col.HeaderCell.SortGlyphDirection = SortOrder.None;
+            }
+
+            column.HeaderCell.SortGlyphDirection = isAscending ? SortOrder.Ascending : SortOrder.Descending;
+            DisplayUsers(currentUsers);
+        }
 
         public void RefreshData()
         {
