@@ -8,7 +8,7 @@ namespace SocialManager.services
 {
   public class UserService
   {
-    private const string HEADER = "UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId,Role,ReportCount";
+    private const string HEADER = "UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId,Role,ReportCount,ViolationCount";
     private List<User> _users;
 
     public UserService()
@@ -20,7 +20,7 @@ namespace SocialManager.services
     // --- Private Helper Methods ---
 
     /// <summary>
-    /// Migration: Đảm bảo CSV có cột Role (14 cột) và ReportCount (15 cột)
+    /// Migration: Đảm bảo CSV có cột Role, ReportCount và ViolationCount
     /// </summary>
     private void MigrateUserCsvIfNeeded()
     {
@@ -36,45 +36,33 @@ namespace SocialManager.services
         string currentHeader = lines[0];
         bool needsMigration = false;
 
-        // Check nếu header thiếu Role hoặc ReportCount
+        // Check header structure
         var headerParts = currentHeader.Split(',');
 
-        if (headerParts.Length < 14 || !currentHeader.Contains("Role"))
+        // Update header to latest format
+        if (headerParts.Length < 16 || !currentHeader.Contains("ViolationCount"))
         {
           lines[0] = HEADER;
           needsMigration = true;
 
-          // Add Role=0 and ReportCount=0 to existing records
+          // Migrate data rows
           for (int i = 1; i < lines.Count; i++)
           {
             if (!string.IsNullOrWhiteSpace(lines[i]))
             {
               var parts = lines[i].Split(',');
-              if (parts.Length == 13) // Old format without Role and ReportCount
+              
+              if (parts.Length == 13) // Old format: no Role, ReportCount, ViolationCount
               {
-                lines[i] += ",0,0"; // Add default Role=0, ReportCount=0
+                lines[i] += ",0,0,0"; // Add Role=0, ReportCount=0, ViolationCount=0
               }
-              else if (parts.Length == 14) // Has Role but no ReportCount
+              else if (parts.Length == 14) // Has Role, no ReportCount, ViolationCount
               {
-                lines[i] += ",0"; // Add default ReportCount=0
+                lines[i] += ",0,0"; // Add ReportCount=0, ViolationCount=0
               }
-            }
-          }
-        }
-        else if (headerParts.Length < 15 || !currentHeader.Contains("ReportCount"))
-        {
-          lines[0] = HEADER;
-          needsMigration = true;
-
-          // Add ReportCount=0 to existing records
-          for (int i = 1; i < lines.Count; i++)
-          {
-            if (!string.IsNullOrWhiteSpace(lines[i]))
-            {
-              var parts = lines[i].Split(',');
-              if (parts.Length == 14) // Has Role but no ReportCount
+              else if (parts.Length == 15) // Has Role, ReportCount, no ViolationCount
               {
-                lines[i] += ",0"; // Add default ReportCount=0
+                lines[i] += ",0"; // Add ViolationCount=0
               }
             }
           }
@@ -83,7 +71,7 @@ namespace SocialManager.services
         if (needsMigration)
         {
           File.WriteAllLines(GlobalSetting.UsersFilePath, lines, Encoding.UTF8);
-          Console.WriteLine("User CSV migrated to include Role and ReportCount columns");
+          Console.WriteLine("User CSV migrated to include Role, ReportCount and ViolationCount columns");
         }
       }
       catch (Exception ex)
@@ -477,14 +465,33 @@ namespace SocialManager.services
 
         user.ReportCount = GetReportCount(userId);
 
-        // Tự động cập nhật StatusId dựa trên ReportCount
-        if (user.ReportCount >= 100)
+        // Tự động cập nhật StatusId dựa trên ViolationCount và ReportCount
+        // Ưu tiên: ViolationCount (admin xác nhận) > ReportCount (user báo cáo)
+        // ViolationCount:
+        //   3+ lần: Banned (-1)
+        //   1-2 lần: Warning (2)
+        // ReportCount:
+        //   50+ lần: Banned (-1) - tự động ban khi quá nhiều report
+        //   30-49 lần: Warning (2) - cảnh báo
+        if (user.ViolationCount >= 3)
         {
-          user.StatusId = -1; // Tạm ngừng tài khoản
+          user.StatusId = -1; // Banned - admin đã xác nhận 3+ vi phạm
         }
-        else if (user.StatusId == -1 && user.ReportCount < 100)
+        else if (user.ReportCount >= 50)
         {
-          user.StatusId = 1; // Khôi phục nếu dưới ngưỡng
+          user.StatusId = -1; // Banned - bị báo cáo quá nhiều (50+ lần)
+        }
+        else if (user.ViolationCount >= 1 && user.ViolationCount <= 2)
+        {
+          user.StatusId = 2; // Warning - admin đã xác nhận 1-2 vi phạm
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - bị báo cáo nhiều (30-49 lần)
+        }
+        else if (user.ViolationCount == 0 && user.ReportCount < 30 && user.StatusId != 0)
+        {
+          user.StatusId = 1; // Active - không có vi phạm và report dưới ngưỡng
         }
 
         return SaveAllUsers(_users);
@@ -511,10 +518,28 @@ namespace SocialManager.services
 
         user.ReportCount++;
 
-        // Tự động cập nhật StatusId dựa trên ReportCount
-        if (user.ReportCount >= 100)
+        // NOTE: ReportCount để thống kê và tự động cảnh báo/ban ở ngưỡng cao
+        // ViolationCount (admin xác nhận) có ưu tiên cao hơn
+        // Tự động cập nhật StatusId:
+        //   ViolationCount >= 3: Banned (-1)
+        //   ReportCount >= 50: Banned (-1) - tự động ban
+        //   ViolationCount 1-2: Warning (2)
+        //   ReportCount >= 30: Warning (2) - cảnh báo tự động
+        if (user.ViolationCount >= 3)
         {
-          user.StatusId = -1; // Tạm ngừng tài khoản
+          user.StatusId = -1; // Banned - admin confirmed
+        }
+        else if (user.ReportCount >= 50)
+        {
+          user.StatusId = -1; // Banned - too many reports
+        }
+        else if (user.ViolationCount >= 1 && user.ViolationCount <= 2)
+        {
+          user.StatusId = 2; // Warning - admin confirmed
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - many reports
         }
 
         return SaveAllUsers(_users);
@@ -522,6 +547,97 @@ namespace SocialManager.services
       catch (Exception ex)
       {
         Console.WriteLine($"Lỗi khi tăng report count: {ex.Message}");
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// Tăng ViolationCount khi Admin xác nhận vi phạm (ẩn post/comment)
+    /// </summary>
+    public bool IncrementViolationCount(Guid userId)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var user = _users.FirstOrDefault(u => u.UserID == userId);
+        if (user == null)
+          return false;
+
+        user.ViolationCount++;
+
+        // Tự động cập nhật StatusId dựa trên ViolationCount và ReportCount
+        // 3+ lần violation: Banned (-1)
+        // 50+ lần report: Banned (-1)
+        // 1-2 lần violation: Warning (2)
+        // 30+ lần report: Warning (2)
+        if (user.ViolationCount >= 3)
+        {
+          user.StatusId = -1; // Banned - bị cấm
+        }
+        else if (user.ReportCount >= 50)
+        {
+          user.StatusId = -1; // Banned - quá nhiều báo cáo
+        }
+        else if (user.ViolationCount >= 1 && user.ViolationCount <= 2)
+        {
+          user.StatusId = 2; // Warning - cảnh báo
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - nhiều báo cáo
+        }
+
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi tăng violation count: {ex.Message}");
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// Giảm ViolationCount (khi admin hủy quyết định vi phạm)
+    /// </summary>
+    public bool DecrementViolationCount(Guid userId)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var user = _users.FirstOrDefault(u => u.UserID == userId);
+        if (user == null)
+          return false;
+
+        if (user.ViolationCount > 0)
+          user.ViolationCount--;
+
+        // Cập nhật StatusId dựa trên ViolationCount và ReportCount
+        if (user.ViolationCount >= 3)
+        {
+          user.StatusId = -1; // Banned
+        }
+        else if (user.ReportCount >= 50)
+        {
+          user.StatusId = -1; // Banned - quá nhiều report
+        }
+        else if (user.ViolationCount >= 1)
+        {
+          user.StatusId = 2; // Warning - do violation
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - do nhiều report
+        }
+        else
+        {
+          user.StatusId = 1; // Active - khôi phục về hoạt động bình thường
+        }
+
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi giảm violation count: {ex.Message}");
         return false;
       }
     }

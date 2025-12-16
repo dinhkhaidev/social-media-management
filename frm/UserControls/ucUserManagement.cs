@@ -53,6 +53,7 @@ namespace SocialManager.frm.UserControls
         {
             InitializeComponent();
             InitializeUserManagement();
+            CreateUserManagementLayout();
             LoadUsers();
         }
 
@@ -194,7 +195,8 @@ namespace SocialManager.frm.UserControls
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Margin = new Padding(5),
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                Cursor = Cursors.Hand
             };
             btnRefresh.FlatAppearance.BorderSize = 0;
             btnRefresh.Click += BtnRefresh_Click;

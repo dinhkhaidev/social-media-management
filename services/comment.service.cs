@@ -270,12 +270,10 @@ namespace SocialManager.services
       }
     }
 
-
-
     /// <summary>
     /// Tố cáo comment: Soft delete comment và ghi lại report
     /// </summary>
-    public bool ReportComment(int commentId, Guid reporterUserId, out Guid? reportedUserId)
+    public bool ReportComment(int commentId, Guid reporterUserId, out Guid? reportedUserId, string reason = "")
     {
       reportedUserId = null;
 
@@ -294,9 +292,9 @@ namespace SocialManager.services
         if (reporterUserId == comment.UserID)
           return false;
 
-        // Ghi lại report vào Report.csv
+        // Ghi lại report vào Report.csv với lý do
         var reportService = new ReportService();
-        if (!reportService.CreateReport("Comment", commentId, reporterUserId, comment.UserID))
+        if (!reportService.CreateReport("Comment", commentId, reporterUserId, comment.UserID, reason))
           return false;
 
         // Soft delete comment

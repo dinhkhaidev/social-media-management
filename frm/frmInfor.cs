@@ -40,8 +40,7 @@ namespace SocialManager.frm
       ApplyRoundedCorners();
 
       // Apply theme from GlobalSettings
-      bool isDarkMode = GlobalSettings.Theme == "Dark";
-      DashboardTheme.ApplyThemeToForm(this, isDarkMode);
+      DashboardTheme.ApplyThemeToForm(this);
     }
 
     private void ApplyRoundedCorners()

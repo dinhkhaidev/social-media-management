@@ -851,10 +851,11 @@ namespace SocialManager.frm.UserControls
                 "📈 Tăng trưởng người dùng",
                 "✅ Người dùng hoạt động",
                 "💤 Người dùng không hoạt động",
+                "⚠️ Người dùng bị cảnh báo",
                 "📝 Tổng số bài viết",
                 "💬 Tổng số bình luận",
                 "❤️ Tổng số reactions",
-                "⚠️ Báo cáo vi phạm",
+                "🔴 Báo cáo vi phạm",
                 "🚫 Người dùng bị cấm",
                 "🔁 Tỉ lệ retention",
                 "🌍 Phân bố địa lý",
@@ -1182,10 +1183,11 @@ namespace SocialManager.frm.UserControls
                     var metrics = new Dictionary<string, string>
                     {
                         { "👥 Tổng người dùng", users.Count.ToString("N0") },
-                        { "✅ Người dùng hoạt động", users.Count(u => u.StatusId == 0).ToString("N0") },
+                        { "✅ Người dùng hoạt động", users.Count(u => u.StatusId == 1).ToString("N0") },
+                        { "⚠️ Cảnh báo", users.Count(u => u.StatusId == 2).ToString("N0") },
                         { "👑 Admin", users.Count(u => u.Role == 1).ToString("N0") },
                         { "👤 Người dùng thường", users.Count(u => u.Role == 0).ToString("N0") },
-                        { "🚫 Bị cấm", users.Count(u => u.StatusId == 1).ToString("N0") }
+                        { "🚫 Bị cấm", users.Count(u => u.StatusId == -1).ToString("N0") }
                     };
 
                     foreach (var metric in metrics)
@@ -1660,34 +1662,43 @@ namespace SocialManager.frm.UserControls
                             lstSelectedMetrics.Items.Add($"   → {newUsers:N0} người dùng mới");
                             break;
                         case 2: // Người dùng hoạt động
-                            var active = users.Count(u => u.StatusId == 0);
+                            var active = users.Count(u => u.StatusId == 1);
                             lstSelectedMetrics.Items.Add($"   → {active:N0} người dùng ({(users.Count > 0 ? active * 100.0 / users.Count : 0):F1}%)");
                             break;
                         case 3: // Không hoạt động
-                            var inactive = users.Count(u => u.StatusId != 0);
+                            var inactive = users.Count(u => u.StatusId == 0);
                             lstSelectedMetrics.Items.Add($"   → {inactive:N0} người dùng ({(users.Count > 0 ? inactive * 100.0 / users.Count : 0):F1}%)");
                             break;
-                        case 4: // Tổng bài viết
+                        case 4: // Người dùng bị cảnh báo
+                            var warned = users.Count(u => u.StatusId == 2);
+                            var warnedByViolation = users.Count(u => u.StatusId == 2 && u.ViolationCount > 0);
+                            var warnedByReport = users.Count(u => u.StatusId == 2 && u.ViolationCount == 0 && u.ReportCount >= 30);
+                            lstSelectedMetrics.Items.Add($"   → {warned:N0} người dùng ({(users.Count > 0 ? warned * 100.0 / users.Count : 0):F1}%)");
+                            lstSelectedMetrics.Items.Add($"   → Do vi phạm: {warnedByViolation:N0} người");
+                            lstSelectedMetrics.Items.Add($"   → Do nhiều báo cáo (30+): {warnedByReport:N0} người");
+                            break;
+                        case 5: // Tổng bài viết
                             lstSelectedMetrics.Items.Add($"   → {posts.Count:N0} bài viết");
                             break;
-                        case 5: // Tổng bình luận
+                        case 6: // Tổng bình luận
                             lstSelectedMetrics.Items.Add($"   → {comments.Count:N0} bình luận");
                             break;
-                        case 6: // Tổng reactions
+                        case 7: // Tổng reactions
                             var totalLikes = posts.Sum(p => p.LikesCount);
                             lstSelectedMetrics.Items.Add($"   → {totalLikes:N0} lượt thích");
                             break;
-                        case 7: // Báo cáo vi phạm
+                        case 8: // Báo cáo vi phạm
                             lstSelectedMetrics.Items.Add($"   → {reports.Count:N0} báo cáo");
                             break;
-                        case 8: // Người dùng bị cấm
-                            var banned = users.Count(u => u.StatusId == 1);
+                        case 9: // Người dùng bị cấm
+                            var banned = users.Count(u => u.StatusId == -1);
                             lstSelectedMetrics.Items.Add($"   → {banned:N0} người dùng bị cấm");
+                            lstSelectedMetrics.Items.Add($"   → Đã bị báo cáo 3+ lần");
                             break;
-                        case 9: // Retention
-                            lstSelectedMetrics.Items.Add($"   → Tỉ lệ retention: {(users.Count > 0 ? users.Count(u => u.StatusId == 0) * 100.0 / users.Count : 0):F1}%");
+                        case 10: // Retention
+                            lstSelectedMetrics.Items.Add($"   → Tỉ lệ retention: {(users.Count > 0 ? users.Count(u => u.StatusId == 1) * 100.0 / users.Count : 0):F1}%");
                             break;
-                        case 10: // Địa lý
+                        case 11: // Địa lý
                             if (geographicData != null && geographicData.Count > 0)
                             {
                                 var total = geographicData.Values.Sum();
@@ -1700,7 +1711,7 @@ namespace SocialManager.frm.UserControls
                                 lstSelectedMetrics.Items.Add($"   → Chưa có dữ liệu phân bố địa lý");
                             }
                             break;
-                        case 11: // Tốc độ xử lý
+                        case 12: // Tốc độ xử lý
                             var resolved = reports.Count(r => r.Status == "Resolved");
                             lstSelectedMetrics.Items.Add($"   → {resolved:N0}/{reports.Count:N0} báo cáo đã xử lý (2.5h TB)");
                             break;

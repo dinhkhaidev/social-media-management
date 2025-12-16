@@ -187,19 +187,27 @@ namespace SocialManager.services
     {
       try
       {
+        // Skip header lines
+        if (csvLine.StartsWith("PostID,") || string.IsNullOrWhiteSpace(csvLine))
+          return null;
+
         // Simple CSV parsing - in production you'd want more robust parsing
         string[] values = csvLine.Split(',');
 
         if (values.Length < 8)
           return null;
 
-        var post = new Post();
+        // Skip if first column is not a valid PostID
+        if (!int.TryParse(values[0], out int postId))
+          return null;
 
-        if (int.TryParse(values[0], out int postId))
-          post.PostID = postId;
+        var post = new Post();
+        post.PostID = postId;
 
         if (Guid.TryParse(values[1], out Guid userId))
           post.UserID = userId;
+        else
+          return null; // Invalid UserID
 
         post.Content = values[2].Trim('"').Replace("\"\"", "\"");
         post.MediaUrl = values[3];
@@ -214,20 +222,38 @@ namespace SocialManager.services
         if (DateTime.TryParse(values[7], out DateTime created))
           post.CreatedAt = created;
 
-        if (values.Length > 8 && DateTime.TryParse(values[8], out DateTime updated))
+        if (values.Length > 8 && !string.IsNullOrWhiteSpace(values[8]) && DateTime.TryParse(values[8], out DateTime updated))
           post.UpdatedAt = updated;
 
-        // Parse IsDeleted (column 10)
-        if (values.Length > 9 && bool.TryParse(values[9], out bool isDeleted))
-          post.IsDeleted = isDeleted;
+        // Parse IsDeleted (column 10) - handle different positions due to CSV inconsistency
+        bool isDeleted = false;
+        if (values.Length > 9)
+        {
+          // Try parsing the last column as IsDeleted
+          string lastValue = values[values.Length - 1].Trim();
+          if (bool.TryParse(lastValue, out isDeleted))
+          {
+            post.IsDeleted = isDeleted;
+          }
+          else
+          {
+            // If last column is not boolean, try column 9
+            if (values.Length > 9 && bool.TryParse(values[9], out isDeleted))
+              post.IsDeleted = isDeleted;
+            else
+              post.IsDeleted = false;
+          }
+        }
         else
+        {
           post.IsDeleted = false;
+        }
 
         return post;
       }
       catch (Exception ex)
       {
-        System.Diagnostics.Debug.WriteLine($"Error parsing post from CSV: {ex.Message}");
+        System.Diagnostics.Debug.WriteLine($"Error parsing post from CSV: {ex.Message} - Line: {csvLine}");
         return null;
       }
     }
@@ -347,34 +373,28 @@ namespace SocialManager.services
 
         for (int i = 1; i < lines.Count; i++) // Skip header
         {
-          if (string.IsNullOrWhiteSpace(lines[i]))
+          if (string.IsNullOrWhiteSpace(lines[i]) || lines[i].StartsWith("PostID,"))
             continue;
 
           var parts = lines[i].Split(',');
           if (parts.Length > 0 && int.TryParse(parts[0], out int id) && id == postId)
           {
-            // Update UpdatedAt (column 9) and IsDeleted (column 10)
-            if (parts.Length >= 10)
+            // Ensure we have enough columns (minimum 10 for IsDeleted)
+            var newParts = new List<string>();
+            
+            // Copy existing parts (up to 8 columns: PostID to CreatedAt)
+            for (int j = 0; j < Math.Min(parts.Length, 8); j++)
             {
-              parts[8] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // UpdatedAt
-              parts[9] = "True"; // IsDeleted
+              newParts.Add(parts[j]);
             }
-            else if (parts.Length == 9)
-            {
-              parts[8] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-              lines[i] = string.Join(",", parts) + ",True";
-              found = true;
-              break;
-            }
-            else
-            {
-              // Old format - just append
-              lines[i] = lines[i] + $",{DateTime.Now:yyyy-MM-dd HH:mm:ss},True";
-              found = true;
-              break;
-            }
-
-            lines[i] = string.Join(",", parts);
+            
+            // Add UpdatedAt (column 9)
+            newParts.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            
+            // Add IsDeleted (column 10)
+            newParts.Add("True");
+            
+            lines[i] = string.Join(",", newParts);
             found = true;
             break;
           }
@@ -383,9 +403,11 @@ namespace SocialManager.services
         if (found)
         {
           File.WriteAllLines(POST_DATA_PATH, lines);
+          System.Diagnostics.Debug.WriteLine($"Successfully soft deleted post {postId}");
           return true;
         }
 
+        System.Diagnostics.Debug.WriteLine($"Post {postId} not found for soft delete");
         return false;
       }
       catch (Exception ex)
@@ -410,30 +432,41 @@ namespace SocialManager.services
 
         for (int i = 1; i < lines.Count; i++) // Skip header
         {
-          if (string.IsNullOrWhiteSpace(lines[i]))
+          if (string.IsNullOrWhiteSpace(lines[i]) || lines[i].StartsWith("PostID,"))
             continue;
 
           var parts = lines[i].Split(',');
           if (parts.Length > 0 && int.TryParse(parts[0], out int id) && id == postId)
           {
-            // Update IsDeleted (column 10) to False
-            if (parts.Length >= 10)
+            // Ensure we have enough columns (minimum 10 for IsDeleted)
+            var newParts = new List<string>();
+            
+            // Copy existing parts (up to 8 columns: PostID to CreatedAt)
+            for (int j = 0; j < Math.Min(parts.Length, 8); j++)
             {
-              parts[8] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // UpdatedAt
-              parts[9] = "False"; // IsDeleted
-              lines[i] = string.Join(",", parts);
-              found = true;
-              break;
+              newParts.Add(parts[j]);
             }
+            
+            // Add UpdatedAt (column 9)
+            newParts.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            
+            // Add IsDeleted (column 10)
+            newParts.Add("False");
+            
+            lines[i] = string.Join(",", newParts);
+            found = true;
+            break;
           }
         }
 
         if (found)
         {
           File.WriteAllLines(POST_DATA_PATH, lines);
+          System.Diagnostics.Debug.WriteLine($"Successfully restored post {postId}");
           return true;
         }
 
+        System.Diagnostics.Debug.WriteLine($"Post {postId} not found for restore");
         return false;
       }
       catch (Exception ex)
@@ -443,7 +476,7 @@ namespace SocialManager.services
       }
     }
 
-    public static bool ReportPost(int postId, Guid reporterUserId, out Guid? reportedUserId)
+    public static bool ReportPost(int postId, Guid reporterUserId, out Guid? reportedUserId, string reason = "")
     {
       reportedUserId = null;
       try
@@ -466,7 +499,7 @@ namespace SocialManager.services
         }
 
         var reportService = new ReportService();
-        bool reportCreated = reportService.CreateReport("Post", postId, reporterUserId, post.UserID);
+        bool reportCreated = reportService.CreateReport("Post", postId, reporterUserId, post.UserID, reason);
         if (!reportCreated)
         {
           System.Windows.Forms.MessageBox.Show("Không thể tạo báo cáo tố cáo!", "Lỗi", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
@@ -496,8 +529,7 @@ namespace SocialManager.services
         return false;
       }
     }
-
-    /// <summary>
+/// <summary>
     /// Get posts that a user has commented on
     /// </summary>
     public List<Post> GetPostsCommentedByUser(Guid userId)

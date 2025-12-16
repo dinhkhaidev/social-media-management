@@ -37,7 +37,7 @@ namespace SocialManager.frm
       lblEmail.Text = $"Email: {email}";
       lblCode.Text = $"Mã xác minh: {verificationCode}";
       lblInstruction.Text = "Vui lòng nhập mã xác minh 6 số đã được gửi đến email của bạn.\n" +
-                            "(Trong môi trường thử nghiệm, mã sẽ hiển thị trực tiếp)";
+                            "(Trong môi trường demo, mã sẽ hiển thị trực tiếp)";
 
       // Setup textbox
       txtVerificationCode.MaxLength = 6;

@@ -59,9 +59,9 @@ namespace SocialManager
         // Parse CreatedAt with specific format
         string createdAtStr = values[7]?.Trim();
         System.Diagnostics.Debug.WriteLine($"📆 Parsing CreatedAt: '{createdAtStr}'");
-
-        if (DateTime.TryParseExact(createdAtStr, "yyyy-MM-dd HH:mm:ss",
-            System.Globalization.CultureInfo.InvariantCulture,
+        
+        if (DateTime.TryParseExact(createdAtStr, "yyyy-MM-dd HH:mm:ss", 
+            System.Globalization.CultureInfo.InvariantCulture, 
             System.Globalization.DateTimeStyles.None, out DateTime createdAt))
         {
           this.CreatedAt = createdAt;

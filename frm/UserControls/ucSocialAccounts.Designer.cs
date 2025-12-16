@@ -389,7 +389,7 @@ namespace SocialManager.frm.UserControls
             btnRefreshData.Name = "btnRefreshData";
             btnRefreshData.Size = new Size(120, 35);
             btnRefreshData.TabIndex = 2;
-            btnRefreshData.Text = "?? Refresh Data";
+            btnRefreshData.Text = "🔄 Làm mới";
             btnRefreshData.UseVisualStyleBackColor = false;
             btnRefreshData.Click += btnRefreshData_Click;
             // 

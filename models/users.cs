@@ -22,23 +22,24 @@ namespace SocialManager
     public int Role { get; set; } // 0: User, 1: Admin, 2: Moderator
     public DateTime CreatedAt { get; set; }
     public int StatusId { get; set; }
-    public int ReportCount { get; set; } // Số lần bị tố cáo
+    public int ReportCount { get; set; } // Số lần bị báo cáo: 30+ cảnh báo, 50+ bị cấm
+    public int ViolationCount { get; set; } // Số lần vi phạm Admin xác nhận: 1-2 cảnh báo, 3+ bị cấm
 
     // Computed property cho trạng thái tài khoản
     public string AccountStatus
     {
       get
       {
-        if (ReportCount >= 100)
-          return "Tạm ngừng";
-        else if (ReportCount >= 50)
+        if (ViolationCount >= 3 || ReportCount >= 50)
+          return "Bị cấm";
+        else if (ViolationCount >= 1 || ReportCount >= 30)
           return "Cảnh báo";
         else
           return "Bình thường";
       }
     }
 
-    public bool CanPost => ReportCount < 100; // Chỉ cho đăng bài nếu < 100 lần tố cáo
+    public bool CanPost => ViolationCount < 3 && ReportCount < 50; // Không cho đăng bài nếu bị cấm
 
     // --- Constructors ---
 
@@ -48,6 +49,7 @@ namespace SocialManager
       UserName = Password = FullName = Bio = AvatarUrl = Email = Phone = Address = "";
       Role = 0;
       ReportCount = 0;
+      ViolationCount = 0;
     }
 
     // Factory method để tạo User từ CSV columns
@@ -77,6 +79,13 @@ namespace SocialManager
             int.TryParse(values[14], out reportCount);
           }
 
+          // Handle ViolationCount field (16th field) if exists, otherwise default to 0
+          int violationCount = 0;
+          if (values.Length >= 16)
+          {
+            int.TryParse(values[15], out violationCount);
+          }
+
           return new User(
               userId,
               values[1].Trim(),      // UserName - THÊM Trim()
@@ -92,7 +101,8 @@ namespace SocialManager
               createdAt,
               statusId,
               role,
-              reportCount
+              reportCount,
+              violationCount
           );
         }
         catch (Exception ex)
@@ -105,7 +115,7 @@ namespace SocialManager
       return new User(); // Return default user for invalid format
     }
 
-    public User(Guid userID, string userName, string password, string fullName, string bio, string avatarUrl, string email, string phone, int gender, DateTime dob, string address, DateTime createdAt, int statusId, int role = 0, int reportCount = 0)
+    public User(Guid userID, string userName, string password, string fullName, string bio, string avatarUrl, string email, string phone, int gender, DateTime dob, string address, DateTime createdAt, int statusId, int role = 0, int reportCount = 0, int violationCount = 0)
     {
       UserID = userID;
       UserName = userName;
@@ -122,6 +132,7 @@ namespace SocialManager
       CreatedAt = createdAt;
       StatusId = statusId;
       ReportCount = reportCount;
+      ViolationCount = violationCount;
     }
 
     // --- Methods ---
@@ -129,11 +140,11 @@ namespace SocialManager
     // Chuyển đổi User object thành dòng CSV
     public string ToCsvLine()
     {
-      // Format: UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId,Role,ReportCount
+      // Format: UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId,Role,ReportCount,ViolationCount
       return $"{UserID},{UserName},{Password},{FullName}," +
              $"{Bio},{AvatarUrl},{Email},{Phone}," +
              $"{Gender},{DOB:yyyy-MM-dd HH:mm:ss},{Address}," +
-             $"{CreatedAt:yyyy-MM-dd HH:mm:ss},{StatusId},{Role},{ReportCount}";
+             $"{CreatedAt:yyyy-MM-dd HH:mm:ss},{StatusId},{Role},{ReportCount},{ViolationCount}";
     }
   }
 }

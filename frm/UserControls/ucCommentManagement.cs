@@ -11,9 +11,9 @@ namespace SocialManager
     public partial class ucCommentManagement : UserControl
     {
         #region Fields
-        private readonly CommentService commentService;
-        private readonly UserService userService;
-        private readonly PostService postService;
+        private CommentService commentService;
+        private UserService userService;
+        private PostService postService;
         private List<Comment> allComments;
         private List<Comment> selectedComments;
         
@@ -132,7 +132,7 @@ namespace SocialManager
             
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
             layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             
@@ -189,22 +189,7 @@ namespace SocialManager
                 Location = new Point(15, 35)
             };
             
-            btnRefresh = new Button
-            {
-                Text = "🔄",
-                Width = 40,
-                Height = 40,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = PrimaryColor,
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 14F),
-                Cursor = Cursors.Hand,
-                Location = new Point(panel.Width - 60, 10)
-            };
-            btnRefresh.FlatAppearance.BorderSize = 0;
-            btnRefresh.Click += BtnRefresh_Click;
-            
-            panel.Controls.AddRange(new Control[] { title, lblTotalComments, btnRefresh });
+            panel.Controls.AddRange(new Control[] { title, lblTotalComments });
             return panel;
         }
 
@@ -311,7 +296,7 @@ namespace SocialManager
             {
                 Dock = DockStyle.Fill,
                 FlowDirection = FlowDirection.LeftToRight,
-                WrapContents = false,
+                WrapContents = true,
                 BackColor = Color.Transparent
             };
             
@@ -338,8 +323,11 @@ namespace SocialManager
             btnExport = CreateActionButton("📊 Xuất file", Color.FromArgb(39, 174, 96));
             btnExport.Click += BtnExport_Click;
             
+            btnRefresh = CreateActionButton("🔄 Làm mới", PrimaryColor);
+            btnRefresh.Click += BtnRefresh_Click;
+            
             flowPanel.Controls.AddRange(new Control[] { 
-                btnHide, btnUnhide, btnDelete, btnWarnUser, btnBulkAction, btnExport
+                btnHide, btnUnhide, btnDelete, btnWarnUser, btnBulkAction, btnExport, btnRefresh
             });
             
             panel.Controls.Add(flowPanel);
@@ -1084,6 +1072,11 @@ namespace SocialManager
         #region Action Handlers
         private void BtnRefresh_Click(object? sender, EventArgs e)
         {
+            // Force reload services to get fresh data from files
+            commentService = new CommentService();
+            userService = new UserService();
+            postService = new PostService();
+            
             LoadComments();
             MessageBox.Show("Đã làm mới danh sách!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -1201,7 +1194,7 @@ namespace SocialManager
                 if (saveDialog.ShowDialog() == DialogResult.OK)
                 {
                     var lines = new List<string>();
-                    lines.Add("ID,Người dùng,Bài viết,Nội dung,Trạng thái,Ngày tạo");
+                    lines.Add("ID,ùng,Bài viết,Nội dung,Trạng thái,Ngày tạo");
                     
                     foreach (var comment in allComments)
                     {
@@ -1391,14 +1384,14 @@ namespace SocialManager
             var btn = new Button
             {
                 Text = text,
-                Width = 150,
+                Width = 130,
                 Height = 35,
                 FlatStyle = FlatStyle.Flat,
                 BackColor = color,
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
                 Cursor = Cursors.Hand,
-                Margin = new Padding(0, 0, 5, 0)
+                Margin = new Padding(0, 0, 3, 0)
             };
             
             btn.FlatAppearance.BorderSize = 0;

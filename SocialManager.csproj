@@ -16,14 +16,23 @@
   </ItemGroup>
 
   <!-- Attach designer metadata to frm/ files that are included implicitly by SDK -->
-
+  <ItemGroup>
+    <Compile Update="frm\frmDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmDashboard.Designer.cs">
+      <DependentUpon>frmDashboard.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="frm\frmDashboard.resx">
+      <DependentUpon>frmDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Remove="Function\**" />
     <EmbeddedResource Remove="Function\**" />
     <None Remove="Function\**" />
     <Compile Remove="datas\RoundedTextBox.cs" />
-    <!-- Do not compile legacy standalone Newsfeed form; use ucNewsfeed within frmDashboard instead -->
-    <Compile Remove="frm\frmNewsfeed.cs" />
   </ItemGroup>
 
   <ItemGroup>

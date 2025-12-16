@@ -24,6 +24,7 @@ namespace SocialManager.constants
       return status switch
       {
         1 => "Active",
+        2 => "Warning",
         0 => "Inactive",
         -1 => "Banned",
         _ => "Unknown"

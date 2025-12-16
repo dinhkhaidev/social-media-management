@@ -145,7 +145,7 @@ namespace SocialManager.frm.UserControls
             
             container.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));  // Header (reduced from 80)
             container.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));  // Search & Filter
-            container.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));  // Actions
+            container.RowStyles.Add(new RowStyle(SizeType.Absolute, 70));  // Actions
             container.RowStyles.Add(new RowStyle(SizeType.Percent, 100F)); // DataGridView
             container.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));  // Pagination
             
@@ -200,9 +200,25 @@ namespace SocialManager.frm.UserControls
                 AutoSize = true
             };
             
-            btnRefresh = CreateIconButton("🔄", "Làm mới", new Point(panel.Width - 120, 15));
+            btnRefresh = new Button
+            {
+                Text = "🔄 Làm mới",
+                Size = new Size(100, 35),
+                BackColor = Color.FromArgb(52, 152, 219),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9F),
+                Cursor = Cursors.Hand,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+            btnRefresh.FlatAppearance.BorderSize = 0;
             btnRefresh.Click += BtnRefresh_Click;
-            btnRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            
+            // Position refresh button properly
+            panel.Resize += (s, e) => {
+                btnRefresh.Location = new Point(panel.Width - 110, 10);
+            };
+            btnRefresh.Location = new Point(400, 10);
             
             panel.Controls.AddRange(new Control[] { lblTitle, lblTotalUsers, btnRefresh });
             return panel;
@@ -277,7 +293,7 @@ namespace SocialManager.frm.UserControls
             {
                 Dock = DockStyle.Fill,
                 FlowDirection = FlowDirection.LeftToRight,
-                WrapContents = false,
+                WrapContents = true,
                 BackColor = Color.Transparent
             };
             
@@ -308,8 +324,11 @@ namespace SocialManager.frm.UserControls
             btnExport = CreateActionButton("📊 Xuất file", Color.FromArgb(39, 174, 96));
             btnExport.Click += BtnExport_Click;
             
+            var btnRefreshAction = CreateActionButton("🔄 Làm mới", Color.FromArgb(52, 152, 219));
+            btnRefreshAction.Click += BtnRefresh_Click;
+            
             flowPanel.Controls.AddRange(new Control[] { 
-                btnBan, btnUnban, btnWarning, btnResetPassword, btnChangeRole, btnBulkAction, btnExport
+                btnBan, btnUnban, btnWarning, btnResetPassword, btnChangeRole, btnBulkAction, btnExport, btnRefreshAction
             });
             
             panel.Controls.Add(flowPanel);
@@ -1220,6 +1239,11 @@ namespace SocialManager.frm.UserControls
         #region Action Handlers
         private void BtnRefresh_Click(object? sender, EventArgs e)
         {
+            // Force reload services to get fresh data from files
+            userService = new UserService();
+            postService = new PostService();
+            reportService = new ReportService();
+            
             LoadUsers();
             MessageBox.Show("Đã làm mới danh sách!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -1238,7 +1262,7 @@ namespace SocialManager.frm.UserControls
             {
                 foreach (var user in selectedUsers)
                 {
-                    user.ReportCount = 100; // Set to banned threshold
+                    user.StatusId = -1; // Ban user
                     userService.UpdateUser(user);
                 }
                 
@@ -1261,7 +1285,8 @@ namespace SocialManager.frm.UserControls
             {
                 foreach (var user in selectedUsers)
                 {
-                    user.ReportCount = 0; // Reset to normal
+                    user.StatusId = 1; // Unban user (Active)
+                    user.ReportCount = 0; // Reset report count
                     userService.UpdateUser(user);
                 }
                 
@@ -1494,7 +1519,7 @@ namespace SocialManager.frm.UserControls
             {
                 foreach (var user in users)
                 {
-                    user.ReportCount = 100;
+                    user.StatusId = -1; // Ban user
                     userService.UpdateUser(user);
                 }
                 LoadUsers();
@@ -1595,13 +1620,13 @@ namespace SocialManager.frm.UserControls
             var btn = new Button
             {
                 Text = text,
-                Size = new Size(110, 35),
+                Size = new Size(120, 35),
                 BackColor = color,
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 9F),
+                Font = new Font("Segoe UI", 8.5F),
                 Cursor = Cursors.Hand,
-                Margin = new Padding(0, 0, 5, 0)
+                Margin = new Padding(0, 0, 3, 0)
             };
             
             btn.FlatAppearance.BorderSize = 0;

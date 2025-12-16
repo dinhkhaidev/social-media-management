@@ -11,9 +11,9 @@ namespace SocialManager
     public partial class ucPostManagement : UserControl
     {
         #region Fields
-        private readonly PostService postService;
-        private readonly UserService userService;
-        private readonly ReportService reportService;
+        private PostService postService;
+        private UserService userService;
+        private ReportService reportService;
         private List<Post> allPosts;
         private List<Post> selectedPosts;
         
@@ -141,7 +141,7 @@ namespace SocialManager
             
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F)); // Header
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F)); // Search/Filter
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F)); // Actions
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F)); // Actions
             layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F)); // Grid
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F)); // Pagination
             
@@ -160,24 +160,8 @@ namespace SocialManager
             var panel = new Panel
             {
                 Dock = DockStyle.Fill,
-                BackColor = Color.White, // Will be overridden by theme
+                BackColor = Color.White,
                 Padding = new Padding(15, 5, 15, 5)
-            };
-            
-            panel.Paint += (s, e) =>
-            {
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                using (var path = GetRoundedRectangle(panel.ClientRectangle, 8))
-                {
-                    using (var brush = new SolidBrush(Color.White))
-                    {
-                        e.Graphics.FillPath(brush, path);
-                    }
-                    using (var pen = new Pen(Color.FromArgb(230, 235, 240), 1))
-                    {
-                        e.Graphics.DrawPath(pen, path);
-                    }
-                }
             };
             
             var title = new Label
@@ -198,22 +182,7 @@ namespace SocialManager
                 Location = new Point(15, 35)
             };
             
-            btnRefresh = new Button
-            {
-                Text = "🔄",
-                Width = 40,
-                Height = 40,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = PrimaryColor,
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 14F),
-                Cursor = Cursors.Hand,
-                Location = new Point(panel.Width - 60, 10)
-            };
-            btnRefresh.FlatAppearance.BorderSize = 0;
-            btnRefresh.Click += BtnRefresh_Click;
-            
-            panel.Controls.AddRange(new Control[] { title, lblTotalPosts, btnRefresh });
+            panel.Controls.AddRange(new Control[] { title, lblTotalPosts });
             return panel;
         }
 
@@ -346,8 +315,11 @@ namespace SocialManager
             btnExport = CreateActionButton("📊 Xuất file", Color.FromArgb(39, 174, 96));
             btnExport.Click += BtnExport_Click;
             
+            btnRefresh = CreateActionButton("🔄 Làm mới", PrimaryColor);
+            btnRefresh.Click += BtnRefresh_Click;
+            
             flowPanel.Controls.AddRange(new Control[] { 
-                btnHide, btnUnhide, btnDelete, btnFeature, btnPin, btnBulkAction, btnExport
+                btnHide, btnUnhide, btnDelete, btnFeature, btnPin, btnBulkAction, btnExport, btnRefresh
             });
             
             panel.Controls.Add(flowPanel);
@@ -796,18 +768,45 @@ namespace SocialManager
 
         private string GetPostStatus(Post post)
         {
-            if (post.IsDeleted) return "🗑️ Đã xóa";
+            // DEBUG: Force check CSV for this specific post
+            try
+            {
+                var csvLines = System.IO.File.ReadAllLines("datas\\Post.csv");
+                foreach (var line in csvLines.Skip(1))
+                {
+                    if (!string.IsNullOrWhiteSpace(line) && !line.StartsWith("PostID,"))
+                    {
+                        var parts = line.Split(',');
+                        if (parts.Length > 0 && int.TryParse(parts[0], out int csvPostId) && csvPostId == post.PostID)
+                        {
+                            var lastCol = parts.Length > 9 ? parts[parts.Length - 1].Trim() : "False";
+                            if (lastCol.Equals("True", StringComparison.OrdinalIgnoreCase))
+                            {
+                                return "🗑️ Đã xóa";
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            catch { }
             
-            // Check if user is banned
+            // FIRST: Check if post is deleted (highest priority)
+            if (post.IsDeleted) 
+            {
+                return "🗑️ Đã xóa";
+            }
+            
+            // SECOND: Check if user is banned
             var user = userService.GetUserById(post.UserID);
             if (user != null && user.StatusId == -1)
             {
                 return "🚫 Người dùng bị khóa";
             }
             
-            // Check if post has reports
+            // THIRD: Check if post has active reports
             var reports = reportService.GetReportsForContent("Post", post.PostID);
-            if (reports.Any())
+            if (reports != null && reports.Any())
             {
                 var activeReports = reports.Where(r => r.Status == "New" || r.Status == "In Review").ToList();
                 if (activeReports.Any())
@@ -816,6 +815,7 @@ namespace SocialManager
                 }
             }
             
+            // DEFAULT: Published
             return "Đã xuất bản";
         }
         #endregion
@@ -1269,8 +1269,33 @@ namespace SocialManager
         #region Action Handlers
         private void BtnRefresh_Click(object? sender, EventArgs e)
         {
+            // Force reload services to get fresh data from files
+            postService = new PostService();
+            userService = new UserService();
+            reportService = new ReportService();
+            
             LoadPosts();
-            MessageBox.Show("Đã làm mới danh sách!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            
+            // Debug: Check CSV content directly
+            var csvLines = System.IO.File.ReadAllLines("datas\\Post.csv");
+            var debugInfo = "";
+            for (int i = 1; i < Math.Min(6, csvLines.Length); i++)
+            {
+                if (!string.IsNullOrWhiteSpace(csvLines[i]) && !csvLines[i].StartsWith("PostID,"))
+                {
+                    var parts = csvLines[i].Split(',');
+                    if (parts.Length > 0 && int.TryParse(parts[0], out int postId))
+                    {
+                        var post = allPosts.FirstOrDefault(p => p.PostID == postId);
+                        var lastCol = parts.Length > 9 ? parts[parts.Length - 1] : "N/A";
+                        debugInfo += $"Post {postId}: CSV_LastCol={lastCol}, Parsed_IsDeleted={post?.IsDeleted}\n";
+                    }
+                }
+            }
+            
+            var deletedCount = allPosts.Count(p => p.IsDeleted);
+            MessageBox.Show($"Đã làm mới!\nDeleted count: {deletedCount}\n\n{debugInfo}", 
+                "Debug", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnHide_Click(object? sender, EventArgs e)
@@ -1288,15 +1313,20 @@ namespace SocialManager
             {
                 foreach (var post in selectedPosts)
                 {
-                    // Implement hide logic - just update IsDeleted in memory
-                    // The UpdatePost method signature requires postId and content, not the full Post object
-                    // So we'll need to modify the post data directly in CSV or create a new method
-                    // For now, let's skip the UpdatePost call and just reload
-                    post.IsDeleted = true;
+                    // Hide post in database
+                    postService.SoftDeletePost(post.PostID);
+                    
+                    // Increase user's violation count
+                    var user = userService.GetUserById(post.UserID);
+                    if (user != null)
+                    {
+                        user.ViolationCount++;
+                        userService.UpdateUser(user);
+                    }
                 }
                 
                 LoadPosts();
-                MessageBox.Show($"Đã ẩn {selectedPosts.Count} bài viết!", "Thành công", 
+                MessageBox.Show($"Đã ẩn {selectedPosts.Count} bài viết và tăng violation count!", "Thành công", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -1316,7 +1346,8 @@ namespace SocialManager
             {
                 foreach (var post in selectedPosts)
                 {
-                    post.IsDeleted = false;
+                    // Restore post in database
+                    postService.RestorePost(post.PostID);
                 }
                 
                 LoadPosts();
@@ -1475,11 +1506,20 @@ namespace SocialManager
             {
                 foreach (var post in posts)
                 {
-                    post.IsDeleted = true;
+                    // Hide post in database
+                    postService.SoftDeletePost(post.PostID);
+                    
+                    // Increase user's violation count
+                    var user = userService.GetUserById(post.UserID);
+                    if (user != null)
+                    {
+                        user.ViolationCount++;
+                        userService.UpdateUser(user);
+                    }
                 }
                 
                 LoadPosts();
-                MessageBox.Show($"Đã ẩn {posts.Count} bài viết!", "Thành công", 
+                MessageBox.Show($"Đã ẩn {posts.Count} bài viết và tăng violation count!", "Thành công", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -1496,7 +1536,8 @@ namespace SocialManager
             {
                 foreach (var post in posts)
                 {
-                    post.IsDeleted = false;
+                    // Restore post in database
+                    postService.RestorePost(post.PostID);
                 }
                 
                 LoadPosts();
@@ -1567,14 +1608,14 @@ namespace SocialManager
             var btn = new Button
             {
                 Text = text,
-                Width = 100,
+                Width = 140,
                 Height = 30,
                 FlatStyle = FlatStyle.Flat,
                 BackColor = color,
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
                 Cursor = Cursors.Hand,
-                Margin = new Padding(2)
+                Margin = new Padding(1)
             };
             
             btn.FlatAppearance.BorderSize = 0;
