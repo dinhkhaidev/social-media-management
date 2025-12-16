@@ -1,35 +1,33 @@
 namespace SocialManager.frm.UserControls
 {
-    partial class ucAnalytics
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+  partial class ucAnalytics
+  {
+    /// <summary>
+    /// Required designer variable.
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+    /// <summary>
+    /// Clean up any resources being used.
+    /// </summary>
+    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing && (components != null))
+      {
+        components.Dispose();
+      }
+      base.Dispose(disposing);
+    }
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             tlpMain = new TableLayoutPanel();
             flpMetrics = new FlowLayoutPanel();
             pnlTotalReach = new Panel();
@@ -50,7 +48,6 @@ namespace SocialManager.frm.UserControls
             lblClicks = new Label();
             tlpContent = new TableLayoutPanel();
             pnlChart = new Panel();
-            chartPlatforms = new System.Windows.Forms.DataVisualization.Charting.Chart();
             pnlChartActions = new Panel();
             btnApplyFilter = new Button();
             dtpToDate = new DateTimePicker();
@@ -76,7 +73,6 @@ namespace SocialManager.frm.UserControls
             ((System.ComponentModel.ISupportInitialize)picClicks).BeginInit();
             tlpContent.SuspendLayout();
             pnlChart.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)chartPlatforms).BeginInit();
             pnlChartActions.SuspendLayout();
             pnlTopPosts.SuspendLayout();
             pnlTopPostsActions.SuspendLayout();
@@ -106,11 +102,9 @@ namespace SocialManager.frm.UserControls
             flpMetrics.Controls.Add(pnlNewFollowers);
             flpMetrics.Controls.Add(pnlClicks);
             flpMetrics.Dock = DockStyle.Fill;
-            flpMetrics.FlowDirection = FlowDirection.LeftToRight;
             flpMetrics.Location = new Point(30, 20);
             flpMetrics.Margin = new Padding(0);
             flpMetrics.Name = "flpMetrics";
-            flpMetrics.Padding = new Padding(0);
             flpMetrics.Size = new Size(1060, 150);
             flpMetrics.TabIndex = 0;
             flpMetrics.WrapContents = false;
@@ -144,20 +138,20 @@ namespace SocialManager.frm.UserControls
             lblTotalReachValue.ForeColor = Color.FromArgb(44, 62, 80);
             lblTotalReachValue.Location = new Point(20, 75);
             lblTotalReachValue.Name = "lblTotalReachValue";
-            lblTotalReachValue.Size = new Size(139, 54);
+            lblTotalReachValue.Size = new Size(152, 54);
             lblTotalReachValue.TabIndex = 1;
             lblTotalReachValue.Text = "125.4K";
             // 
             // lblTotalReach
             // 
             lblTotalReach.AutoSize = true;
-            lblTotalReach.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            lblTotalReach.Font = new Font("Segoe UI", 10F);
             lblTotalReach.ForeColor = Color.FromArgb(127, 140, 141);
             lblTotalReach.Location = new Point(75, 30);
             lblTotalReach.Name = "lblTotalReach";
-            lblTotalReach.Size = new Size(91, 23);
+            lblTotalReach.Size = new Size(160, 23);
             lblTotalReach.TabIndex = 0;
-            lblTotalReach.Text = "Total Reach";
+            lblTotalReach.Text = "Tổng Lượt Tiếp Cận";
             // 
             // pnlEngagementRate
             // 
@@ -188,20 +182,20 @@ namespace SocialManager.frm.UserControls
             lblEngagementRateValue.ForeColor = Color.FromArgb(44, 62, 80);
             lblEngagementRateValue.Location = new Point(20, 75);
             lblEngagementRateValue.Name = "lblEngagementRateValue";
-            lblEngagementRateValue.Size = new Size(93, 54);
+            lblEngagementRateValue.Size = new Size(115, 54);
             lblEngagementRateValue.TabIndex = 1;
             lblEngagementRateValue.Text = "3.8%";
             // 
             // lblEngagementRate
             // 
             lblEngagementRate.AutoSize = true;
-            lblEngagementRate.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            lblEngagementRate.Font = new Font("Segoe UI", 10F);
             lblEngagementRate.ForeColor = Color.FromArgb(127, 140, 141);
             lblEngagementRate.Location = new Point(75, 30);
             lblEngagementRate.Name = "lblEngagementRate";
-            lblEngagementRate.Size = new Size(138, 23);
+            lblEngagementRate.Size = new Size(132, 23);
             lblEngagementRate.TabIndex = 0;
-            lblEngagementRate.Text = "Engagement Rate";
+            lblEngagementRate.Text = "Tỷ Lệ Tương Tác";
             // 
             // pnlNewFollowers
             // 
@@ -232,20 +226,20 @@ namespace SocialManager.frm.UserControls
             lblNewFollowersValue.ForeColor = Color.FromArgb(44, 62, 80);
             lblNewFollowersValue.Location = new Point(20, 75);
             lblNewFollowersValue.Name = "lblNewFollowersValue";
-            lblNewFollowersValue.Size = new Size(110, 54);
+            lblNewFollowersValue.Size = new Size(120, 54);
             lblNewFollowersValue.TabIndex = 1;
             lblNewFollowersValue.Text = "+542";
             // 
             // lblNewFollowers
             // 
             lblNewFollowers.AutoSize = true;
-            lblNewFollowers.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            lblNewFollowers.Font = new Font("Segoe UI", 10F);
             lblNewFollowers.ForeColor = Color.FromArgb(127, 140, 141);
             lblNewFollowers.Location = new Point(75, 30);
             lblNewFollowers.Name = "lblNewFollowers";
-            lblNewFollowers.Size = new Size(119, 23);
+            lblNewFollowers.Size = new Size(165, 23);
             lblNewFollowers.TabIndex = 0;
-            lblNewFollowers.Text = "New Followers";
+            lblNewFollowers.Text = "Người Theo Dõi Mới";
             // 
             // pnlClicks
             // 
@@ -276,20 +270,20 @@ namespace SocialManager.frm.UserControls
             lblClicksValue.ForeColor = Color.FromArgb(44, 62, 80);
             lblClicksValue.Location = new Point(20, 75);
             lblClicksValue.Name = "lblClicksValue";
-            lblClicksValue.Size = new Size(88, 54);
+            lblClicksValue.Size = new Size(106, 54);
             lblClicksValue.TabIndex = 1;
             lblClicksValue.Text = "1.2K";
             // 
             // lblClicks
             // 
             lblClicks.AutoSize = true;
-            lblClicks.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            lblClicks.Font = new Font("Segoe UI", 10F);
             lblClicks.ForeColor = Color.FromArgb(127, 140, 141);
             lblClicks.Location = new Point(75, 30);
             lblClicks.Name = "lblClicks";
-            lblClicks.Size = new Size(51, 23);
+            lblClicks.Size = new Size(91, 23);
             lblClicks.TabIndex = 0;
-            lblClicks.Text = "Clicks";
+            lblClicks.Text = "Lượt Nhấp";
             // 
             // tlpContent
             // 
@@ -310,7 +304,6 @@ namespace SocialManager.frm.UserControls
             // pnlChart
             // 
             pnlChart.BackColor = Color.White;
-            pnlChart.Controls.Add(chartPlatforms);
             pnlChart.Controls.Add(pnlChartActions);
             pnlChart.Controls.Add(lblChartTitle);
             pnlChart.Dock = DockStyle.Fill;
@@ -321,19 +314,6 @@ namespace SocialManager.frm.UserControls
             pnlChart.Size = new Size(520, 500);
             pnlChart.TabIndex = 0;
             pnlChart.Paint += pnlCard_Paint;
-            // 
-            // chartPlatforms
-            // 
-            chartArea1.Name = "ChartArea1";
-            chartPlatforms.ChartAreas.Add(chartArea1);
-            chartPlatforms.Dock = DockStyle.Fill;
-            legend1.Name = "Legend1";
-            chartPlatforms.Legends.Add(legend1);
-            chartPlatforms.Location = new Point(25, 135);
-            chartPlatforms.Name = "chartPlatforms";
-            chartPlatforms.Size = new Size(470, 340);
-            chartPlatforms.TabIndex = 2;
-            chartPlatforms.Text = "chart1";
             // 
             // pnlChartActions
             // 
@@ -359,7 +339,7 @@ namespace SocialManager.frm.UserControls
             btnApplyFilter.Name = "btnApplyFilter";
             btnApplyFilter.Size = new Size(100, 35);
             btnApplyFilter.TabIndex = 4;
-            btnApplyFilter.Text = "Apply Filter";
+            btnApplyFilter.Text = "Áp Dụng";
             btnApplyFilter.UseVisualStyleBackColor = false;
             btnApplyFilter.Click += btnApplyFilter_Click;
             // 
@@ -379,9 +359,9 @@ namespace SocialManager.frm.UserControls
             lblToDate.ForeColor = Color.FromArgb(127, 140, 141);
             lblToDate.Location = new Point(190, 15);
             lblToDate.Name = "lblToDate";
-            lblToDate.Size = new Size(28, 23);
+            lblToDate.Size = new Size(45, 23);
             lblToDate.TabIndex = 2;
-            lblToDate.Text = "To:";
+            lblToDate.Text = "Đến:";
             // 
             // dtpFromDate
             // 
@@ -399,9 +379,9 @@ namespace SocialManager.frm.UserControls
             lblFromDate.ForeColor = Color.FromArgb(127, 140, 141);
             lblFromDate.Location = new Point(0, 15);
             lblFromDate.Name = "lblFromDate";
-            lblFromDate.Size = new Size(50, 23);
+            lblFromDate.Size = new Size(33, 23);
             lblFromDate.TabIndex = 0;
-            lblFromDate.Text = "From:";
+            lblFromDate.Text = "Từ:";
             // 
             // lblChartTitle
             // 
@@ -411,9 +391,9 @@ namespace SocialManager.frm.UserControls
             lblChartTitle.ForeColor = Color.FromArgb(44, 62, 80);
             lblChartTitle.Location = new Point(25, 25);
             lblChartTitle.Name = "lblChartTitle";
-            lblChartTitle.Size = new Size(235, 32);
+            lblChartTitle.Size = new Size(283, 32);
             lblChartTitle.TabIndex = 0;
-            lblChartTitle.Text = "Platform Performance";
+            lblChartTitle.Text = "📊 Hiệu Suất Nền Tảng";
             // 
             // pnlTopPosts
             // 
@@ -451,7 +431,7 @@ namespace SocialManager.frm.UserControls
             btnExportReport.Name = "btnExportReport";
             btnExportReport.Size = new Size(110, 35);
             btnExportReport.TabIndex = 1;
-            btnExportReport.Text = "?? Export Report";
+            btnExportReport.Text = "📥 Xuất BC";
             btnExportReport.UseVisualStyleBackColor = false;
             btnExportReport.Click += btnExportReport_Click;
             // 
@@ -466,7 +446,7 @@ namespace SocialManager.frm.UserControls
             btnRefreshData.Name = "btnRefreshData";
             btnRefreshData.Size = new Size(110, 35);
             btnRefreshData.TabIndex = 0;
-            btnRefreshData.Text = "?? Refresh Data";
+            btnRefreshData.Text = "🔄 Làm Mới";
             btnRefreshData.UseVisualStyleBackColor = false;
             btnRefreshData.Click += btnRefreshData_Click;
             // 
@@ -498,9 +478,9 @@ namespace SocialManager.frm.UserControls
             lblTopPostsTitle.ForeColor = Color.FromArgb(44, 62, 80);
             lblTopPostsTitle.Location = new Point(25, 25);
             lblTopPostsTitle.Name = "lblTopPostsTitle";
-            lblTopPostsTitle.Size = new Size(237, 32);
+            lblTopPostsTitle.Size = new Size(309, 32);
             lblTopPostsTitle.TabIndex = 0;
-            lblTopPostsTitle.Text = "Top Performing Posts";
+            lblTopPostsTitle.Text = "🔥 Bài Viết Hiệu Suất Cao";
             // 
             // ucAnalytics
             // 
@@ -525,50 +505,51 @@ namespace SocialManager.frm.UserControls
             pnlClicks.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picClicks).EndInit();
             tlpContent.ResumeLayout(false);
-            pnlChart.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)chartPlatforms).BeginInit();
-            pnlChartActions.SuspendLayout();
-            pnlTopPosts.SuspendLayout();
-            pnlTopPostsActions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvTopPosts).BeginInit();
+            pnlChart.ResumeLayout(false);
+            pnlChart.PerformLayout();
+            pnlChartActions.ResumeLayout(false);
+            pnlChartActions.PerformLayout();
+            pnlTopPosts.ResumeLayout(false);
+            pnlTopPosts.PerformLayout();
+            pnlTopPostsActions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvTopPosts).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private TableLayoutPanel tlpMain;
-        private FlowLayoutPanel flpMetrics;
-        private Panel pnlTotalReach;
-        private PictureBox picTotalReach;
-        private Label lblTotalReachValue;
-        private Label lblTotalReach;
-        private Panel pnlEngagementRate;
-        private PictureBox picEngagementRate;
-        private Label lblEngagementRateValue;
-        private Label lblEngagementRate;
-        private Panel pnlNewFollowers;
-        private PictureBox picNewFollowers;
-        private Label lblNewFollowersValue;
-        private Label lblNewFollowers;
-        private Panel pnlClicks;
-        private PictureBox picClicks;
-        private Label lblClicksValue;
-        private Label lblClicks;
-        private TableLayoutPanel tlpContent;
-        private Panel pnlChart;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartPlatforms;
-        private Panel pnlChartActions;
-        private Button btnApplyFilter;
-        private DateTimePicker dtpToDate;
-        private Label lblToDate;
-        private DateTimePicker dtpFromDate;
-        private Label lblFromDate;
-        private Label lblChartTitle;
-        private Panel pnlTopPosts;
-        private Panel pnlTopPostsActions;
-        private Button btnExportReport;
-        private Button btnRefreshData;
-        private DataGridView dgvTopPosts;
-        private Label lblTopPostsTitle;
-    }
+    private FlowLayoutPanel flpMetrics;
+    private Panel pnlTotalReach;
+    private PictureBox picTotalReach;
+    private Label lblTotalReachValue;
+    private Label lblTotalReach;
+    private Panel pnlEngagementRate;
+    private PictureBox picEngagementRate;
+    private Label lblEngagementRateValue;
+    private Label lblEngagementRate;
+    private Panel pnlNewFollowers;
+    private PictureBox picNewFollowers;
+    private Label lblNewFollowersValue;
+    private Label lblNewFollowers;
+    private Panel pnlClicks;
+    private PictureBox picClicks;
+    private Label lblClicksValue;
+    private Label lblClicks;
+    private TableLayoutPanel tlpContent;
+    private Panel pnlChart;
+    private Panel pnlChartActions;
+    private Button btnApplyFilter;
+    private DateTimePicker dtpToDate;
+    private Label lblToDate;
+    private DateTimePicker dtpFromDate;
+    private Label lblFromDate;
+    private Label lblChartTitle;
+    private Panel pnlTopPosts;
+    private Panel pnlTopPostsActions;
+    private Button btnExportReport;
+    private Button btnRefreshData;
+    private DataGridView dgvTopPosts;
+    private Label lblTopPostsTitle;
+  }
 }

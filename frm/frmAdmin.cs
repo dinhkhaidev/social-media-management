@@ -1,6 +1,7 @@
 ﻿using SocialManager.frm.UserControls;
 using SocialManager.middlewares;
 using SocialManager.services;
+using SocialManager.utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +18,6 @@ namespace SocialManager.frm
     //public partial class frmAdmin : ProtectFormMiddleware
     public partial class frmAdmin : Form
     {
-        private string currentView = "Dashboard";
         private bool sidebarCollapsed = false;
         private int originalSidebarWidth = 280;
         private int collapsedSidebarWidth = 60;
@@ -25,6 +25,8 @@ namespace SocialManager.frm
         // User Controls for subforms - use base UserControl type for flexibility
         private UserControl dashboardControl;
         private UserControl postsControl;
+        private UserControl commentsControl;
+        private UserControl reportsControl;
         private UserControl analyticsControl;
         private UserControl settingsControl;
         private UserControl socialAccountsControl;
@@ -42,6 +44,9 @@ namespace SocialManager.frm
                 System.Diagnostics.Debug.WriteLine("Calling InitializeForm...");
                 InitializeForm();
                 System.Diagnostics.Debug.WriteLine("InitializeForm completed");
+                
+                // Apply global settings on startup
+                ApplyGlobalSettings();
 
                 System.Diagnostics.Debug.WriteLine("frmAdmin constructor completed successfully");
             }
@@ -70,13 +75,86 @@ namespace SocialManager.frm
                 System.Diagnostics.Debug.WriteLine("Force showing dashboard...");
                 ShowDashboard();
 
+                // Add debug button to test analytics
+                AddDebugButtonToAdmin();
+
                 System.Diagnostics.Debug.WriteLine("frmAdmin_Load completed successfully");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error in frmAdmin_Load: {ex.Message}");
-                MessageBox.Show($"Error initializing admin form: {ex.Message}", "Initialization Error",
+                MessageBox.Show($"Lỗi khi khởi tạo form quản trị: {ex.Message}", "Lỗi khởi tạo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void AddDebugButtonToAdmin()
+        {
+            try
+            {
+                var btnDebugAnalytics = new Button
+                {
+                    Text = "🔧 Kiểm tra Thống kê",
+                    BackColor = Color.FromArgb(230, 126, 34),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Size = new Size(120, 30),
+                    Location = new Point(this.Width - 140, 10),
+                    Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right
+                };
+
+                btnDebugAnalytics.FlatAppearance.BorderSize = 0;
+                btnDebugAnalytics.Click += BtnDebugAnalytics_Click;
+
+                this.Controls.Add(btnDebugAnalytics);
+                btnDebugAnalytics.BringToFront();
+
+                System.Diagnostics.Debug.WriteLine("frmAdmin: Debug button added");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error adding debug button to admin: {ex.Message}");
+            }
+        }
+
+        private void BtnDebugAnalytics_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== ADMIN DEBUG ANALYTICS ===");
+
+                string analyticsType = analyticsControl?.GetType().Name ?? "NULL";
+                string analyticsStatus = analyticsControl?.GetType().Name.Contains("SimpleControl") == true ? "FALLBACK" : "REAL";
+
+                System.Diagnostics.Debug.WriteLine($"Current analyticsControl type: {analyticsType}");
+                System.Diagnostics.Debug.WriteLine($"Status: {analyticsStatus}");
+
+                // Thử tạo ucAnalytics mới
+                try
+                {
+                    var testAnalytics = new ucAnalytics();
+                    MessageBox.Show($"✅ Kiểm tra Thống kê Thành công!\n\nControl hiện tại: {analyticsType}\nTrạng thái: {analyticsStatus}\n\nClick tab Thống kê để xem giao diện thật!",
+                        "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Replace the fallback with real one
+                    analyticsControl = testAnalytics;
+                    analyticsControl.Dock = DockStyle.Fill;
+
+                    System.Diagnostics.Debug.WriteLine("✅ Replaced fallback with real ucAnalytics");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"❌ Kiểm tra Thống kê Thất bại!\n\nLỗi: {ex.Message}\n\nControl hiện tại: {analyticsType}",
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Diagnostics.Debug.WriteLine($"❌ Test failed: {ex.Message}");
+                }
+
+                System.Diagnostics.Debug.WriteLine("=== ADMIN DEBUG COMPLETED ===");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Debug Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -122,32 +200,71 @@ namespace SocialManager.frm
                     {
                         System.Diagnostics.Debug.WriteLine($"Error loading ucSimpleDashboard: {ex2.Message}");
                         // Final fallback
-                        dashboardControl = CreateSimpleUserControl("Dashboard", "Dashboard is loading...");
+                        dashboardControl = CreateSimpleUserControl("Trang chủ", "Đang tải trang chủ...");
                     }
                 }
 
                 // Initialize Posts Control
                 try
                 {
-                    postsControl = new ucPosts() { Dock = DockStyle.Fill };
-                    System.Diagnostics.Debug.WriteLine("ucPosts initialized successfully");
+                    postsControl = new ucPostManagement() { Dock = DockStyle.Fill };
+                    System.Diagnostics.Debug.WriteLine("ucPostManagement initialized successfully");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error loading ucPosts: {ex.Message}");
-                    postsControl = CreateSimpleUserControl("Posts Management", "📝 Posts feature coming soon...");
+                    System.Diagnostics.Debug.WriteLine($"Error loading ucPostManagement: {ex.Message}");
+                    postsControl = CreateSimpleUserControl("Quản lý Bài viết", "📝 Tính năng đang phát triển...");
                 }
 
-                // Initialize Analytics Control
+                // Initialize Comments Control
                 try
                 {
-                    analyticsControl = new ucAnalytics() { Dock = DockStyle.Fill };
-                    System.Diagnostics.Debug.WriteLine("ucAnalytics initialized successfully");
+                    commentsControl = new ucCommentManagement() { Dock = DockStyle.Fill };
+                    System.Diagnostics.Debug.WriteLine("ucCommentManagement initialized successfully");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error loading ucAnalytics: {ex.Message}");
-                    analyticsControl = CreateSimpleUserControl("Analytics & Reports", "📊 Analytics feature coming soon...");
+                    System.Diagnostics.Debug.WriteLine($"Error loading ucCommentManagement: {ex.Message}");
+                    commentsControl = CreateSimpleUserControl("Quản lý Bình luận", "💬 Tính năng đang phát triển...");
+                }
+
+                // Initialize Reports Control
+                try
+                {
+                    reportsControl = new ucReportManagement() { Dock = DockStyle.Fill };
+                    System.Diagnostics.Debug.WriteLine("ucReportManagement initialized successfully");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error loading ucReportManagement: {ex.Message}");
+                    reportsControl = CreateSimpleUserControl("Quản lý Báo cáo", "🚨 Tính năng đang phát triển...");
+                }
+
+                // Initialize Analytics Control - Try ucAnalyticsInsights first
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine("Starting ucAnalyticsInsights initialization...");
+                    analyticsControl = new ucAnalyticsInsights() { Dock = DockStyle.Fill };
+                    System.Diagnostics.Debug.WriteLine("✅ ucAnalyticsInsights initialized successfully");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ ERROR loading ucAnalyticsInsights: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                    // Fallback to Simple version
+                    try
+                    {
+                        System.Diagnostics.Debug.WriteLine("Falling back to ucAnalyticsSimple...");
+                        analyticsControl = new ucAnalyticsSimple() { Dock = DockStyle.Fill };
+                        System.Diagnostics.Debug.WriteLine("✅ ucAnalyticsSimple initialized successfully");
+                    }
+                    catch (Exception ex2)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"❌ ERROR loading ucAnalyticsSimple: {ex2.Message}");
+                        // Final fallback
+                        analyticsControl = CreateAnalyticsFallback();
+                    }
                 }
 
                 // Initialize Settings Control
@@ -162,16 +279,27 @@ namespace SocialManager.frm
                     settingsControl = CreateSimpleUserControl("Settings", "⚙️ Settings feature coming soon...");
                 }
 
-                // Initialize Social Accounts Control
+                // Initialize Social Accounts Control (User Management)
                 try
                 {
-                    socialAccountsControl = new ucSocialAccounts() { Dock = DockStyle.Fill };
-                    System.Diagnostics.Debug.WriteLine("ucSocialAccounts initialized successfully");
+                    socialAccountsControl = new ucUserManagementNew() { Dock = DockStyle.Fill };
+                    System.Diagnostics.Debug.WriteLine("ucUserManagementNew initialized successfully");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error loading ucSocialAccounts: {ex.Message}");
-                    socialAccountsControl = CreateSimpleUserControl("Social Accounts", "🔗 Social accounts feature coming soon...");
+                    System.Diagnostics.Debug.WriteLine($"Error loading ucUserManagementNew: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                    // Fallback to old version if new version fails
+                    try
+                    {
+                        socialAccountsControl = new ucUserManagement() { Dock = DockStyle.Fill };
+                        System.Diagnostics.Debug.WriteLine("ucUserManagement (old) fallback initialized");
+                    }
+                    catch (Exception ex2)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error loading ucUserManagement fallback: {ex2.Message}");
+                        socialAccountsControl = CreateSimpleUserControl("User Management", "👥 User management feature coming soon...");
+                    }
                 }
 
                 // Verify all controls are initialized
@@ -181,29 +309,32 @@ namespace SocialManager.frm
                 if (postsControl == null)
                     postsControl = CreateSimpleUserControl("Posts", "Posts initialization failed");
 
+                if (commentsControl == null)
+                    commentsControl = CreateSimpleUserControl("Comments", "Comments initialization failed");
+
                 if (analyticsControl == null)
-                    analyticsControl = CreateSimpleUserControl("Analytics", "Analytics initialization failed");
+                    analyticsControl = CreateSimpleUserControl("Thống kê", "Khởi tạo thống kê thất bại");
 
                 if (settingsControl == null)
-                    settingsControl = CreateSimpleUserControl("Settings", "Settings initialization failed");
+                    settingsControl = CreateSimpleUserControl("Cài đặt", "Khởi tạo cài đặt thất bại");
 
                 if (socialAccountsControl == null)
-                    socialAccountsControl = CreateSimpleUserControl("Social Accounts", "Social accounts initialization failed");
+                    socialAccountsControl = CreateSimpleUserControl("Quản lý Người dùng", "Khởi tạo quản lý người dùng thất bại");
 
                 System.Diagnostics.Debug.WriteLine("All UserControls initialized successfully");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Critical error in InitializeUserControls: {ex.Message}");
-                MessageBox.Show($"Error initializing application components: {ex.Message}\nThe application will continue with basic functionality.",
-                    "Initialization Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Lỗi khi khởi tạo các thành phần ứng dụng: {ex.Message}\nỨng dụng sẽ tiếp tục với chức năng cơ bản.",
+                    "Cảnh báo khởi tạo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Absolute emergency fallback - create all controls as simple ones
-                dashboardControl = CreateSimpleUserControl("Dashboard", "System is starting up...");
-                postsControl = CreateSimpleUserControl("Posts", "Posts feature loading...");
-                analyticsControl = CreateSimpleUserControl("Analytics", "Analytics feature loading...");
-                settingsControl = CreateSimpleUserControl("Settings", "Settings feature loading...");
-                socialAccountsControl = CreateSimpleUserControl("Social Accounts", "Social accounts feature loading...");
+                dashboardControl = CreateSimpleUserControl("Trang chủ", "Hệ thống đang khởi động...");
+                postsControl = CreateSimpleUserControl("Bài viết", "Đang tải tính năng bài viết...");
+                analyticsControl = CreateSimpleUserControl("Thống kê", "Đang tải tính năng thống kê...");
+                settingsControl = CreateSimpleUserControl("Cài đặt", "Đang tải cài đặt...");
+                socialAccountsControl = CreateSimpleUserControl("Quản lý Người dùng", "Đang tải quản lý người dùng...");
             }
         }
 
@@ -249,7 +380,7 @@ namespace SocialManager.frm
 
                 var lblTime = new Label
                 {
-                    Text = $"Generated at: {DateTime.Now:yyyy-MM-dd HH:mm:ss}",
+                    Text = $"Tạo lúc: {DateTime.Now:dd/MM/yyyy HH:mm:ss}",
                     Font = new Font("Segoe UI", 10F),
                     ForeColor = Color.FromArgb(149, 165, 166),
                     AutoSize = true,
@@ -293,6 +424,137 @@ namespace SocialManager.frm
             }
         }
 
+        private UserControl CreateAnalyticsFallback()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("Creating Analytics fallback - trying ucAnalyticsSimple...");
+
+                // Try to load ucAnalyticsSimple first
+                try
+                {
+                    var analyticsSimple = new ucAnalyticsSimple
+                    {
+                        Dock = DockStyle.Fill,
+                        Name = "AnalyticsSimple"
+                    };
+                    System.Diagnostics.Debug.WriteLine("✅ ucAnalyticsSimple loaded successfully!");
+                    return analyticsSimple;
+                }
+                catch (Exception innerEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Failed to load ucAnalyticsSimple: {innerEx.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Stack trace: {innerEx.StackTrace}");
+                    // Continue to final fallback UI
+                }
+
+                // Fallback UI
+                System.Diagnostics.Debug.WriteLine("Creating Analytics fallback UI...");
+
+                var control = new UserControl
+                {
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.FromArgb(247, 249, 252),
+                    Padding = new Padding(30),
+                    Name = "AnalyticsFallback"
+                };
+
+                var mainPanel = new Panel
+                {
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.White,
+                    Padding = new Padding(30)
+                };
+
+                var titleLabel = new Label
+                {
+                    Text = "📊 Thống kê & Báo cáo",
+                    Font = new Font("Segoe UI", 24F, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(44, 62, 80),
+                    AutoSize = true,
+                    Location = new Point(30, 30)
+                };
+
+                var messageLabel = new Label
+                {
+                    Text = "Analytics module đang được tải...\n\n" +
+                           "📈 Thống kê người dùng\n" +
+                           "📊 Phân tích bài viết\n" +
+                           "💹 Báo cáo tương tác\n" +
+                           "📋 Xuất báo cáo\n\n" +
+                           "Click \"🔧 Test Analytics\" để thử tải lại module thực.",
+                    Font = new Font("Segoe UI", 12F),
+                    ForeColor = Color.FromArgb(127, 140, 141),
+                    AutoSize = true,
+                    Location = new Point(30, 80),
+                    MaximumSize = new Size(500, 0)
+                };
+
+                var statusLabel = new Label
+                {
+                    Text = $"Trạng thái: Fallback mode - {DateTime.Now:HH:mm:ss}",
+                    Font = new Font("Segoe UI", 10F),
+                    ForeColor = Color.FromArgb(230, 126, 34),
+                    AutoSize = true,
+                    Location = new Point(30, 250)
+                };
+
+                var retryButton = new Button
+                {
+                    Text = "🔄 Thử Tải Lại Analytics",
+                    Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                    BackColor = Color.FromArgb(52, 152, 219),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Size = new Size(200, 40),
+                    Location = new Point(30, 300),
+                    Cursor = Cursors.Hand
+                };
+
+                retryButton.FlatAppearance.BorderSize = 0;
+                retryButton.Click += (s, e) =>
+                {
+                    try
+                    {
+                        // Thử ucAnalyticsSimple trước (không cần Chart dependencies)
+                        try
+                        {
+                            var simpleAnalytics = new ucAnalyticsSimple() { Dock = DockStyle.Fill };
+                            analyticsControl = simpleAnalytics;
+                            MessageBox.Show("✅ Thống kê (Đơn giản) đã được tải thành công!\n\nGiao diện Thống kê không có biểu đồ nhưng hiển thị đầy đủ dữ liệu.",
+                                "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex1)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"ucAnalyticsSimple fails: {ex1.Message}");
+
+                            MessageBox.Show($"❌ Không thể tải Thống kê:\n\nPhiên bản đơn giản: {ex1.Message}\n\nVui lòng kiểm tra hoặc liên hệ hỗ trợ.",
+                                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"❌ Lỗi retry: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                };
+
+                mainPanel.Controls.Add(titleLabel);
+                mainPanel.Controls.Add(messageLabel);
+                mainPanel.Controls.Add(statusLabel);
+                mainPanel.Controls.Add(retryButton);
+
+                control.Controls.Add(mainPanel);
+
+                System.Diagnostics.Debug.WriteLine("Analytics fallback created successfully");
+                return control;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error creating Analytics fallback: {ex.Message}");
+                return CreateSimpleUserControl("Thống kê", "📊 Đang tải tính năng thống kê...\n\nVui lòng đợi hoặc khởi động lại ứng dụng.");
+            }
+        }
+
         private void SetupResponsiveDesign()
         {
             // Enable double buffering for smoother rendering
@@ -314,7 +576,7 @@ namespace SocialManager.frm
                 System.Diagnostics.Debug.WriteLine("UserControl is null, creating emergency fallback");
 
                 // Create emergency fallback instead of showing error
-                var emergencyControl = CreateSimpleUserControl("Loading...", "Please wait while the content loads.");
+                var emergencyControl = CreateSimpleUserControl("Đang tải...", "Vui lòng đợi trong khi nội dung đang tải.");
                 userControl = emergencyControl;
             }
 
@@ -353,14 +615,14 @@ namespace SocialManager.frm
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error in LoadUserControlIntoMainPanel: {ex.Message}");
-                MessageBox.Show($"Error loading view: {ex.Message}\nPlease try clicking the menu item again.",
-                    "View Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Lỗi khi tải giao diện: {ex.Message}\nVui lòng thử nhấp vào mục menu lại.",
+                    "Lỗi tải giao diện", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Try to recover by creating a simple error control
                 try
                 {
-                    var errorControl = CreateSimpleUserControl("Error Loading View",
-                        $"There was an error loading this view.\nError: {ex.Message}\n\nPlease try again or contact support.");
+                    var errorControl = CreateSimpleUserControl("Lỗi Tải Giao diện",
+                        $"Có lỗi khi tải giao diện này.\nLỗi: {ex.Message}\n\nVui lòng thử lại hoặc liên hệ hỗ trợ.");
 
                     pnlMain.Controls.Clear();
                     if (pnlTopBar != null)
@@ -372,8 +634,8 @@ namespace SocialManager.frm
                 catch (Exception ex2)
                 {
                     System.Diagnostics.Debug.WriteLine($"Critical error in error recovery: {ex2.Message}");
-                    MessageBox.Show("Critical error loading application views. Please restart the application.",
-                        "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lỗi nghiêm trọng khi tải giao diện ứng dụng. Vui lòng khởi động lại ứng dụng.",
+                        "Lỗi nghiêm trọng", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -418,12 +680,14 @@ namespace SocialManager.frm
                 pnlSidebar.Width = originalSidebarWidth;
                 lblTitle.Visible = true;
                 lblSubtitle.Visible = true;
-                btnDashboard.Text = "Dashboard";
-                btnPosts.Text = "Posts";
-                btnAnalytics.Text = "Analytics";
-                btnSettings.Text = "Settings";
-                btnSocialAccounts.Text = "Social Accounts";
-                btnLogout.Text = "Logout";
+                btnDashboard.Text = "Trang chủ";
+                btnPosts.Text = "Bài viết";
+                btnComments.Text = "Bình luận";
+                btnReports.Text = "Báo cáo";
+                btnAnalytics.Text = "Thống kê";
+                btnSettings.Text = "Cài đặt";
+                btnSocialAccounts.Text = "Người dùng";
+                btnLogout.Text = "Đăng xuất";
 
                 foreach (Control control in pnlNavigation.Controls)
                 {
@@ -458,9 +722,11 @@ namespace SocialManager.frm
             // Position buttons with consistent spacing
             btnDashboard.Location = new Point(20, startY);
             btnPosts.Location = new Point(20, startY + (buttonHeight + spacing) * 1);
-            btnAnalytics.Location = new Point(20, startY + (buttonHeight + spacing) * 2);
-            btnSettings.Location = new Point(20, startY + (buttonHeight + spacing) * 3);
-            btnSocialAccounts.Location = new Point(20, startY + (buttonHeight + spacing) * 4);
+            btnComments.Location = new Point(20, startY + (buttonHeight + spacing) * 2);
+            btnReports.Location = new Point(20, startY + (buttonHeight + spacing) * 3);
+            btnAnalytics.Location = new Point(20, startY + (buttonHeight + spacing) * 4);
+            btnSettings.Location = new Point(20, startY + (buttonHeight + spacing) * 5);
+            btnSocialAccounts.Location = new Point(20, startY + (buttonHeight + spacing) * 6);
         }
 
         // Navigation event handlers
@@ -472,6 +738,16 @@ namespace SocialManager.frm
         private void btnPosts_Click(object sender, EventArgs e)
         {
             ShowPosts();
+        }
+
+        private void btnComments_Click(object sender, EventArgs e)
+        {
+            ShowComments();
+        }
+
+        private void btnReports_Click(object sender, EventArgs e)
+        {
+            ShowReports();
         }
 
         private void btnAnalytics_Click(object sender, EventArgs e)
@@ -493,45 +769,97 @@ namespace SocialManager.frm
         private void ShowDashboard()
         {
             SetActiveButton(btnDashboard);
-            currentView = "Dashboard";
-            lblCurrentView.Text = "Dashboard";
-            lblBreadcrumb.Text = "Home > Dashboard";
+            lblCurrentView.Text = "Trang chủ";
+            lblBreadcrumb.Text = "Trang chủ > Bảng điều khiển";
             LoadUserControlIntoMainPanel(dashboardControl);
         }
 
         private void ShowPosts()
         {
             SetActiveButton(btnPosts);
-            currentView = "Posts";
-            lblCurrentView.Text = "Posts Management";
-            lblBreadcrumb.Text = "Home > Posts";
+            lblCurrentView.Text = "Quản lý Bài viết";
+            lblBreadcrumb.Text = "Trang chủ > Bài viết";
             LoadUserControlIntoMainPanel(postsControl);
+        }
+
+        private void ShowComments()
+        {
+            SetActiveButton(btnComments);
+            lblCurrentView.Text = "Quản lý Bình luận";
+            lblBreadcrumb.Text = "Trang chủ > Bình luận";
+            LoadUserControlIntoMainPanel(commentsControl);
+        }
+
+        private void ShowReports()
+        {
+            SetActiveButton(btnReports);
+            lblCurrentView.Text = "🚨 Quản lý Báo cáo Vi phạm";
+            lblBreadcrumb.Text = "Trang chủ > Báo cáo";
+            LoadUserControlIntoMainPanel(reportsControl);
         }
 
         private void ShowAnalytics()
         {
             SetActiveButton(btnAnalytics);
-            currentView = "Analytics";
-            lblCurrentView.Text = "Analytics & Reports";
-            lblBreadcrumb.Text = "Home > Analytics";
+            lblCurrentView.Text = "Thống kê & Báo cáo";
+            lblBreadcrumb.Text = "Trang chủ > Thống kê";
+
+            // Nếu chưa có hoặc không phải ucAnalyticsInsights, tạo mới
+            if (analyticsControl == null || 
+                analyticsControl.GetType().Name != "ucAnalyticsInsights")
+            {
+                var currentType = analyticsControl?.GetType().Name ?? "null";
+                System.Diagnostics.Debug.WriteLine($"Current analytics control: {currentType}, creating new ucAnalyticsInsights...");
+
+                try
+                {
+                    // Try ucAnalyticsInsights first (new comprehensive control)
+                    System.Diagnostics.Debug.WriteLine("Attempting to create ucAnalyticsInsights...");
+                    var newAnalyticsControl = new ucAnalyticsInsights() { Dock = DockStyle.Fill };
+                    analyticsControl = newAnalyticsControl;
+                    System.Diagnostics.Debug.WriteLine("✅ Successfully created ucAnalyticsInsights");
+                    MessageBox.Show("✅ Analytics Insights loaded!", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Failed to create ucAnalyticsInsights: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Stack: {ex.StackTrace}");
+                    MessageBox.Show($"❌ Error loading Analytics:\n{ex.Message}\n\nUsing fallback UI.", 
+                        "Debug", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    
+                    // Fallback to CreateAnalyticsFallback
+                    try
+                    {
+                        analyticsControl = CreateAnalyticsFallback();
+                        System.Diagnostics.Debug.WriteLine("✅ Using fallback Analytics UI");
+                    }
+                    catch (Exception ex2)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"❌ Critical: Failed to create fallback: {ex2.Message}");
+                    }
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("✅ ucAnalyticsInsights already loaded, reusing...");
+            }
+
             LoadUserControlIntoMainPanel(analyticsControl);
         }
 
         private void ShowSettings()
         {
             SetActiveButton(btnSettings);
-            currentView = "Settings";
-            lblCurrentView.Text = "Settings";
-            lblBreadcrumb.Text = "Home > Settings";
+            lblCurrentView.Text = "Cài đặt Hệ thống";
+            lblBreadcrumb.Text = "Trang chủ > Cài đặt";
             LoadUserControlIntoMainPanel(settingsControl);
         }
 
         private void ShowSocialAccounts()
         {
             SetActiveButton(btnSocialAccounts);
-            currentView = "Social Accounts";
-            lblCurrentView.Text = "Social Accounts";
-            lblBreadcrumb.Text = "Home > Social Accounts";
+            lblCurrentView.Text = "Quản lý Người dùng";
+            lblBreadcrumb.Text = "Trang chủ > Người dùng";
             LoadUserControlIntoMainPanel(socialAccountsControl);
         }
 
@@ -572,6 +900,18 @@ namespace SocialManager.frm
         {
             DrawNavigationIcon(e.Graphics, new Rectangle(15, 18, 20, 20),
                 btnPosts.BackColor == Color.Transparent ? Color.FromArgb(189, 195, 199) : Color.White, "posts");
+        }
+
+        private void btnComments_Paint(object sender, PaintEventArgs e)
+        {
+            DrawNavigationIcon(e.Graphics, new Rectangle(15, 18, 20, 20),
+                btnComments.BackColor == Color.Transparent ? Color.FromArgb(189, 195, 199) : Color.White, "comments");
+        }
+
+        private void btnReports_Paint(object sender, PaintEventArgs e)
+        {
+            DrawNavigationIcon(e.Graphics, new Rectangle(15, 18, 20, 20),
+                btnReports.BackColor == Color.Transparent ? Color.FromArgb(189, 195, 199) : Color.White, "reports");
         }
 
         private void btnAnalytics_Paint(object sender, PaintEventArgs e)
@@ -625,6 +965,33 @@ namespace SocialManager.frm
                         g.DrawLine(pen, centerX - 5, centerY - 6, centerX + 5, centerY - 6);
                         g.DrawLine(pen, centerX - 5, centerY - 2, centerX + 5, centerY - 2);
                         g.DrawLine(pen, centerX - 5, centerY + 2, centerX + 2, centerY + 2);
+                        break;
+
+                    case "comments":
+                        // Comment bubble icon
+                        g.DrawRectangle(pen, centerX - 8, centerY - 6, 14, 10);
+                        // Tail of comment bubble
+                        g.DrawLine(pen, centerX - 5, centerY + 4, centerX - 6, centerY + 7);
+                        g.DrawLine(pen, centerX - 6, centerY + 7, centerX - 3, centerY + 4);
+                        // Three dots inside
+                        g.FillEllipse(brush, centerX - 5, centerY - 2, 2, 2);
+                        g.FillEllipse(brush, centerX - 1, centerY - 2, 2, 2);
+                        g.FillEllipse(brush, centerX + 3, centerY - 2, 2, 2);
+                        break;
+
+                    case "reports":
+                        // Alert/Warning icon - triangle with exclamation mark
+                        // Draw triangle
+                        Point[] triangle = new Point[]
+                        {
+                            new Point(centerX, centerY - 9),
+                            new Point(centerX - 9, centerY + 8),
+                            new Point(centerX + 9, centerY + 8)
+                        };
+                        g.DrawPolygon(pen, triangle);
+                        // Exclamation mark
+                        g.DrawLine(pen, centerX, centerY - 4, centerX, centerY + 2);
+                        g.FillEllipse(brush, centerX - 1, centerY + 5, 2, 2);
                         break;
 
                     case "analytics":
@@ -685,20 +1052,65 @@ namespace SocialManager.frm
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to logout?", "Confirm Logout", 
+            var result = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận Đăng xuất",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
+
             if (result == DialogResult.Yes)
             {
                 // Clear authentication
                 AuthSessionService.Logout();
-                
+
                 // Create and show login form BEFORE closing admin form
                 frmLogin loginForm = new frmLogin();
                 //loginForm.Show();
 
                 // Close admin form
                 this.Close();
+            }
+        }
+
+        private void lblBreadcrumb_Click(object sender, EventArgs e)
+        {
+
+        }
+        
+        /// <summary>
+        /// Áp dụng cấu hình global khi khởi động form
+        /// </summary>
+        private void ApplyGlobalSettings()
+        {
+            try
+            {
+                // Apply system name to form title
+                this.Text = $"{GlobalSettings.SystemName} - Admin Panel";
+                
+                // Update title label if exists
+                if (lblTitle != null)
+                {
+                    lblTitle.Text = GlobalSettings.SystemName;
+                }
+                
+                // Update title with SolidVerse name
+                if (lblTitle != null)
+                {
+                    lblTitle.Text = "SolidVerse";
+                }
+                
+                // Apply theme
+                GlobalSettings.ApplyTheme(GlobalSettings.Theme);
+                
+                // Check maintenance mode
+                if (GlobalSettings.MaintenanceMode)
+                {
+                    // Show maintenance indicator (could add a label or status)
+                    this.Text += " [🔧 BẢO TRÌ]";
+                }
+                
+                System.Diagnostics.Debug.WriteLine($"Applied global settings - System: {GlobalSettings.SystemName}, Theme: {GlobalSettings.Theme}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error applying global settings: {ex.Message}");
             }
         }
     }
@@ -737,3 +1149,4 @@ namespace SocialManager.frm
         }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,249 +6,655 @@ using System.Threading.Tasks;
 
 namespace SocialManager.services
 {
-    public class UserService
+  public class UserService
+  {
+    private const string HEADER = "UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId,Role,ReportCount,ViolationCount";
+    private List<User> _users;
+
+    public UserService()
     {
-        private readonly List<User> _users;
-        public UserService()
-        {
-            _users = User.GetList(GlobalSetting.UsersFilePath);
-        }
-
-        // Get all users for admin dashboard
-        public List<User> GetAllUsers()
-        {
-            try
-            {
-                // Reload from file to get latest data
-                return User.GetList(GlobalSetting.UsersFilePath);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading users: {ex.Message}");
-                return new List<User>();
-            }
-        }
-
-        // Get user statistics for dashboard
-        public UserStatistics GetUserStatistics()
-        {
-            try
-            {
-                var allUsers = GetAllUsers();
-                return new UserStatistics
-                {
-                    TotalUsers = allUsers.Count,
-                    ActiveUsers = allUsers.Count(u => u.StatusId == 1),
-                    InactiveUsers = allUsers.Count(u => u.StatusId == 0),
-                    BannedUsers = allUsers.Count(u => u.StatusId == -1),
-                    AdminUsers = allUsers.Count(u => u.Role == 1),
-                    RegularUsers = allUsers.Count(u => u.Role == 0),
-                    NewUsersToday = allUsers.Count(u => u.CreatedAt.Date == DateTime.Today),
-                    NewUsersThisWeek = allUsers.Count(u => u.CreatedAt >= DateTime.Today.AddDays(-7)),
-                    NewUsersThisMonth = allUsers.Count(u => u.CreatedAt >= DateTime.Today.AddDays(-30))
-                };
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error calculating user statistics: {ex.Message}");
-                return new UserStatistics();
-            }
-        }
-
-        public bool UserExists(string username, string email)
-        {
-            try
-            {
-                return _users.Any(u => u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) ||
-                                     u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error checking user existence: {ex.Message}");
-                return false;
-            }
-        }
-
-        public bool CreateUser(
-            string username, string password, 
-            string fullname, string email,
-            string phone,int gender,DateTime dob, 
-            string address, string bio, string avatarUrl
-            )
-        {
-            try
-            {
-                // Ensure directory exists
-                string directoryPath = Path.GetDirectoryName(GlobalSetting.UsersFilePath);
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                // Create new user with proper UserID
-                var newUser = new User
-                {
-                    UserID = Guid.NewGuid(),
-                    UserName = username,
-                    Password = password, // In production, hash this
-                    FullName = fullname,
-                    Email = email,
-                    Phone = phone,
-                    Gender = gender,
-                    DOB = dob,
-                    Address = address,
-                    CreatedAt = DateTime.Now,
-                    StatusId = 1, // Active
-                    Bio = bio,
-                    AvatarUrl = avatarUrl,
-                    Role = 0 // Default role: User
-                };
-
-                // Create CSV line with proper formatting
-                string csvLine = $"{newUser.UserID},{newUser.UserName},{newUser.Password},{newUser.Role},{newUser.FullName}," +
-                               $"{newUser.Bio},{newUser.AvatarUrl},{newUser.Email},{newUser.Phone}," +
-                               $"{newUser.Gender},{newUser.DOB:yyyy-MM-dd},{newUser.Address}," +
-                               $"{newUser.CreatedAt:yyyy-MM-dd HH:mm:ss},{newUser.StatusId}";
-
-                // Write to file
-                if (!File.Exists(GlobalSetting.UsersFilePath))
-                {
-                    // Create new file with header
-                    string header = "UserID,UserName,Password,Role,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId";
-                    File.WriteAllText(GlobalSetting.UsersFilePath, header + Environment.NewLine + csvLine, Encoding.UTF8);
-                }
-                else
-                {
-                    // Append to existing file
-                    File.AppendAllText(GlobalSetting.UsersFilePath, Environment.NewLine + csvLine, Encoding.UTF8);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error creating user: {ex.Message}\nStack trace: {ex.StackTrace}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        public bool AuthenticateUser(string username, string password)
-        {
-            try
-            {
-                if (!File.Exists(GlobalSetting.UsersFilePath))
-                {
-                    // Create data directory if it doesn't exist
-                    Directory.CreateDirectory(Path.GetDirectoryName(GlobalSetting.UsersFilePath));
-
-                    // Create CSV header and default admin user
-                    string csvContent = "UserID,UserName,Password,Role,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId\n" +
-                                        $"{Guid.NewGuid()},admin,admin123,1,Administrator,System Administrator,,admin@socialmedia.com,,0,1990-01-01,System,{DateTime.Now:yyyy-MM-dd HH:mm:ss},1";
-
-                    File.WriteAllText(GlobalSetting.UsersFilePath, csvContent);
-                }
-                var user = _users.FirstOrDefault(u =>
-                    (u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) ||
-                     u.Email.Equals(username, StringComparison.OrdinalIgnoreCase)) &&
-                    u.Password == password &&
-                    u.StatusId == 1); // Active user
-
-                return user != null;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public User GetUserByUsername(string username)
-        {
-            try
-            {
-                return _users.FirstOrDefault(u =>
-                    u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) ||
-                    u.Email.Equals(username, StringComparison.OrdinalIgnoreCase));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public User GetUserById(Guid userId)
-        {
-            try
-            {
-                return _users.FirstOrDefault(u => u.UserID == userId);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        // Update user status (for admin actions)
-        public bool UpdateUserStatus(Guid userId, int newStatus)
-        {
-            try
-            {
-                var allUsers = GetAllUsers();
-                var user = allUsers.FirstOrDefault(u => u.UserID == userId);
-                if (user == null) return false;
-
-                user.StatusId = newStatus;
-                return SaveAllUsers(allUsers);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error updating user status: {ex.Message}");
-                return false;
-            }
-        }
-
-        // Save all users back to file
-        private bool SaveAllUsers(List<User> users)
-        {
-            try
-            {
-                var csv = new StringBuilder();
-                csv.AppendLine("UserID,UserName,Password,Role,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId");
-
-                foreach (var user in users)
-                {
-                    var csvLine = $"{user.UserID},{user.UserName},{user.Password},{user.Role},{user.FullName}," +
-                                 $"{user.Bio},{user.AvatarUrl},{user.Email},{user.Phone}," +
-                                 $"{user.Gender},{user.DOB:yyyy-MM-dd},{user.Address}," +
-                                 $"{user.CreatedAt:yyyy-MM-dd HH:mm:ss},{user.StatusId}";
-                    csv.AppendLine(csvLine);
-                }
-
-                File.WriteAllText(GlobalSetting.UsersFilePath, csv.ToString(), Encoding.UTF8);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error saving users: {ex.Message}");
-                return false;
-            }
-        }
+      MigrateUserCsvIfNeeded();
+      _users = LoadFromDisk();
     }
 
-    // Helper class for user statistics
-    public class UserStatistics
+    // --- Private Helper Methods ---
+
+    /// <summary>
+    /// Migration: Đảm bảo CSV có cột Role, ReportCount và ViolationCount
+    /// </summary>
+    private void MigrateUserCsvIfNeeded()
     {
-        public int TotalUsers { get; set; }
-        public int ActiveUsers { get; set; }
-        public int InactiveUsers { get; set; }
-        public int BannedUsers { get; set; }
-        public int AdminUsers { get; set; }
-        public int RegularUsers { get; set; }
-        public int NewUsersToday { get; set; }
-        public int NewUsersThisWeek { get; set; }
-        public int NewUsersThisMonth { get; set; }
+      try
+      {
+        if (!File.Exists(GlobalSetting.UsersFilePath))
+          return;
+
+        var lines = File.ReadAllLines(GlobalSetting.UsersFilePath, Encoding.UTF8).ToList();
+        if (lines.Count == 0)
+          return;
+
+        string currentHeader = lines[0];
+        bool needsMigration = false;
+
+        // Check header structure
+        var headerParts = currentHeader.Split(',');
+
+        // Update header to latest format
+        if (headerParts.Length < 16 || !currentHeader.Contains("ViolationCount"))
+        {
+          lines[0] = HEADER;
+          needsMigration = true;
+
+          // Migrate data rows
+          for (int i = 1; i < lines.Count; i++)
+          {
+            if (!string.IsNullOrWhiteSpace(lines[i]))
+            {
+              var parts = lines[i].Split(',');
+              
+              if (parts.Length == 13) // Old format: no Role, ReportCount, ViolationCount
+              {
+                lines[i] += ",0,0,0"; // Add Role=0, ReportCount=0, ViolationCount=0
+              }
+              else if (parts.Length == 14) // Has Role, no ReportCount, ViolationCount
+              {
+                lines[i] += ",0,0"; // Add ReportCount=0, ViolationCount=0
+              }
+              else if (parts.Length == 15) // Has Role, ReportCount, no ViolationCount
+              {
+                lines[i] += ",0"; // Add ViolationCount=0
+              }
+            }
+          }
+        }
+
+        if (needsMigration)
+        {
+          File.WriteAllLines(GlobalSetting.UsersFilePath, lines, Encoding.UTF8);
+          Console.WriteLine("User CSV migrated to include Role, ReportCount and ViolationCount columns");
+        }
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi migration CSV: {ex.Message}");
+      }
+    }
+
+    // --- Private Helper Methods ---
+
+    /// <summary>
+    /// Đọc toàn bộ User từ file CSV
+    /// </summary>
+    private List<User> LoadFromDisk()
+    {
+      var userList = new List<User>();
+
+      // Kiểm tra file có tồn tại không
+      if (!File.Exists(GlobalSetting.UsersFilePath))
+      {
+        Console.WriteLine($"Info: File not found at {GlobalSetting.UsersFilePath}, returning empty list");
+        return userList;
+      }
+
+      try
+      {
+        var lines = File.ReadLines(GlobalSetting.UsersFilePath, Encoding.UTF8).ToList();
+
+        if (lines.Count == 0)
+        {
+          return userList;
+        }
+
+        // Skip header line (index 0)
+        for (int i = 1; i < lines.Count; i++)
+        {
+          string line = lines[i];
+          if (!string.IsNullOrWhiteSpace(line))
+          {
+            User user = User.FromColumns(line.Split(','));
+            // Chỉ thêm vào danh sách nếu UserID hợp lệ
+            if (user.UserID != Guid.Empty)
+            {
+              userList.Add(user);
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi đọc file user: {ex.Message}");
+      }
+
+      return userList;
+    }
+
+    /// <summary>
+    /// Lưu toàn bộ User vào file CSV
+    /// </summary>
+    private bool SaveAllUsers(List<User> users)
+    {
+      try
+      {
+        // Đảm bảo thư mục tồn tại
+        string? directoryPath = Path.GetDirectoryName(GlobalSetting.UsersFilePath);
+        if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
+        {
+          Directory.CreateDirectory(directoryPath);
+        }
+
+        var csv = new StringBuilder();
+        csv.AppendLine(HEADER);
+        foreach (var user in users)
+        {
+          csv.AppendLine(user.ToCsvLine());
+        }
+        File.WriteAllText(GlobalSetting.UsersFilePath, csv.ToString(), Encoding.UTF8);
+        return true;
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi lưu danh sách người dùng: {ex.Message}");
+        return false;
+      }
+    }
+
+    // --- Public API Methods ---
+
+    public void RefreshUser()
+    {
+      _users = LoadFromDisk();
+    }
+
+    public List<User> GetAllUsers()
+    {
+      try
+      {
+        return LoadFromDisk();
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi tải danh sách người dùng: {ex.Message}");
+        return new List<User>();
+      }
+    }
+
+    public UserStatistics GetUserStatistics()
+    {
+      try
+      {
+        var allUsers = GetAllUsers();
+        return new UserStatistics
+        {
+          TotalUsers = allUsers.Count,
+          ActiveUsers = allUsers.Count(u => u.StatusId == 1),
+          InactiveUsers = allUsers.Count(u => u.StatusId == 0),
+          BannedUsers = allUsers.Count(u => u.StatusId == -1),
+          AdminUsers = allUsers.Count(u => u.Role == 1),
+          RegularUsers = allUsers.Count(u => u.Role == 0),
+          NewUsersToday = allUsers.Count(u => u.CreatedAt.Date == DateTime.Today),
+          NewUsersThisWeek = allUsers.Count(u => u.CreatedAt >= DateTime.Today.AddDays(-7)),
+          NewUsersThisMonth = allUsers.Count(u => u.CreatedAt >= DateTime.Today.AddDays(-30))
+        };
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi tính thống kê người dùng: {ex.Message}");
+        return new UserStatistics();
+      }
+    }
+
+    public bool UserExists(string username, string email)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        return _users.Any(u => u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) || u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi kiểm tra người dùng tồn tại: {ex.Message}");
+        return false;
+      }
+    }
+
+    public bool CreateUser(string username, string password, string fullname, string email, string phone, int gender, DateTime dob, string address, string bio, string avatarUrl)
+    {
+      try
+      {
+        var newUser = new User(
+          Guid.NewGuid(),
+          username,
+          password,
+          fullname,
+          bio,
+          avatarUrl,
+          email,
+          phone,
+          gender,
+          dob,
+          address,
+          DateTime.Now,
+          1, // StatusId = Active
+          0  // Role = Regular User
+        );
+
+        // Refresh và thêm user mới
+        _users = LoadFromDisk();
+        _users.Add(newUser);
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi tạo người dùng: {ex.Message}\nChi tiết lỗi: {ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return false;
+      }
+    }
+
+    public bool AuthenticateUser(string username, string password)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+
+        if (!File.Exists(GlobalSetting.UsersFilePath))
+        {
+          // Tạo admin user mặc định nếu file không tồn tại
+          string? directoryPath = Path.GetDirectoryName(GlobalSetting.UsersFilePath);
+          if (!string.IsNullOrEmpty(directoryPath))
+          {
+            Directory.CreateDirectory(directoryPath);
+          }
+
+          var adminUser = new User(
+            Guid.NewGuid(),
+            "admin",
+            "admin123",
+            "Administrator",
+            "System Administrator",
+            "",
+            "admin@socialmedia.com",
+            "",
+            0,
+            new DateTime(1990, 1, 1),
+            "System",
+            DateTime.Now,
+            1, // StatusId = Active
+            1  // Role = Admin
+          );
+
+          _users.Add(adminUser);
+          SaveAllUsers(_users);
+
+          // Refresh users list after creating admin
+          _users = LoadFromDisk();
+        }
+
+        var user = _users.FirstOrDefault(u =>
+          (u.UserName.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase) ||
+           u.Email.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase)) &&
+          u.Password.Trim() == password.Trim());
+
+        return user != null && user.StatusId == 1;
+      }
+      catch
+      {
+        return false;
+      }
+    }
+
+    public string GetAuthenticationError(string username, string password)
+    {
+      try
+      {
+        _users = LoadFromDisk();
         
-        public double ActivePercentage => TotalUsers > 0 ? (ActiveUsers * 100.0 / TotalUsers) : 0;
-        public double GrowthWeekly => TotalUsers > 0 ? (NewUsersThisWeek * 100.0 / TotalUsers) : 0;
+        var user = _users.FirstOrDefault(u =>
+          (u.UserName.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase) ||
+           u.Email.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase)) &&
+          u.Password.Trim() == password.Trim());
+
+        if (user == null)
+          return "Tên đăng nhập hoặc mật khẩu không đúng.";
+        
+        if (user.StatusId == -1)
+          return "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.";
+        
+        if (user.StatusId == 0)
+          return "Tài khoản chưa được kích hoạt.";
+        
+        return ""; // No error
+      }
+      catch
+      {
+        return "Có lỗi xảy ra khi đăng nhập.";
+      }
     }
+
+    public User? GetUserByUsername(string username)
+    {
+      try
+      {
+        // Refresh users list to get latest data
+        _users = LoadFromDisk();
+        return _users.FirstOrDefault(u => u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) || u.Email.Equals(username, StringComparison.OrdinalIgnoreCase));
+      }
+      catch
+      {
+        return null;
+      }
+    }
+
+    public User? GetUserById(Guid userId)
+    {
+      try
+      {
+        // Refresh the users list to get latest data
+        _users = LoadFromDisk();
+        return _users.FirstOrDefault(u => u.UserID == userId);
+      }
+      catch
+      {
+        return null;
+      }
+    }
+
+    public bool UpdateUser(User user)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var existingUser = _users.FirstOrDefault(u => u.UserID == user.UserID);
+        if (existingUser == null)
+          return false;
+
+        // Replace user in list
+        int index = _users.IndexOf(existingUser);
+        _users[index] = user;
+
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi cập nhật người dùng: {ex.Message}");
+        return false;
+      }
+    }
+
+    public bool UpdatePassword(Guid userId, string newPassword)
+    {
+      try
+      {
+        var user = GetUserById(userId);
+        if (user == null) return false;
+
+        user.Password = newPassword;
+        return UpdateUser(user);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi cập nhật mật khẩu: {ex.Message}");
+        return false;
+      }
+    }
+
+    public bool UpdateUserStatus(Guid userId, int newStatus)
+    {
+      try
+      {
+        var allUsers = GetAllUsers();
+        var user = allUsers.FirstOrDefault(u => u.UserID == userId);
+        if (user == null) return false;
+
+        user.StatusId = newStatus;
+        return SaveAllUsers(allUsers);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi cập nhật trạng thái người dùng: {ex.Message}");
+        return false;
+      }
+    }
+
+    public bool DeleteUser(Guid userId)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var user = _users.FirstOrDefault(u => u.UserID == userId);
+        if (user == null)
+          return false;
+
+        _users.Remove(user);
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($"Lỗi khi xóa người dùng: {ex.Message}");
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// Lấy số lần bị tố cáo từ ReportService
+    /// </summary>
+    public int GetReportCount(Guid userId)
+    {
+      try
+      {
+        var reportService = new ReportService();
+        return reportService.GetReportCountForUser(userId);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi lấy report count: {ex.Message}");
+        return 0;
+      }
+    }
+
+    /// <summary>
+    /// Cập nhật ReportCount cho user từ ReportService (để sync)
+    /// </summary>
+    public bool UpdateReportCountFromService(Guid userId)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var user = _users.FirstOrDefault(u => u.UserID == userId);
+        if (user == null)
+          return false;
+
+        user.ReportCount = GetReportCount(userId);
+
+        // Tự động cập nhật StatusId dựa trên ViolationCount và ReportCount
+        // Ưu tiên: ViolationCount (admin xác nhận) > ReportCount (user báo cáo)
+        // ViolationCount:
+        //   3+ lần: Banned (-1)
+        //   1-2 lần: Warning (2)
+        // ReportCount:
+        //   50+ lần: Banned (-1) - tự động ban khi quá nhiều report
+        //   30-49 lần: Warning (2) - cảnh báo
+        if (user.ViolationCount >= 3)
+        {
+          user.StatusId = -1; // Banned - admin đã xác nhận 3+ vi phạm
+        }
+        else if (user.ReportCount >= 50)
+        {
+          user.StatusId = -1; // Banned - bị báo cáo quá nhiều (50+ lần)
+        }
+        else if (user.ViolationCount >= 1 && user.ViolationCount <= 2)
+        {
+          user.StatusId = 2; // Warning - admin đã xác nhận 1-2 vi phạm
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - bị báo cáo nhiều (30-49 lần)
+        }
+        else if (user.ViolationCount == 0 && user.ReportCount < 30 && user.StatusId != 0)
+        {
+          user.StatusId = 1; // Active - không có vi phạm và report dưới ngưỡng
+        }
+
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi cập nhật report count: {ex.Message}");
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// [DEPRECATED] Tăng số lần bị tố cáo của user - Dùng ReportService thay thế
+    /// </summary>
+    [Obsolete("Use ReportService.CreateReport() instead")]
+    public bool IncrementReportCount(Guid userId)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var user = _users.FirstOrDefault(u => u.UserID == userId);
+        if (user == null)
+          return false;
+
+        user.ReportCount++;
+
+        // NOTE: ReportCount để thống kê và tự động cảnh báo/ban ở ngưỡng cao
+        // ViolationCount (admin xác nhận) có ưu tiên cao hơn
+        // Tự động cập nhật StatusId:
+        //   ViolationCount >= 3: Banned (-1)
+        //   ReportCount >= 50: Banned (-1) - tự động ban
+        //   ViolationCount 1-2: Warning (2)
+        //   ReportCount >= 30: Warning (2) - cảnh báo tự động
+        if (user.ViolationCount >= 3)
+        {
+          user.StatusId = -1; // Banned - admin confirmed
+        }
+        else if (user.ReportCount >= 50)
+        {
+          user.StatusId = -1; // Banned - too many reports
+        }
+        else if (user.ViolationCount >= 1 && user.ViolationCount <= 2)
+        {
+          user.StatusId = 2; // Warning - admin confirmed
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - many reports
+        }
+
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi tăng report count: {ex.Message}");
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// Tăng ViolationCount khi Admin xác nhận vi phạm (ẩn post/comment)
+    /// </summary>
+    public bool IncrementViolationCount(Guid userId)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var user = _users.FirstOrDefault(u => u.UserID == userId);
+        if (user == null)
+          return false;
+
+        user.ViolationCount++;
+
+        // Tự động cập nhật StatusId dựa trên ViolationCount và ReportCount
+        // 3+ lần violation: Banned (-1)
+        // 50+ lần report: Banned (-1)
+        // 1-2 lần violation: Warning (2)
+        // 30+ lần report: Warning (2)
+        if (user.ViolationCount >= 3)
+        {
+          user.StatusId = -1; // Banned - bị cấm
+        }
+        else if (user.ReportCount >= 50)
+        {
+          user.StatusId = -1; // Banned - quá nhiều báo cáo
+        }
+        else if (user.ViolationCount >= 1 && user.ViolationCount <= 2)
+        {
+          user.StatusId = 2; // Warning - cảnh báo
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - nhiều báo cáo
+        }
+
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi tăng violation count: {ex.Message}");
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// Giảm ViolationCount (khi admin hủy quyết định vi phạm)
+    /// </summary>
+    public bool DecrementViolationCount(Guid userId)
+    {
+      try
+      {
+        _users = LoadFromDisk();
+        var user = _users.FirstOrDefault(u => u.UserID == userId);
+        if (user == null)
+          return false;
+
+        if (user.ViolationCount > 0)
+          user.ViolationCount--;
+
+        // Cập nhật StatusId dựa trên ViolationCount và ReportCount
+        if (user.ViolationCount >= 3)
+        {
+          user.StatusId = -1; // Banned
+        }
+        else if (user.ReportCount >= 50)
+        {
+          user.StatusId = -1; // Banned - quá nhiều report
+        }
+        else if (user.ViolationCount >= 1)
+        {
+          user.StatusId = 2; // Warning - do violation
+        }
+        else if (user.ReportCount >= 30)
+        {
+          user.StatusId = 2; // Warning - do nhiều report
+        }
+        else
+        {
+          user.StatusId = 1; // Active - khôi phục về hoạt động bình thường
+        }
+
+        return SaveAllUsers(_users);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Lỗi khi giảm violation count: {ex.Message}");
+        return false;
+      }
+    }
+  }
+
+  public class UserStatistics
+  {
+    public int TotalUsers { get; set; }
+    public int ActiveUsers { get; set; }
+    public int InactiveUsers { get; set; }
+    public int BannedUsers { get; set; }
+    public int AdminUsers { get; set; }
+    public int RegularUsers { get; set; }
+    public int NewUsersToday { get; set; }
+    public int NewUsersThisWeek { get; set; }
+    public int NewUsersThisMonth { get; set; }
+    public double ActivePercentage => TotalUsers > 0 ? (ActiveUsers * 100.0 / TotalUsers) : 0;
+    public double GrowthWeekly => TotalUsers > 0 ? (NewUsersThisWeek * 100.0 / TotalUsers) : 0;
+  }
 }

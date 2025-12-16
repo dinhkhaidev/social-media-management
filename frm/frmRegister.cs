@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
 using SocialManager.services;
+using SocialManager.utils;
 using SocialManager.validations.register;
 using System;
 using System.Collections.Generic;
@@ -22,18 +23,25 @@ namespace SocialManager.frm;
 
 public partial class frmRegister : Form
 {
-    private readonly UserService _userService;
-    private readonly frmLogin _parentLoginForm; // Reference to parent login form
-    
-    // Constructor cũ (để backward compatibility)
+    private readonly UserService? _userService;
+    private readonly frmLogin? _parentLoginForm; // Reference to parent login form
+
+    // Constructor c? (�? backward compatibility)
     public frmRegister() : this(null)
     {
     }
-    
-    // Constructor mới nhận login form reference
-    public frmRegister(frmLogin parentLoginForm)
+
+    // Constructor m?i nh?n login form reference
+    public frmRegister(frmLogin? parentLoginForm)
     {
         InitializeComponent();
+
+        // Skip initialization in design mode
+        if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+        {
+            return;
+        }
+
         InitializeForm();
         _userService = new UserService();
         _parentLoginForm = parentLoginForm;
@@ -55,15 +63,84 @@ public partial class frmRegister : Form
 
         // Setup Enter key handling
         this.AcceptButton = btnRegister;
+
+        // Apply rounded corners
+        UIHelper.ApplyRoundedCorners(pnlRegisterForm, 20);
+        UIHelper.ApplyRoundedCorners(pnlUsername, 12);
+        UIHelper.ApplyRoundedCorners(pnlFullName, 12);
+        UIHelper.ApplyRoundedCorners(pnlEmail, 12);
+        UIHelper.ApplyRoundedCorners(pnlPhone, 12);
+        UIHelper.ApplyRoundedCorners(pnlPassword, 12);
+        UIHelper.ApplyRoundedCorners(pnlConfirmPassword, 12);
+        UIHelper.ApplyRoundedCorners(btnAutoFill, 10);
+        UIHelper.ApplyRoundedCorners(btnRegister, 10);
+        UIHelper.ApplyRoundedCorners(btnBack, 10);
+        
+        // Apply global settings
+        ApplyGlobalSettings();
     }
 
     private void SetupValidation()
     {
-        // FIX: Sử dụng static methods
+        // FIX: S? d?ng static methods
         txtUsername.TextChanged += inputValidateEvent.ValidateUsername;
         txtEmail.TextChanged += inputValidateEvent.ValidateEmail;
         txtPassword.TextChanged += inputValidateEvent.ValidatePassword;
         txtConfirmPassword.TextChanged += inputValidateEvent.ValidateConfirmPassword;
+        txtPhone.TextChanged += ValidatePhone;
+    }
+
+    private void ValidatePhone(object sender, EventArgs e)
+    {
+        TextBox textBox = sender as TextBox;
+        if (textBox == null) return;
+
+        string phone = textBox.Text.Trim();
+        
+        // Reset background color
+        textBox.Parent.BackColor = Color.FromArgb(248, 249, 250);
+        
+        if (!string.IsNullOrEmpty(phone))
+        {
+            if (IsValidPhoneNumber(phone))
+            {
+                textBox.Parent.BackColor = Color.FromArgb(240, 248, 255); // Light blue for valid
+            }
+            else
+            {
+                textBox.Parent.BackColor = Color.FromArgb(255, 240, 240); // Light red for invalid
+            }
+        }
+    }
+
+    private bool IsValidPhoneNumber(string phone)
+    {
+        // Remove all non-digit characters
+        string cleanPhone = Regex.Replace(phone, @"\D", "");
+        
+        // Check Vietnamese phone number patterns
+        // Mobile: 09x, 08x, 07x, 05x, 03x (10 digits)
+        // Landline: 02x (10-11 digits)
+        if (cleanPhone.Length >= 10 && cleanPhone.Length <= 11)
+        {
+            // Mobile numbers
+            if (cleanPhone.Length == 10 && 
+                (cleanPhone.StartsWith("09") || cleanPhone.StartsWith("08") || 
+                 cleanPhone.StartsWith("07") || cleanPhone.StartsWith("05") || 
+                 cleanPhone.StartsWith("03")))
+            {
+                return true;
+            }
+            
+            // Landline numbers
+            if ((cleanPhone.Length == 10 || cleanPhone.Length == 11) && 
+                cleanPhone.StartsWith("02"))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     private void btnRegister_Click(object sender, EventArgs e)
@@ -77,6 +154,14 @@ public partial class frmRegister : Form
 
         try
         {
+            // Check if service is initialized
+            if (_userService == null)
+            {
+                MessageBox.Show("Lỗi khởi tạo dịch vụ. Vui lòng khởi động lại ứng dụng.", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_userService.CreateUser(
                 txtUsername.Text.Trim(),
                 txtPassword.Text,
@@ -91,21 +176,28 @@ public partial class frmRegister : Form
             ))
             {
                 string username = txtUsername.Text.Trim();
-                MessageBox.Show("Account created successfully! You can now login with your credentials.",
-                    "Registration Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // FIX: Sử dụng parent login form nếu có, không tạo mới
+                // Force refresh user service to ensure latest data is available for login
+                _userService.RefreshUser();
+
+                MessageBox.Show("Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay bây giờ.",
+                    "Đăng ký thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // FIX: S? d?ng parent login form n?u c�, kh�ng t?o m?i
                 if (_parentLoginForm != null)
                 {
+                    // Refresh parent login form's user data
+                    _parentLoginForm.RefreshUserData();
+
                     // Set username trong parent login form
                     _parentLoginForm.SetUsername(username);
-                    
-                    // Close register form và parent login sẽ hiện lại tự động
+
+                    // Close register form v� parent login s? hi?n l?i t? �?ng
                     this.Close();
                 }
                 else
                 {
-                    // Fallback: tạo login form mới nếu không có parent
+                    // Fallback: t?o login form m?i n?u kh�ng c� parent
                     frmLogin loginForm = new frmLogin();
                     this.Hide();
                     loginForm.SetUsername(username);
@@ -115,14 +207,14 @@ public partial class frmRegister : Form
             }
             else
             {
-                MessageBox.Show("Failed to create account. Please try again.",
-                    "Registration Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Không thể tạo tài khoản. Vui lòng thử lại.",
+                    "Đăng ký thất bại", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"An error occurred during registration: {ex.Message}",
-                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Đã xảy ra lỗi khi đăng ký: {ex.Message}",
+                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -188,19 +280,29 @@ public partial class frmRegister : Form
             return false;
         }
 
+        // Phone validation (optional but if provided must be valid)
+        if (!string.IsNullOrWhiteSpace(txtPhone.Text))
+        {
+            if (!IsValidPhoneNumber(txtPhone.Text))
+            {
+                ShowValidationError("Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam.", txtPhone);
+                return false;
+            }
+        }
+
         // Terms validation
         if (!chkTerms.Checked)
         {
-            MessageBox.Show("Please accept the Terms of Service and Privacy Policy.",
-                "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Vui lòng chấp nhận Điều khoản dịch vụ và Chính sách bảo mật.",
+                "Lỗi xác thực", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
 
-        // Check if username or email already exists
-        if (_userService.UserExists(txtUsername.Text, txtEmail.Text))
+        // Check if service is initialized and username or email already exists
+        if (_userService != null && _userService.UserExists(txtUsername.Text, txtEmail.Text))
         {
-            MessageBox.Show("Username or email already exists. Please choose different ones.",
-                "Registration Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Tên đăng nhập hoặc email đã tồn tại. Vui lòng chọn tên khác.",
+                "Lỗi đăng ký", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
 
@@ -210,21 +312,21 @@ public partial class frmRegister : Form
 
     private void ShowValidationError(string message, TextBox textBox)
     {
-        MessageBox.Show(message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        MessageBox.Show(message, "Lỗi xác thực", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         textBox.Focus();
     }
 
 
     private void llblLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        // FIX: Không tạo form Login mới, chỉ đóng register form
-        // Parent login form sẽ hiện lại tự động
+        // FIX: Kh�ng t?o form Login m?i, ch? ��ng register form
+        // Parent login form s? hi?n l?i t? �?ng
         this.Close();
     }
-    
+
     private void button1_Click(object sender, EventArgs e)
     {
-        // FIX: Same logic như llblLogin_LinkClicked
+        // FIX: Same logic nh� llblLogin_LinkClicked
         this.Close();
     }
 
@@ -232,7 +334,7 @@ public partial class frmRegister : Form
     // Custom paint events for modern UI - using GraphicsExtensions from Admin form
     private void pnlRegisterCard_Paint(object sender, PaintEventArgs e)
     {
-        Panel panel = sender as Panel;
+        Panel? panel = sender as Panel;
         if (panel != null)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -253,7 +355,7 @@ public partial class frmRegister : Form
 
     private void pnlInput_Paint(object sender, PaintEventArgs e)
     {
-        Panel panel = sender as Panel;
+        Panel? panel = sender as Panel;
         if (panel != null)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -453,8 +555,46 @@ public partial class frmRegister : Form
 
     }
 
+    private void btnAutoFill_Click(object sender, EventArgs e)
+    {
+        // Auto fill sample data
+        txtUsername.Text = "user" + DateTime.Now.Ticks.ToString().Substring(10);
+        txtEmail.Text = "test@example.com";
+        txtFullName.Text = "Nguyễn Văn A";
+        txtPhone.Text = "0901234567";
+        txtPassword.Text = "123456";
+        txtConfirmPassword.Text = "123456";
+        cmbGender.SelectedIndex = 0;
+        dtpDateOfBirth.Value = new DateTime(1995, 1, 1);
+        chkTerms.Checked = true;
+    }
+
     private void picAppLogo_Click(object sender, EventArgs e)
     {
 
     }
+
+    private void lblAppDescription_Click(object sender, EventArgs e)
+    {
+
+    }
+    
+    /// <summary>
+    /// Áp dụng cấu hình global khi khởi động form (không áp dụng theme)
+    /// </summary>
+    private void ApplyGlobalSettings()
+    {
+        try
+        {
+            // Only update system name, don't apply theme to keep original design
+            this.Text = "SolidVerse - Đăng ký";
+            
+            System.Diagnostics.Debug.WriteLine($"Applied global settings to Register form - System: {GlobalSettings.SystemName}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error applying global settings to Register form: {ex.Message}");
+        }
+    }
 }
+

@@ -1,0 +1,3 @@
+﻿UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId,Role,ReportCount
+0f178aaa-bcbf-4d4d-b894-9d83e9133f0e,admin,admin123,Administrator,System Administrator,,admin@socialmedia.com,,0,1990-01-01 00:00:00,System,2025-10-26 22:46:21,1,1
+0faec523-951c-48bc-9e85-6c61185eec9a,test,test1234,test1234,,,test123@gmail.com,0356737383,0,1990-01-01 00:00:00,sda,2025-10-26 22:46:53,1,0

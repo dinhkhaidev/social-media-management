@@ -8,6 +8,26 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <!-- Ensure root duplicates are not included -->
+  <ItemGroup>
+    <Compile Remove="frmDashboard.cs" />
+    <Compile Remove="frmDashboard.Designer.cs" />
+    <EmbeddedResource Remove="frmDashboard.resx" />
+  </ItemGroup>
+
+  <!-- Attach designer metadata to frm/ files that are included implicitly by SDK -->
+  <ItemGroup>
+    <Compile Update="frm\frmDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmDashboard.Designer.cs">
+      <DependentUpon>frmDashboard.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="frm\frmDashboard.resx">
+      <DependentUpon>frmDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Remove="Function\**" />
     <EmbeddedResource Remove="Function\**" />
@@ -27,6 +47,30 @@
     </Compile>
   </ItemGroup>
 
+  <!-- Handle ucDashboard partial classes to avoid duplicate resource generation -->
+  <ItemGroup>
+    <Compile Update="frm\UserControls\ucDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucDashboard.Designer.cs">
+      <DependentUpon>ucDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Update="frm\UserControls\ucDashboard.Extended.cs">
+      <DependentUpon>ucDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Update="frm\UserControls\ucDashboard.QuickGuide.cs">
+      <DependentUpon>ucDashboard.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="frm\UserControls\ucDashboard.resx">
+      <DependentUpon>ucDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <!-- Remove Extended.resx from embedded resources to avoid duplicate resource generation -->
+    <EmbeddedResource Remove="frm\UserControls\ucDashboard.Extended.resx" />
+    <None Include="frm\UserControls\ucDashboard.Extended.resx">
+      <DependentUpon>ucDashboard.Extended.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -36,6 +80,12 @@
 
   <ItemGroup>
     <None Update="datas\Comment.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\Likes.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\Post.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="datas\unitData\Comment-unit.csv">

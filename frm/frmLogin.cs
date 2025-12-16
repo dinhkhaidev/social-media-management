@@ -1,4 +1,5 @@
-﻿using SocialManager.services;
+using SocialManager.services;
+using SocialManager.utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,21 +16,41 @@ namespace SocialManager.frm
 {
     public partial class frmLogin : Form
     {
-        private readonly UserService _userService;
+        private readonly UserService? _userService;
         public frmLogin()
         {
             InitializeComponent();
+
+            // Skip initialization in design mode
+            if (this.DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+            {
+                return;
+            }
+
             InitializeForm();
             _userService = new UserService();
+            
+            // Check maintenance mode on startup
+            CheckMaintenanceMode();
         }
 
         private void InitializeForm()
         {
+            // Update form title
+            this.Text = "SolidVerse - Đăng nhập";
+            
             // Setup form properties
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint | 
-                         ControlStyles.UserPaint | 
-                         ControlStyles.DoubleBuffer | 
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint |
+                         ControlStyles.UserPaint |
+                         ControlStyles.DoubleBuffer |
                          ControlStyles.ResizeRedraw, true);
+            
+            // Update app title labels if they exist
+            var titleLabels = this.Controls.Find("lblTitle", true).Concat(this.Controls.Find("lblAppName", true));
+            foreach (Label lbl in titleLabels.OfType<Label>())
+            {
+                lbl.Text = "SolidVerse";
+            }
 
             // Remove labels since we have placeholders
             if (pnlLoginForm.Controls.Contains(lblUsername))
@@ -47,13 +68,20 @@ namespace SocialManager.frm
             txtUsername.KeyPress += Input_KeyPress;
             txtPassword.KeyPress += Input_KeyPress;
             this.AcceptButton = btnLogin;
+
+            // Apply rounded corners
+            UIHelper.ApplyRoundedCorners(pnlLoginForm, 20);
+            UIHelper.ApplyRoundedCorners(pnlUsername, 12);
+            UIHelper.ApplyRoundedCorners(pnlPassword, 12);
+            UIHelper.ApplyRoundedCorners(btnLogin, 10);
+            // btnRegister and btnForgotPassword are LinkLabels, not Buttons - skip
         }
 
-        private void Input_KeyPress(object sender, KeyPressEventArgs e)
+        private void Input_KeyPress(object? sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                btnLogin_Click(sender, e);
+                btnLogin_Click(sender!, e);
             }
         }
 
@@ -89,95 +117,151 @@ namespace SocialManager.frm
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Text;
 
+            // Check maintenance mode but allow admin login
+            GlobalSettings.LoadSettings();
+            bool isMaintenanceMode = GlobalSettings.MaintenanceMode;
+            bool isAdminUser = false;
+            
+            // Pre-check if user is admin
+            if (isMaintenanceMode && _userService != null && _userService.AuthenticateUser(username, password))
+            {
+                User? user = _userService.GetUserByUsername(username);
+                isAdminUser = user?.Role == 1;
+            }
+            
+            // Block non-admin users in maintenance mode
+            if (isMaintenanceMode && !isAdminUser)
+            {
+                MessageBox.Show(
+                    "🔧 Hệ thống đang bảo trì\n\n" +
+                    "Hệ thống hiện đang trong chế độ bảo trì.\n" +
+                    "Chỉ quản trị viên mới có thể truy cập.\n\n" +
+                    "Vui lòng thử lại sau ít phút.",
+                    "Hệ thống bảo trì",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
+            }
+
+
             // Show loading state
-            btnLogin.Text = "LOGGING IN...";
+            btnLogin.Text = "ĐANG ĐĂNG NHẬP...";
             btnLogin.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
 
             try
             {
-                if (_userService.AuthenticateUser(username, password))
+                // Check if service is initialized
+                if (_userService == null)
                 {
-                    //User foundUser = _userService.GetUserByUsername(username);
+                    MessageBox.Show("Lỗi khởi tạo dịch vụ. Vui lòng khởi động lại ứng dụng.", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                    AuthSessionService.Login(_userService.GetUserByUsername(username));
-                    
-                    // Successful login
-                    MessageBox.Show("Login successful!", "Success", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    
-                    try
+                // Force refresh user data before authentication to get latest data
+                //_userService.RefreshUser();
+
+                // Check authentication with detailed error message
+                string authError = _userService.GetAuthenticationError(username, password);
+                
+                if (string.IsNullOrEmpty(authError))
+                {
+                    // Get the most current user data after authentication
+                    User? foundUser = _userService.GetUserByUsername(username);
+
+                    if (foundUser != null)
                     {
-                        // Create admin form
-                        if (AuthSessionService.CurrentUser!= null && AuthSessionService.CurrentUser.Role == 1)
+                        AuthSessionService.Login(foundUser);
+
+                        // Successful login
+                        MessageBox.Show("Đăng nhập thành công!", "Thành công",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        try
                         {
-                            frmAdmin adminForm = new frmAdmin();
+                            // Create admin form
+                            if (AuthSessionService.CurrentUser != null && AuthSessionService.CurrentUser.Role == 1)
+                            {
+                                frmAdmin adminForm = new frmAdmin();
 
-                            // Hide login form FIRST
-                            this.Hide();
+                                // Hide login form FIRST
+                                this.Hide();
 
-                            // Show admin form as dialog
-                            var adminResult = adminForm.ShowDialog();
+                                // Show admin form as dialog
+                                var adminResult = adminForm.ShowDialog();
 
+                            }
+                            else if (AuthSessionService.CurrentUser != null)
+                            {
+                                // Mở Dashboard user (có thanh navigation ở trên)
+                                frmDashboard dashboardForm = new frmDashboard();
+                                this.Hide();
+
+                                // Show dashboard form as dialog
+                                var dashboardResult = dashboardForm.ShowDialog();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Tài khoản của bạn không có quyền truy cập.",
+                                    "Truy cập bị từ chối", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                                // Show login form again
+                                this.Show();
+                            }
+                            // After dashboard form closes, check if user is still logged in
+                            if (!AuthSessionService.IsLoggedIn)
+                            {
+                                // User logged out, show login form again and clear inputs
+                                this.Show();
+                                txtPassword.Clear();
+                                txtUsername.Focus();
+                            }
+                            else
+                            {
+                                // User closed dashboard form but still logged in, close application
+                                this.Close();
+                            }
                         }
-                        else if (AuthSessionService.CurrentUser != null)
+                        catch (Exception adminEx)
                         {
-                            frmDashboard userForm = new frmDashboard();
-                            this.Hide();
+                            MessageBox.Show($"Lỗi khi mở dashboard: {adminEx.Message}",
+                                "Lỗi Dashboard", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                            // Show admin form as dialog
-                            var adminResult = userForm.ShowDialog();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Your account does not have permission to access the admin panel.", 
-                                "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            
                             // Show login form again
                             this.Show();
                         }
-                        // After admin form closes, check if user is still logged in
-                        if (!AuthSessionService.IsLoggedIn)
-                        {
-                            // User logged out, show login form again
-                            this.Show();
-                            txtPassword.Clear();
-                            txtUsername.Focus();
-                        }
-                        else
-                        {
-                            // User closed admin form but still logged in, close application
-                            this.Close();
-                        }
                     }
-                    catch (Exception adminEx)
+                    else
                     {
-                        MessageBox.Show($"Error opening admin panel: {adminEx.Message}", 
-                            "Admin Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        
-                        // Show login form again
-                        this.Show();
+                        // Failed to get user data after authentication
+                        MessageBox.Show("Đăng nhập thành công nhưng không thể tải dữ liệu người dùng. Vui lòng thử lại.", "Lỗi đăng nhập",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        txtPassword.Clear();
+                        txtUsername.Focus();
                     }
                 }
                 else
                 {
-                    // Failed login
-                    MessageBox.Show("Invalid username or password. Please try again.", "Login Failed", 
+                    // Failed login with specific error message
+                    MessageBox.Show(authError, "Đăng nhập thất bại",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    
+
                     txtPassword.Clear();
                     txtUsername.Focus();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred during login: {ex.Message}", "Error", 
+                MessageBox.Show($"Có lỗi xảy ra khi đăng nhập: {ex.Message}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 // Reset button state
-                btnLogin.Text = "LOGIN";
+                btnLogin.Text = "ĐĂNG NHẬP";
                 btnLogin.Enabled = true;
                 this.Cursor = Cursors.Default;
             }
@@ -187,7 +271,7 @@ namespace SocialManager.frm
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                MessageBox.Show("Please enter your username or email.", "Validation Error", 
+                MessageBox.Show("Vui lòng nhập tên đăng nhập hoặc email.", "Lỗi nhập liệu",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtUsername.Focus();
                 return false;
@@ -195,7 +279,7 @@ namespace SocialManager.frm
 
             if (string.IsNullOrWhiteSpace(txtPassword.Text))
             {
-                MessageBox.Show("Please enter your password.", "Validation Error", 
+                MessageBox.Show("Vui lòng nhập mật khẩu.", "Lỗi nhập liệu",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtPassword.Focus();
                 return false;
@@ -206,7 +290,7 @@ namespace SocialManager.frm
 
         private void llblForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show("Please contact your administrator to reset your password.", "Forgot Password", 
+            MessageBox.Show("Vui lòng liên hệ quản trị viên để đặt lại mật khẩu.", "Quên mật khẩu",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -214,16 +298,19 @@ namespace SocialManager.frm
         {
             // Pass reference của login form hiện tại để không tạo form mới
             frmRegister registerForm = new frmRegister(this); // Pass login form reference
-            
+
             // Hide login form
             this.Hide();
-            
+
             // Show register form as dialog
             var result = registerForm.ShowDialog();
-            
+
+            // Refresh user service data when returning from registration
+            _userService?.RefreshUser();
+
             // Show login form again after register is closed
             this.Show();
-            
+
             // Optional: Focus on username field for new login attempt
             txtUsername.Focus();
         }
@@ -237,20 +324,32 @@ namespace SocialManager.frm
             }
         }
 
+        public void RefreshUserData()
+        {
+            try
+            {
+                _userService?.RefreshUser();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error refreshing user data in login form: {ex.Message}");
+            }
+        }
+
         // Custom paint events for modern UI - using GraphicsExtensions from Admin form
         private void pnlLoginCard_Paint(object sender, PaintEventArgs e)
         {
-            Panel panel = sender as Panel;
+            Panel? panel = sender as Panel;
             if (panel != null)
             {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                
+
                 // Draw subtle shadow
                 using (var shadowBrush = new SolidBrush(Color.FromArgb(15, 0, 0, 0)))
                 {
                     GraphicsExtensions.FillRoundedRectangle(e.Graphics, shadowBrush, new Rectangle(5, 5, panel.Width - 5, panel.Height - 5), 15);
                 }
-                
+
                 // Draw main card
                 using (var cardBrush = new SolidBrush(Color.White))
                 {
@@ -261,18 +360,18 @@ namespace SocialManager.frm
 
         private void pnlInput_Paint(object sender, PaintEventArgs e)
         {
-            Panel panel = sender as Panel;
+            Panel? panel = sender as Panel;
             if (panel != null)
             {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                
+
                 using (var brush = new SolidBrush(panel.BackColor))
                 {
                     GraphicsExtensions.FillRoundedRectangle(e.Graphics, brush, new Rectangle(0, 0, panel.Width, panel.Height), 8);
                 }
-                
+
                 // Draw border
-                Color borderColor = panel.BackColor == Color.FromArgb(240, 248, 255) ? 
+                Color borderColor = panel.BackColor == Color.FromArgb(240, 248, 255) ?
                     Color.FromArgb(52, 152, 219) : Color.FromArgb(220, 221, 222);
                 using (var pen = new Pen(borderColor, 1))
                 {
@@ -337,6 +436,33 @@ namespace SocialManager.frm
                 g.DrawRectangle(pen, rect.X + 3, rect.Y + 8, 10, 6);
                 g.DrawArc(pen, rect.X + 5, rect.Y + 3, 6, 8, 180, 180);
                 g.FillEllipse(new SolidBrush(color), rect.X + 7, rect.Y + 10, 2, 2);
+            }
+        }
+
+        private void lblSubtitle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblAppDescription_Click(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void CheckMaintenanceMode()
+        {
+            // Force reload settings from file to get latest maintenance mode status
+            GlobalSettings.LoadSettings();
+            
+            if (GlobalSettings.MaintenanceMode)
+            {
+                // Show maintenance message on form title but keep controls enabled for admin
+                this.Text = "SolidVerse - Hệ thống bảo trì (Admin có thể đăng nhập)";
+            }
+            else
+            {
+                // Restore normal title
+                this.Text = "SolidVerse - Đăng nhập";
             }
         }
     }

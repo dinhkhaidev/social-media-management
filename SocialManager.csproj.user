@@ -1,28 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
   <ItemGroup>
-    <Compile Update="controls\RoundedTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="frm\frmDashboard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="datas\RoundedTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="frm\frmAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmDashboard.cs">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Update="frm\frmForgotPass.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frm\frmLogin.cs">
+    <Compile Update="frm\frmInfor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="frm\frmNewsfeed.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="frm\frmPost.cs">
@@ -31,16 +26,49 @@
     <Compile Update="frm\frmRegister.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frm\frmInfor.cs">
+    <Compile Update="frm\frmVerifyEmail.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="frm\UserControls\PostControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\RoundedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\RoundedTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="frm\UserControls\ucAnalytics.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucAnalyticsInsights.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucAnalyticsSimple.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucCommentManagement.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="frm\UserControls\ucDashboard.Extended.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucNewsfeed.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucPostDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucPostManagement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="frm\UserControls\ucPosts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucReportManagement.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucSettings.cs">
@@ -50,6 +78,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="frm\UserControls\ucSocialAccounts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucUserManagement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="frm\UserControls\ucUserManagementNew.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="middlewares\protectedAuth.middleware.cs">

@@ -1,29 +1,29 @@
-﻿namespace SocialManager.frm.UserControls
+namespace SocialManager.frm.UserControls
 {
-    partial class ucSocialAccounts
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+  partial class ucSocialAccounts
+  {
+    /// <summary>
+    /// Required designer variable.
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+    /// <summary>
+    /// Clean up any resources being used.
+    /// </summary>
+    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing && (components != null))
+      {
+        components.Dispose();
+      }
+      base.Dispose(disposing);
+    }
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -158,9 +158,9 @@
             lblTotalUsersLabel.ForeColor = Color.White;
             lblTotalUsersLabel.Location = new Point(15, 69);
             lblTotalUsersLabel.Name = "lblTotalUsersLabel";
-            lblTotalUsersLabel.Size = new Size(96, 23);
+            lblTotalUsersLabel.Size = new Size(151, 23);
             lblTotalUsersLabel.TabIndex = 1;
-            lblTotalUsersLabel.Text = "Total Users";
+            lblTotalUsersLabel.Text = "Tổng người dùng";
             // 
             // pnlActiveUsers
             // 
@@ -204,9 +204,9 @@
             lblActiveUsersLabel.ForeColor = Color.White;
             lblActiveUsersLabel.Location = new Point(18, 69);
             lblActiveUsersLabel.Name = "lblActiveUsersLabel";
-            lblActiveUsersLabel.Size = new Size(107, 23);
+            lblActiveUsersLabel.Size = new Size(196, 23);
             lblActiveUsersLabel.TabIndex = 1;
-            lblActiveUsersLabel.Text = "Active Users";
+            lblActiveUsersLabel.Text = "Người dùng hoạt động";
             // 
             // pnlNewToday
             // 
@@ -238,9 +238,9 @@
             lblNewTodayLabel.ForeColor = Color.White;
             lblNewTodayLabel.Location = new Point(18, 69);
             lblNewTodayLabel.Name = "lblNewTodayLabel";
-            lblNewTodayLabel.Size = new Size(98, 23);
+            lblNewTodayLabel.Size = new Size(116, 23);
             lblNewTodayLabel.TabIndex = 1;
-            lblNewTodayLabel.Text = "New Today";
+            lblNewTodayLabel.Text = "Mới hôm nay";
             // 
             // pnlNewThisWeek
             // 
@@ -272,9 +272,9 @@
             lblNewWeekLabel.ForeColor = Color.White;
             lblNewWeekLabel.Location = new Point(15, 69);
             lblNewWeekLabel.Name = "lblNewWeekLabel";
-            lblNewWeekLabel.Size = new Size(92, 23);
+            lblNewWeekLabel.Size = new Size(81, 23);
             lblNewWeekLabel.TabIndex = 1;
-            lblNewWeekLabel.Text = "This Week";
+            lblNewWeekLabel.Text = "Tuần này";
             // 
             // pnlAdminUsers
             // 
@@ -306,9 +306,9 @@
             lblAdminUsersLabel.ForeColor = Color.White;
             lblAdminUsersLabel.Location = new Point(18, 69);
             lblAdminUsersLabel.Name = "lblAdminUsersLabel";
-            lblAdminUsersLabel.Size = new Size(67, 23);
+            lblAdminUsersLabel.Size = new Size(109, 23);
             lblAdminUsersLabel.TabIndex = 1;
-            lblAdminUsersLabel.Text = "Admins";
+            lblAdminUsersLabel.Text = "Quản trị viên";
             // 
             // lblStatisticsTitle
             // 
@@ -318,9 +318,9 @@
             lblStatisticsTitle.ForeColor = Color.FromArgb(44, 62, 80);
             lblStatisticsTitle.Location = new Point(20, 20);
             lblStatisticsTitle.Name = "lblStatisticsTitle";
-            lblStatisticsTitle.Size = new Size(213, 32);
+            lblStatisticsTitle.Size = new Size(262, 32);
             lblStatisticsTitle.TabIndex = 0;
-            lblStatisticsTitle.Text = "📊 User Statistics";
+            lblStatisticsTitle.Text = "Thống kê người dùng";
             // 
             // pnlUsersList
             // 
@@ -359,7 +359,7 @@
             btnUserDetails.Name = "btnUserDetails";
             btnUserDetails.Size = new Size(120, 35);
             btnUserDetails.TabIndex = 0;
-            btnUserDetails.Text = "👤 View Details";
+            btnUserDetails.Text = "?? View Details";
             btnUserDetails.UseVisualStyleBackColor = false;
             btnUserDetails.Click += btnUserDetails_Click;
             // 
@@ -374,7 +374,7 @@
             btnExportUsers.Name = "btnExportUsers";
             btnExportUsers.Size = new Size(120, 35);
             btnExportUsers.TabIndex = 1;
-            btnExportUsers.Text = "📤 Export CSV";
+            btnExportUsers.Text = "?? Export CSV";
             btnExportUsers.UseVisualStyleBackColor = false;
             btnExportUsers.Click += btnExportUsers_Click;
             // 
@@ -389,7 +389,7 @@
             btnRefreshData.Name = "btnRefreshData";
             btnRefreshData.Size = new Size(120, 35);
             btnRefreshData.TabIndex = 2;
-            btnRefreshData.Text = "🔄 Refresh Data";
+            btnRefreshData.Text = "🔄 Làm mới";
             btnRefreshData.UseVisualStyleBackColor = false;
             btnRefreshData.Click += btnRefreshData_Click;
             // 
@@ -431,9 +431,9 @@
             lblLastRefresh.ForeColor = Color.FromArgb(127, 140, 141);
             lblLastRefresh.Location = new Point(650, 10);
             lblLastRefresh.Name = "lblLastRefresh";
-            lblLastRefresh.Size = new Size(144, 20);
+            lblLastRefresh.Size = new Size(168, 20);
             lblLastRefresh.TabIndex = 1;
-            lblLastRefresh.Text = "Last updated: --:--:--";
+            lblLastRefresh.Text = "C?p nh?t l?n cu?i: --:--:--";
             // 
             // lblUsersTitle
             // 
@@ -442,9 +442,9 @@
             lblUsersTitle.ForeColor = Color.FromArgb(44, 62, 80);
             lblUsersTitle.Location = new Point(0, 1);
             lblUsersTitle.Name = "lblUsersTitle";
-            lblUsersTitle.Size = new Size(226, 32);
+            lblUsersTitle.Size = new Size(214, 32);
             lblUsersTitle.TabIndex = 0;
-            lblUsersTitle.Text = "👥 Users Manager";
+            lblUsersTitle.Text = "?? Users Manager";
             // 
             // pnlActivities
             // 
@@ -480,9 +480,9 @@
             lblActivitiesTitle.Location = new Point(20, 20);
             lblActivitiesTitle.Name = "lblActivitiesTitle";
             lblActivitiesTitle.Padding = new Padding(0, 0, 0, 8);
-            lblActivitiesTitle.Size = new Size(160, 40);
+            lblActivitiesTitle.Size = new Size(148, 40);
             lblActivitiesTitle.TabIndex = 0;
-            lblActivitiesTitle.Text = "📋 Activities";
+            lblActivitiesTitle.Text = "?? Activities";
             // 
             // ucSocialAccounts
             // 
@@ -520,36 +520,36 @@
         #endregion
 
         private TableLayoutPanel tlpMain;
-        private Panel pnlStatistics;
-        private TableLayoutPanel tlpStats;
-        private Panel pnlTotalUsers;
-        private Label lblTotalUsers;
-        private Label lblTotalUsersLabel;
-        private Panel pnlActiveUsers;
-        private Label lblActivePercentage;
-        private Label lblActiveUsers;
-        private Label lblActiveUsersLabel;
-        private Panel pnlNewToday;
-        private Label lblNewToday;
-        private Label lblNewTodayLabel;
-        private Panel pnlNewThisWeek;
-        private Label lblNewThisWeek;
-        private Label lblNewWeekLabel;
-        private Panel pnlAdminUsers;
-        private Label lblAdminUsers;
-        private Label lblAdminUsersLabel;
-        private Label lblStatisticsTitle;
-        private Panel pnlUsersList;
-        private Panel pnlUserActions;
-        private Button btnUserDetails;
-        private Button btnExportUsers;
-        private Button btnRefreshData;
-        private DataGridView dgvUsers;
-        private Panel pnlUsersHeader;
-        private Label lblLastRefresh;
-        private Label lblUsersTitle;
-        private Panel pnlActivities;
-        private ListBox lstActivities;
-        private Label lblActivitiesTitle;
-    }
+    private Panel pnlStatistics;
+    private TableLayoutPanel tlpStats;
+    private Panel pnlTotalUsers;
+    private Label lblTotalUsers;
+    private Label lblTotalUsersLabel;
+    private Panel pnlActiveUsers;
+    private Label lblActivePercentage;
+    private Label lblActiveUsers;
+    private Label lblActiveUsersLabel;
+    private Panel pnlNewToday;
+    private Label lblNewToday;
+    private Label lblNewTodayLabel;
+    private Panel pnlNewThisWeek;
+    private Label lblNewThisWeek;
+    private Label lblNewWeekLabel;
+    private Panel pnlAdminUsers;
+    private Label lblAdminUsers;
+    private Label lblAdminUsersLabel;
+    private Label lblStatisticsTitle;
+    private Panel pnlUsersList;
+    private Panel pnlUserActions;
+    private Button btnUserDetails;
+    private Button btnExportUsers;
+    private Button btnRefreshData;
+    private DataGridView dgvUsers;
+    private Panel pnlUsersHeader;
+    private Label lblLastRefresh;
+    private Label lblUsersTitle;
+    private Panel pnlActivities;
+    private ListBox lstActivities;
+    private Label lblActivitiesTitle;
+  }
 }

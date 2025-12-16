@@ -1,4 +1,6 @@
-UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId
+UserID,UserName,Password,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId,Role,ReportCount
+0f178aaa-bcbf-4d4d-b894-9d83e9133f0e,admin,admin123,Administrator,System Administrator,,admin@socialmedia.com,,0,1990-01-01 00:00:00,System,2025-10-26 22:46:21,1,1
+0faec523-951c-48bc-9e85-6c61185eec9a,test,test1234,test1234,,,test123@gmail.com,0356737383,0,1990-01-01 00:00:00,sda,2025-10-26 22:46:53,1,0
 b1c13a86-f3f3-4296-9ba5-03cce3a8b118,thao.tran50,pQdAB4p8bP,Trần Thị Thảo,Tìm kiếm những trải nghiệm mới.,https://example.com/avatars/thao.tran50.jpg,thao.tran50@example.com,0917765663,1,1987-01-21 22:01:31,Biên Hòa,2024-01-01 17:33:23,1
 b633242c-be5a-4e15-ac8d-989253896723,phuong.nguyen29,KQf1r701df,Nguyễn Công Đức Phương,Đam mê công nghệ và lập trình.,https://example.com/avatars/phuong.nguyen29.jpg,phuong.nguyen29@example.com,0955418292,1,1971-05-09 11:04:30,Hà Nội,2021-02-06 02:37:32,3
 6b654c3a-4ade-4da9-a267-5c9ab8730007,uyen.huynh30,ZInuld6YwD,Huỳnh Ngọc Minh Uyên,Thích đọc sách và đi du lịch.,https://example.com/avatars/uyen.huynh30.jpg,uyen.huynh30@example.com,0964709858,1,2002-09-03 10:20:50,Hải Phòng,2022-03-04 08:48:32,4

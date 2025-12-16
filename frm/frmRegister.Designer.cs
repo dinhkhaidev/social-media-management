@@ -1,24 +1,24 @@
 ﻿namespace SocialManager.frm
 {
-    partial class frmRegister
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+  partial class frmRegister
+  {
+    /// <summary>
+    /// Required designer variable.
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+    /// <summary>
+    /// Clean up any resources being used.
+    /// </summary>
+    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing && (components != null))
+      {
+        components.Dispose();
+      }
+      base.Dispose(disposing);
+    }
 
         #region Windows Form Designer generated code
 
@@ -61,16 +61,14 @@
             picDateIcon = new PictureBox();
             pnlTerms = new Panel();
             chkTerms = new CheckBox();
+            btnAutoFill = new Button();
             btnRegister = new Button();
             pnlHeader = new Panel();
             lblSubtitle = new Label();
             lblTitle = new Label();
-            picLogo = new PictureBox();
             pnlBackground = new Panel();
             btnBack = new Button();
-            picAppLogo = new PictureBox();
             lblAppDescription = new Label();
-            lblAppName = new Label();
             pnlMain.SuspendLayout();
             pnlRegisterCard.SuspendLayout();
             pnlFooter.SuspendLayout();
@@ -94,9 +92,7 @@
             ((System.ComponentModel.ISupportInitialize)picDateIcon).BeginInit();
             pnlTerms.SuspendLayout();
             pnlHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             pnlBackground.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picAppLogo).BeginInit();
             SuspendLayout();
             // 
             // pnlMain
@@ -119,9 +115,9 @@
             pnlRegisterCard.Controls.Add(pnlHeader);
             pnlRegisterCard.Dock = DockStyle.Top;
             pnlRegisterCard.Location = new Point(40, 30);
-            pnlRegisterCard.MinimumSize = new Size(520, 850);
+            pnlRegisterCard.MinimumSize = new Size(520, 900);
             pnlRegisterCard.Name = "pnlRegisterCard";
-            pnlRegisterCard.Size = new Size(520, 850);
+            pnlRegisterCard.Size = new Size(520, 900);
             pnlRegisterCard.TabIndex = 0;
             pnlRegisterCard.Paint += pnlRegisterCard_Paint;
             // 
@@ -130,7 +126,7 @@
             pnlFooter.Controls.Add(llblLogin);
             pnlFooter.Controls.Add(lblLoginPrompt);
             pnlFooter.Dock = DockStyle.Top;
-            pnlFooter.Location = new Point(0, 800);
+            pnlFooter.Location = new Point(0, 850);
             pnlFooter.Name = "pnlFooter";
             pnlFooter.Padding = new Padding(40, 20, 40, 30);
             pnlFooter.Size = new Size(520, 50);
@@ -143,10 +139,10 @@
             llblLogin.LinkColor = Color.FromArgb(52, 152, 219);
             llblLogin.Location = new Point(255, 20);
             llblLogin.Name = "llblLogin";
-            llblLogin.Size = new Size(55, 23);
+            llblLogin.Size = new Size(98, 23);
             llblLogin.TabIndex = 1;
             llblLogin.TabStop = true;
-            llblLogin.Text = "Login";
+            llblLogin.Text = "Đăng nhập";
             llblLogin.LinkClicked += llblLogin_LinkClicked;
             // 
             // lblLoginPrompt
@@ -156,9 +152,9 @@
             lblLoginPrompt.ForeColor = Color.FromArgb(127, 140, 141);
             lblLoginPrompt.Location = new Point(40, 20);
             lblLoginPrompt.Name = "lblLoginPrompt";
-            lblLoginPrompt.Size = new Size(206, 23);
+            lblLoginPrompt.Size = new Size(138, 23);
             lblLoginPrompt.TabIndex = 0;
-            lblLoginPrompt.Text = "Already have an account?";
+            lblLoginPrompt.Text = "Đã có tài khoản?";
             // 
             // pnlRegisterForm
             // 
@@ -167,7 +163,7 @@
             pnlRegisterForm.Location = new Point(0, 120);
             pnlRegisterForm.Name = "pnlRegisterForm";
             pnlRegisterForm.Padding = new Padding(40, 20, 40, 30);
-            pnlRegisterForm.Size = new Size(520, 680);
+            pnlRegisterForm.Size = new Size(520, 730);
             pnlRegisterForm.TabIndex = 1;
             // 
             // tlpForm
@@ -184,19 +180,21 @@
             tlpForm.Controls.Add(pnlGender, 0, 3);
             tlpForm.Controls.Add(pnlDateOfBirth, 1, 3);
             tlpForm.Controls.Add(pnlTerms, 0, 5);
-            tlpForm.Controls.Add(btnRegister, 0, 6);
+            tlpForm.Controls.Add(btnAutoFill, 0, 6);
+            tlpForm.Controls.Add(btnRegister, 0, 7);
             tlpForm.Dock = DockStyle.Fill;
             tlpForm.Location = new Point(40, 20);
             tlpForm.Name = "tlpForm";
-            tlpForm.RowCount = 7;
+            tlpForm.RowCount = 8;
             tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tlpForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
-            tlpForm.Size = new Size(440, 630);
+            tlpForm.Size = new Size(440, 680);
             tlpForm.TabIndex = 0;
             // 
             // pnlUsername
@@ -220,7 +218,7 @@
             txtUsername.ForeColor = Color.FromArgb(44, 62, 80);
             txtUsername.Location = new Point(35, 12);
             txtUsername.Name = "txtUsername";
-            txtUsername.PlaceholderText = "Username";
+            txtUsername.PlaceholderText = "Tên đăng nhập";
             txtUsername.Size = new Size(165, 23);
             txtUsername.TabIndex = 1;
             // 
@@ -254,7 +252,7 @@
             txtEmail.ForeColor = Color.FromArgb(44, 62, 80);
             txtEmail.Location = new Point(35, 12);
             txtEmail.Name = "txtEmail";
-            txtEmail.PlaceholderText = "Email Address";
+            txtEmail.PlaceholderText = "Địa chỉ Email";
             txtEmail.Size = new Size(165, 23);
             txtEmail.TabIndex = 1;
             // 
@@ -288,7 +286,7 @@
             txtFullName.ForeColor = Color.FromArgb(44, 62, 80);
             txtFullName.Location = new Point(35, 12);
             txtFullName.Name = "txtFullName";
-            txtFullName.PlaceholderText = "Full Name";
+            txtFullName.PlaceholderText = "Họ và tên";
             txtFullName.Size = new Size(165, 23);
             txtFullName.TabIndex = 1;
             // 
@@ -322,7 +320,7 @@
             txtPhone.ForeColor = Color.FromArgb(44, 62, 80);
             txtPhone.Location = new Point(35, 12);
             txtPhone.Name = "txtPhone";
-            txtPhone.PlaceholderText = "Phone Number";
+            txtPhone.PlaceholderText = "Số điện thoại";
             txtPhone.Size = new Size(165, 23);
             txtPhone.TabIndex = 1;
             // 
@@ -356,7 +354,7 @@
             txtPassword.ForeColor = Color.FromArgb(44, 62, 80);
             txtPassword.Location = new Point(35, 12);
             txtPassword.Name = "txtPassword";
-            txtPassword.PlaceholderText = "Password";
+            txtPassword.PlaceholderText = "Mật khẩu";
             txtPassword.Size = new Size(165, 23);
             txtPassword.TabIndex = 1;
             txtPassword.UseSystemPasswordChar = true;
@@ -391,7 +389,7 @@
             txtConfirmPassword.ForeColor = Color.FromArgb(44, 62, 80);
             txtConfirmPassword.Location = new Point(35, 12);
             txtConfirmPassword.Name = "txtConfirmPassword";
-            txtConfirmPassword.PlaceholderText = "Confirm Password";
+            txtConfirmPassword.PlaceholderText = "Xác nhận mật khẩu";
             txtConfirmPassword.Size = new Size(165, 23);
             txtConfirmPassword.TabIndex = 1;
             txtConfirmPassword.UseSystemPasswordChar = true;
@@ -426,7 +424,7 @@
             cmbGender.Font = new Font("Segoe UI", 10F);
             cmbGender.ForeColor = Color.FromArgb(44, 62, 80);
             cmbGender.FormattingEnabled = true;
-            cmbGender.Items.AddRange(new object[] { "Male", "Female", "Other" });
+            cmbGender.Items.AddRange(new object[] { "Nam", "Nữ", "Khác" });
             cmbGender.Location = new Point(35, 11);
             cmbGender.Name = "cmbGender";
             cmbGender.Size = new Size(165, 31);
@@ -491,14 +489,33 @@
             // chkTerms
             // 
             chkTerms.AutoSize = true;
-            chkTerms.Font = new Font("Segoe UI", 10F);
+            chkTerms.Font = new Font("Segoe UI", 9F);
             chkTerms.ForeColor = Color.FromArgb(127, 140, 141);
             chkTerms.Location = new Point(0, 10);
             chkTerms.Name = "chkTerms";
-            chkTerms.Size = new Size(403, 27);
+            chkTerms.Size = new Size(408, 24);
             chkTerms.TabIndex = 0;
-            chkTerms.Text = "I agree to the Terms of Service and Privacy Policy";
+            chkTerms.Text = "Tôi đồng ý với Điều khoản dịch vụ và Chính sách bảo mật";
             chkTerms.UseVisualStyleBackColor = true;
+            // 
+            // btnAutoFill
+            // 
+            btnAutoFill.BackColor = Color.FromArgb(52, 152, 219);
+            tlpForm.SetColumnSpan(btnAutoFill, 2);
+            btnAutoFill.FlatAppearance.BorderSize = 0;
+            btnAutoFill.FlatAppearance.MouseDownBackColor = Color.FromArgb(41, 128, 185);
+            btnAutoFill.FlatAppearance.MouseOverBackColor = Color.FromArgb(41, 128, 185);
+            btnAutoFill.FlatStyle = FlatStyle.Flat;
+            btnAutoFill.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAutoFill.ForeColor = Color.White;
+            btnAutoFill.Location = new Point(3, 368);
+            btnAutoFill.Margin = new Padding(3, 8, 3, 8);
+            btnAutoFill.Name = "btnAutoFill";
+            btnAutoFill.Size = new Size(434, 34);
+            btnAutoFill.TabIndex = 10;
+            btnAutoFill.Text = "TỰ ĐIỀN DỮ LIỆU MẪU";
+            btnAutoFill.UseVisualStyleBackColor = false;
+            btnAutoFill.Click += btnAutoFill_Click;
             // 
             // btnRegister
             // 
@@ -510,12 +527,12 @@
             btnRegister.FlatStyle = FlatStyle.Flat;
             btnRegister.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             btnRegister.ForeColor = Color.White;
-            btnRegister.Location = new Point(3, 368);
+            btnRegister.Location = new Point(3, 418);
             btnRegister.Margin = new Padding(3, 8, 3, 8);
             btnRegister.Name = "btnRegister";
             btnRegister.Size = new Size(434, 50);
-            btnRegister.TabIndex = 10;
-            btnRegister.Text = "CREATE ACCOUNT";
+            btnRegister.TabIndex = 11;
+            btnRegister.Text = "TẠO TÀI KHOẢN";
             btnRegister.UseVisualStyleBackColor = false;
             btnRegister.Click += btnRegister_Click;
             // 
@@ -523,7 +540,6 @@
             // 
             pnlHeader.Controls.Add(lblSubtitle);
             pnlHeader.Controls.Add(lblTitle);
-            pnlHeader.Controls.Add(picLogo);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.Location = new Point(0, 0);
             pnlHeader.Name = "pnlHeader";
@@ -536,39 +552,28 @@
             lblSubtitle.AutoSize = true;
             lblSubtitle.Font = new Font("Segoe UI", 10F);
             lblSubtitle.ForeColor = Color.FromArgb(127, 140, 141);
-            lblSubtitle.Location = new Point(40, 80);
+            lblSubtitle.Location = new Point(53, 84);
             lblSubtitle.Name = "lblSubtitle";
-            lblSubtitle.Size = new Size(254, 23);
+            lblSubtitle.Size = new Size(148, 23);
             lblSubtitle.TabIndex = 2;
-            lblSubtitle.Text = "Create your new admin account";
+            lblSubtitle.Text = "Tạo tài khoản mới";
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 24F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(44, 62, 80);
-            lblTitle.Location = new Point(40, 30);
+            lblTitle.Location = new Point(43, 30);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(178, 54);
+            lblTitle.Size = new Size(179, 54);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "Register";
-            // 
-            // picLogo
-            // 
-            picLogo.Location = new Point(430, 30);
-            picLogo.Name = "picLogo";
-            picLogo.Size = new Size(50, 50);
-            picLogo.TabIndex = 0;
-            picLogo.TabStop = false;
-            picLogo.Paint += picLogo_Paint;
+            lblTitle.Text = "Đăng ký";
             // 
             // pnlBackground
             // 
             pnlBackground.BackColor = Color.FromArgb(46, 204, 113);
             pnlBackground.Controls.Add(btnBack);
-            pnlBackground.Controls.Add(picAppLogo);
             pnlBackground.Controls.Add(lblAppDescription);
-            pnlBackground.Controls.Add(lblAppName);
             pnlBackground.Dock = DockStyle.Fill;
             pnlBackground.Location = new Point(0, 0);
             pnlBackground.Name = "pnlBackground";
@@ -585,42 +590,22 @@
             btnBack.RightToLeft = RightToLeft.No;
             btnBack.Size = new Size(76, 40);
             btnBack.TabIndex = 3;
-            btnBack.Text = "Back";
+            btnBack.Text = "Quay lại";
             btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += button1_Click;
-            // 
-            // picAppLogo
-            // 
-            picAppLogo.Location = new Point(260, 200);
-            picAppLogo.Name = "picAppLogo";
-            picAppLogo.Size = new Size(80, 80);
-            picAppLogo.TabIndex = 2;
-            picAppLogo.TabStop = false;
-            picAppLogo.Click += picAppLogo_Click;
-            picAppLogo.Paint += picAppLogo_Paint;
             // 
             // lblAppDescription
             // 
             lblAppDescription.AutoSize = true;
             lblAppDescription.Font = new Font("Segoe UI Black", 16F);
             lblAppDescription.ForeColor = Color.Honeydew;
-            lblAppDescription.Location = new Point(41, 388);
+            lblAppDescription.Location = new Point(55, 328);
             lblAppDescription.Name = "lblAppDescription";
-            lblAppDescription.Size = new Size(544, 74);
+            lblAppDescription.Size = new Size(462, 74);
             lblAppDescription.TabIndex = 1;
-            lblAppDescription.Text = "Join our platform to manage and grow \r\nyour social media presence effectively";
+            lblAppDescription.Text = "Đừng chỉ lướt qua, hãy trở thành \r\nmột phần của dòng chảy.";
             lblAppDescription.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblAppName
-            // 
-            lblAppName.AutoSize = true;
-            lblAppName.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
-            lblAppName.ForeColor = Color.White;
-            lblAppName.Location = new Point(80, 300);
-            lblAppName.Name = "lblAppName";
-            lblAppName.Size = new Size(471, 72);
-            lblAppName.TabIndex = 0;
-            lblAppName.Text = "Join Social Media";
+            lblAppDescription.Click += lblAppDescription_Click;
             // 
             // frmRegister
             // 
@@ -635,7 +620,7 @@
             MinimizeBox = false;
             Name = "frmRegister";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Social Media Manager - Register";
+            Text = "SolidVerse - Đăng ký";
             pnlMain.ResumeLayout(false);
             pnlRegisterCard.ResumeLayout(false);
             pnlFooter.ResumeLayout(false);
@@ -668,57 +653,53 @@
             pnlTerms.PerformLayout();
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             pnlBackground.ResumeLayout(false);
             pnlBackground.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picAppLogo).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel pnlMain;
-        private Panel pnlRegisterCard;
-        private Panel pnlHeader;
-        private PictureBox picLogo;
-        private Label lblTitle;
-        private Label lblSubtitle;
-        private Panel pnlRegisterForm;
-        private TableLayoutPanel tlpForm;
-        private Panel pnlUsername;
-        private TextBox txtUsername;
-        private PictureBox picUsernameIcon;
-        private Panel pnlEmail;
-        private TextBox txtEmail;
-        private PictureBox picEmailIcon;
-        private Panel pnlFullName;
-        private TextBox txtFullName;
-        private PictureBox picFullNameIcon;
-        private Panel pnlPhone;
-        private TextBox txtPhone;
-        private PictureBox picPhoneIcon;
-        private Panel pnlPassword;
-        private TextBox txtPassword;
-        private PictureBox picPasswordIcon;
-        private Panel pnlConfirmPassword;
-        private TextBox txtConfirmPassword;
-        private PictureBox picConfirmPasswordIcon;
-        private Panel pnlGender;
-        private ComboBox cmbGender;
-        private PictureBox picGenderIcon;
-        private Panel pnlDateOfBirth;
-        private DateTimePicker dtpDateOfBirth;
-        private PictureBox picDateIcon;
-        private Panel pnlTerms;
-        private CheckBox chkTerms;
-        private Button btnRegister;
-        private Panel pnlFooter;
-        private LinkLabel llblLogin;
-        private Label lblLoginPrompt;
-        private Panel pnlBackground;
-        private PictureBox picAppLogo;
+    private Panel pnlRegisterCard;
+    private Panel pnlHeader;
+    private Label lblTitle;
+    private Label lblSubtitle;
+    private Panel pnlRegisterForm;
+    private TableLayoutPanel tlpForm;
+    private Panel pnlUsername;
+    private TextBox txtUsername;
+    private PictureBox picUsernameIcon;
+    private Panel pnlEmail;
+    private TextBox txtEmail;
+    private PictureBox picEmailIcon;
+    private Panel pnlFullName;
+    private TextBox txtFullName;
+    private PictureBox picFullNameIcon;
+    private Panel pnlPhone;
+    private TextBox txtPhone;
+    private PictureBox picPhoneIcon;
+    private Panel pnlPassword;
+    private TextBox txtPassword;
+    private PictureBox picPasswordIcon;
+    private Panel pnlConfirmPassword;
+    private TextBox txtConfirmPassword;
+    private PictureBox picConfirmPasswordIcon;
+    private Panel pnlGender;
+    private ComboBox cmbGender;
+    private PictureBox picGenderIcon;
+    private Panel pnlDateOfBirth;
+    private DateTimePicker dtpDateOfBirth;
+    private PictureBox picDateIcon;
+    private Panel pnlTerms;
+    private CheckBox chkTerms;
+    private Button btnAutoFill;
+    private Button btnRegister;
+    private Panel pnlFooter;
+    private LinkLabel llblLogin;
+    private Label lblLoginPrompt;
+    private Panel pnlBackground;
+    private Button btnBack;
         private Label lblAppDescription;
-        private Label lblAppName;
-        private Button btnBack;
     }
 }

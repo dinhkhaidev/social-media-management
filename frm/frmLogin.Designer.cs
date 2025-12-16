@@ -1,24 +1,24 @@
 ﻿namespace SocialManager.frm
 {
-    partial class frmLogin
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+  partial class frmLogin
+  {
+    /// <summary>
+    /// Required designer variable.
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+    /// <summary>
+    /// Clean up any resources being used.
+    /// </summary>
+    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing && (components != null))
+      {
+        components.Dispose();
+      }
+      base.Dispose(disposing);
+    }
 
         #region Windows Form Designer generated code
 
@@ -46,13 +46,10 @@
             pnlHeader = new Panel();
             lblSubtitle = new Label();
             lblTitle = new Label();
-            picLogo = new PictureBox();
             lblPassword = new Label();
             lblUsername = new Label();
             pnlBackground = new Panel();
-            picAppLogo = new PictureBox();
             lblAppDescription = new Label();
-            lblAppName = new Label();
             pnlMain.SuspendLayout();
             pnlLoginCard.SuspendLayout();
             pnlFooter.SuspendLayout();
@@ -62,9 +59,7 @@
             pnlUsername.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picUsernameIcon).BeginInit();
             pnlHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             pnlBackground.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picAppLogo).BeginInit();
             SuspendLayout();
             // 
             // pnlMain
@@ -110,10 +105,10 @@
             llblRegister.LinkColor = Color.FromArgb(52, 152, 219);
             llblRegister.Location = new Point(215, 55);
             llblRegister.Name = "llblRegister";
-            llblRegister.Size = new Size(76, 23);
+            llblRegister.Size = new Size(77, 23);
             llblRegister.TabIndex = 2;
             llblRegister.TabStop = true;
-            llblRegister.Text = "Register";
+            llblRegister.Text = "Đăng ký";
             llblRegister.LinkClicked += llblRegister_LinkClicked;
             // 
             // lblRegisterPrompt
@@ -123,9 +118,9 @@
             lblRegisterPrompt.ForeColor = Color.FromArgb(127, 140, 141);
             lblRegisterPrompt.Location = new Point(40, 55);
             lblRegisterPrompt.Name = "lblRegisterPrompt";
-            lblRegisterPrompt.Size = new Size(191, 23);
+            lblRegisterPrompt.Size = new Size(157, 23);
             lblRegisterPrompt.TabIndex = 1;
-            lblRegisterPrompt.Text = "Don't have an account?";
+            lblRegisterPrompt.Text = "Chưa có tài khoản?";
             // 
             // llblForgotPassword
             // 
@@ -134,10 +129,10 @@
             llblForgotPassword.LinkColor = Color.FromArgb(52, 152, 219);
             llblForgotPassword.Location = new Point(40, 20);
             llblForgotPassword.Name = "llblForgotPassword";
-            llblForgotPassword.Size = new Size(143, 23);
+            llblForgotPassword.Size = new Size(137, 23);
             llblForgotPassword.TabIndex = 0;
             llblForgotPassword.TabStop = true;
-            llblForgotPassword.Text = "Forgot Password?";
+            llblForgotPassword.Text = "Quên mật khẩu?";
             llblForgotPassword.LinkClicked += llblForgotPassword_LinkClicked;
             // 
             // pnlLoginForm
@@ -158,11 +153,11 @@
             chkRememberMe.AutoSize = true;
             chkRememberMe.Font = new Font("Segoe UI", 10F);
             chkRememberMe.ForeColor = Color.FromArgb(127, 140, 141);
-            chkRememberMe.Location = new Point(40, 180);
+            chkRememberMe.Location = new Point(40, 290);
             chkRememberMe.Name = "chkRememberMe";
-            chkRememberMe.Size = new Size(144, 27);
+            chkRememberMe.Size = new Size(181, 27);
             chkRememberMe.TabIndex = 3;
-            chkRememberMe.Text = "Remember me";
+            chkRememberMe.Text = "Ghi nhớ đăng nhập";
             chkRememberMe.UseVisualStyleBackColor = true;
             // 
             // btnLogin
@@ -177,8 +172,8 @@
             btnLogin.Location = new Point(40, 220);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(300, 50);
-            btnLogin.TabIndex = 4;
-            btnLogin.Text = "LOGIN";
+            btnLogin.TabIndex = 0;
+            btnLogin.Text = "ĐĂNG NHẬP";
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
@@ -201,7 +196,7 @@
             txtPassword.ForeColor = Color.FromArgb(44, 62, 80);
             txtPassword.Location = new Point(50, 13);
             txtPassword.Name = "txtPassword";
-            txtPassword.PlaceholderText = "Enter your password";
+            txtPassword.PlaceholderText = "Nhập mật khẩu của bạn";
             txtPassword.Size = new Size(240, 25);
             txtPassword.TabIndex = 1;
             txtPassword.UseSystemPasswordChar = true;
@@ -234,7 +229,7 @@
             txtUsername.ForeColor = Color.FromArgb(44, 62, 80);
             txtUsername.Location = new Point(50, 13);
             txtUsername.Name = "txtUsername";
-            txtUsername.PlaceholderText = "Enter your username or email";
+            txtUsername.PlaceholderText = "Nhập tên đăng nhập hoặc email";
             txtUsername.Size = new Size(240, 25);
             txtUsername.TabIndex = 1;
             // 
@@ -251,7 +246,6 @@
             // 
             pnlHeader.Controls.Add(lblSubtitle);
             pnlHeader.Controls.Add(lblTitle);
-            pnlHeader.Controls.Add(picLogo);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.Location = new Point(0, 0);
             pnlHeader.Name = "pnlHeader";
@@ -266,29 +260,21 @@
             lblSubtitle.ForeColor = Color.FromArgb(127, 140, 141);
             lblSubtitle.Location = new Point(40, 80);
             lblSubtitle.Name = "lblSubtitle";
-            lblSubtitle.Size = new Size(241, 23);
-            lblSubtitle.TabIndex = 2;
-            lblSubtitle.Text = "Sign in to your admin account";
+            lblSubtitle.Size = new Size(203, 23);
+            lblSubtitle.TabIndex = 1;
+            lblSubtitle.Text = "Đăng nhập vào tài khoản";
+            lblSubtitle.Click += lblSubtitle_Click;
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 24F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(44, 62, 80);
-            lblTitle.Location = new Point(40, 30);
+            lblTitle.Location = new Point(26, 26);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(197, 54);
+            lblTitle.Size = new Size(242, 54);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "Welcome";
-            // 
-            // picLogo
-            // 
-            picLogo.Location = new Point(290, 30);
-            picLogo.Name = "picLogo";
-            picLogo.Size = new Size(50, 50);
-            picLogo.TabIndex = 0;
-            picLogo.TabStop = false;
-            picLogo.Paint += picLogo_Paint;
+            lblTitle.Text = "Chào mừng";
             // 
             // lblPassword
             // 
@@ -299,7 +285,7 @@
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new Size(85, 23);
             lblPassword.TabIndex = 1;
-            lblPassword.Text = "Password";
+            lblPassword.Text = "Mật khẩu";
             // 
             // lblUsername
             // 
@@ -310,14 +296,12 @@
             lblUsername.Name = "lblUsername";
             lblUsername.Size = new Size(134, 23);
             lblUsername.TabIndex = 0;
-            lblUsername.Text = "Username/Email";
+            lblUsername.Text = "Tên đăng nhập/Email";
             // 
             // pnlBackground
             // 
             pnlBackground.BackColor = Color.FromArgb(52, 152, 219);
-            pnlBackground.Controls.Add(picAppLogo);
             pnlBackground.Controls.Add(lblAppDescription);
-            pnlBackground.Controls.Add(lblAppName);
             pnlBackground.Dock = DockStyle.Fill;
             pnlBackground.Location = new Point(0, 0);
             pnlBackground.Name = "pnlBackground";
@@ -325,36 +309,18 @@
             pnlBackground.Size = new Size(500, 700);
             pnlBackground.TabIndex = 1;
             // 
-            // picAppLogo
-            // 
-            picAppLogo.Location = new Point(200, 150);
-            picAppLogo.Name = "picAppLogo";
-            picAppLogo.Size = new Size(80, 80);
-            picAppLogo.TabIndex = 2;
-            picAppLogo.TabStop = false;
-            picAppLogo.Paint += picAppLogo_Paint;
-            // 
             // lblAppDescription
             // 
             lblAppDescription.AutoSize = true;
             lblAppDescription.Font = new Font("Segoe UI Black", 16F);
             lblAppDescription.ForeColor = Color.FromArgb(192, 255, 255);
-            lblAppDescription.Location = new Point(98, 323);
+            lblAppDescription.Location = new Point(12, 284);
             lblAppDescription.Name = "lblAppDescription";
-            lblAppDescription.Size = new Size(319, 37);
+            lblAppDescription.Size = new Size(473, 74);
             lblAppDescription.TabIndex = 1;
-            lblAppDescription.Text = "Management Platform";
-            // 
-            // lblAppName
-            // 
-            lblAppName.AutoSize = true;
-            lblAppName.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
-            lblAppName.ForeColor = Color.White;
-            lblAppName.Location = new Point(80, 250);
-            lblAppName.Name = "lblAppName";
-            lblAppName.Size = new Size(351, 72);
-            lblAppName.TabIndex = 0;
-            lblAppName.Text = "Social Media";
+            lblAppDescription.Text = "Mỗi kết nối đều có thể \r\nthay đổi thế giới — bắt đầu từ bạn";
+            lblAppDescription.TextAlign = ContentAlignment.MiddleCenter;
+            lblAppDescription.Click += lblAppDescription_Click;
             // 
             // frmLogin
             // 
@@ -384,39 +350,34 @@
             ((System.ComponentModel.ISupportInitialize)picUsernameIcon).EndInit();
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             pnlBackground.ResumeLayout(false);
             pnlBackground.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picAppLogo).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel pnlMain;
-        private Panel pnlLoginCard;
-        private Panel pnlHeader;
-        private PictureBox picLogo;
-        private Label lblTitle;
-        private Label lblSubtitle;
-        private Panel pnlLoginForm;
-        private Label lblUsername;
-        private Panel pnlUsername;
-        private PictureBox picUsernameIcon;
-        private TextBox txtUsername;
-        private Panel pnlPassword;
-        private TextBox txtPassword;
-        private PictureBox picPasswordIcon;
-        private Label lblPassword;
-        private Button btnLogin;
-        private CheckBox chkRememberMe;
-        private Panel pnlFooter;
-        private LinkLabel llblForgotPassword;
-        private Label lblRegisterPrompt;
-        private LinkLabel llblRegister;
-        private Panel pnlBackground;
-        private Label lblAppName;
-        private Label lblAppDescription;
-        private PictureBox picAppLogo;
-    }
+    private Panel pnlLoginCard;
+    private Panel pnlHeader;
+    private Label lblTitle;
+    private Label lblSubtitle;
+    private Panel pnlLoginForm;
+    private Label lblUsername;
+    private Panel pnlUsername;
+    private PictureBox picUsernameIcon;
+    private TextBox txtUsername;
+    private Panel pnlPassword;
+    private TextBox txtPassword;
+    private PictureBox picPasswordIcon;
+    private Label lblPassword;
+    private Button btnLogin;
+    private CheckBox chkRememberMe;
+    private Panel pnlFooter;
+    private LinkLabel llblForgotPassword;
+    private Label lblRegisterPrompt;
+    private LinkLabel llblRegister;
+    private Panel pnlBackground;
+    private Label lblAppDescription;
+  }
 }

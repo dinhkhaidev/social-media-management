@@ -1,0 +1,3 @@
+﻿UserID,UserName,Password,Role,FullName,Bio,AvatarUrl,Email,Phone,Gender,DOB,Address,CreatedAt,StatusId
+f2eca652-403a-455b-b40c-87c799ead56f,test,test1234,,,test@gmail.com,0324566721,0,2005-07-15 00:00:00,khong co,,2025-10-20 16:25:26,1
+8954154b-0582-42f6-98c4-a36e2a2465e5,test1,test123,,,,dsajdk@gmail.com,1,0,1990-01-01 00:00:00,,2025-10-26 22:53:57,1
